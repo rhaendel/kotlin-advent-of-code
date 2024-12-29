@@ -1,13 +1,12 @@
 fun main() {
     val regex = """mul\((\d+),(\d+)\)""".toRegex()
 
-    fun findAndMultiply(line: String): Int {
-        return regex.findAll(line)
-            .map { match ->
-                match.groups[1]!!.value.toInt() * match.groups[2]!!.value.toInt()
-            }
-            .sum()
-    }
+    fun findAndMultiply(line: String) = regex
+        .findAll(line)
+        .sumOf {
+            val (left, right) = it.destructured
+            left.toInt() * right.toInt()
+        }
 
     fun part1(input: List<String>): Int {
         return input.map(::findAndMultiply).sum()
