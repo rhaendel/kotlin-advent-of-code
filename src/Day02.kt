@@ -11,23 +11,24 @@ fun main() {
 
     fun calcDifferences(report: List<Int>) = report.windowed(2).map { (a, b) -> b - a }
 
-    fun isSafeReport(diffs: List<Int>) = diffs.fold(true to diffs.first()) { acc, diff ->
-        if (abs(diff) !in 1..3) {
-            // difference too big or equal values following each other
-            false to diff
-        } else if (acc.second * diff < 0) {
-            // change of sign -> not all either increasing or decreasing
-            false to diff
-        } else {
-            acc.first to diff
-        }
-    }.component1()
+    fun isSafeReport(reports: List<Int>): Boolean {
+        val diffs = calcDifferences(reports)
+        return diffs.fold(true to diffs.first()) { acc, diff ->
+                if (abs(diff) !in 1..3) {
+                    // difference too big or equal values following each other
+                    false to diff
+                } else if (acc.second * diff < 0) {
+                    // change of sign -> not all either increasing or decreasing
+                    false to diff
+                } else {
+                    acc.first to diff
+                }
+            }.component1()
+    }
 
     fun part1(input: List<String>): Int {
         val reports = parseReports(input)
-        val allDifferences = reports.map(::calcDifferences)
-        val reportSafeties = allDifferences.map(::isSafeReport)
-
+        val reportSafeties = reports.map(::isSafeReport)
         return reportSafeties.count { it }
     }
 
@@ -35,7 +36,7 @@ fun main() {
         for (i in report.indices) {
             val mutableReport = report.toMutableList()
             mutableReport.removeAt(i)
-            if (isSafeReport(calcDifferences(mutableReport))) {
+            if (isSafeReport(mutableReport)) {
                 return true
             }
         }
@@ -46,7 +47,7 @@ fun main() {
         val reports = parseReports(input)
 
         val reportSafeties = reports.map { report ->
-            isSafeReport(calcDifferences(report)) || isSafeReportWithOneLevelRemoved(report)
+            isSafeReport(report) || isSafeReportWithOneLevelRemoved(report)
         }
 
         return reportSafeties.count { it }
