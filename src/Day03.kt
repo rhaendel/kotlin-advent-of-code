@@ -1,5 +1,5 @@
 fun main() {
-    val regex = """mul\((\d+),(\d+)\)""".toRegex()
+    val regex = """mul\((\d{1,3}),(\d{1,3})\)""".toRegex()
 
     fun findAndMultiply(line: String) = regex
         .findAll(line)
