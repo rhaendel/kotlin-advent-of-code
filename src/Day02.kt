@@ -2,56 +2,47 @@ import kotlin.math.abs
 
 fun main() {
     fun parseReports(input: List<String>) = input
-            .filter { it.isNotBlank() }
-            .map { line ->
-                line.trim()
-                    .split(" ")
-                    .map { it.toInt() }
-            }
+        .filter { it.isNotBlank() }
+        .map { line ->
+            line.trim()
+                .split(" ")
+                .map { it.toInt() }
+        }
 
-    fun calcDifferences(report: List<Int>) = report.windowed(2).map { (a, b) -> b - a }
+    fun calcDifferences(report: List<Int>) = report.zipWithNext { a, b -> b - a }
 
     fun isSafeReport(reports: List<Int>): Boolean {
         val diffs = calcDifferences(reports)
         return diffs.fold(true to diffs.first()) { acc, diff ->
-                if (abs(diff) !in 1..3) {
-                    // difference too big or equal values following each other
-                    false to diff
-                } else if (acc.second * diff < 0) {
-                    // change of sign -> not all either increasing or decreasing
-                    false to diff
-                } else {
-                    acc.first to diff
-                }
-            }.component1()
+            if (abs(diff) !in 1..3) {
+                // difference too big or equal values following each other
+                false to diff
+            } else if (acc.second * diff < 0) {
+                // change of sign -> not all either increasing or decreasing
+                false to diff
+            } else {
+                acc.first to diff
+            }
+        }.component1()
     }
 
-    fun part1(input: List<String>): Int {
-        val reports = parseReports(input)
-        val reportSafeties = reports.map(::isSafeReport)
-        return reportSafeties.count { it }
-    }
+    fun part1(input: List<String>) = parseReports(input)
+        .map(::isSafeReport)
+        .count { it }
 
     fun isSafeReportWithOneLevelRemoved(report: List<Int>): Boolean {
         for (i in report.indices) {
-            val mutableReport = report.toMutableList()
-            mutableReport.removeAt(i)
-            if (isSafeReport(mutableReport)) {
+            val dampened = report.toMutableList().apply { removeAt(i) }
+            if (isSafeReport(dampened)) {
                 return true
             }
         }
         return false
     }
 
-    fun part2(input: List<String>): Int {
-        val reports = parseReports(input)
-
-        val reportSafeties = reports.map { report ->
-            isSafeReport(report) || isSafeReportWithOneLevelRemoved(report)
-        }
-
-        return reportSafeties.count { it }
-    }
+    fun part2(input: List<String>) = parseReports(input)
+        .map { isSafeReport(it) || isSafeReportWithOneLevelRemoved(it) }
+        .count { it }
 
     // Test if implementation meets criteria from the description, like:
     check(part1(listOf("5 4 5", "1 2 3", "1 1 2", "1 5 6", "7 6 5")) == 2)
