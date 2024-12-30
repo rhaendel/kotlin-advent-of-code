@@ -1,9 +1,7 @@
 fun main() {
 
     fun part1(input: List<String>): Int {
-        val plane = Plane(input)
-        val sum = plane.search()
-        return sum
+        return Plane(input).search()
     }
 
     printAndCheck(
@@ -29,27 +27,25 @@ class Plane(input: List<String>) {
 
     private val word = "XMAS".toCharArray()
 
-    private val width: Int = input[0].length
-    private val height: Int = input.size
-    private val plane = Array(width) { CharArray(height) }
+    private val plane = Array(input.size) { CharArray(input[0].length) }
 
     init {
         input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char -> plane[col][row] = char }
+            line.forEachIndexed { col, char -> plane[row][col] = char }
         }
     }
 
-    private fun charAt(col: Int, row: Int): Char {
-        if (col < 0 || row < 0 || col >= width || row >= height) {
+    private fun charAt(row: Int, col: Int): Char {
+        if (row < 0 || col < 0 || row >= plane.size || col >= plane[0].size) {
             return ' '
         }
-        return plane[col][row]
+        return plane[row][col]
     }
 
     fun search(): Int {
         var sum = 0
-        for (row in 0..<height) {
-            for (col in 0..<width) {
+        for (row in plane.indices) {
+            for (col in plane[0].indices) {
                 sum += searchAt(col, row)
             }
         }
@@ -58,21 +54,21 @@ class Plane(input: List<String>) {
 
     private fun searchAt(col: Int, row: Int): Int {
         var sum = 0
-        sum += search(col, { a, b -> a + b }, row, { a, _ -> a }) // →
-        sum += search(col, { a, b -> a - b }, row, { a, _ -> a }) // ←
-        sum += search(col, { a, _ -> a }, row, { a, b -> a + b }) // ↓
-        sum += search(col, { a, _ -> a }, row, { a, b -> a - b }) // ↑
-        sum += search(col, { a, b -> a + b }, row, { a, b -> a + b }) // ↘
-        sum += search(col, { a, b -> a - b }, row, { a, b -> a + b }) // ↙
-        sum += search(col, { a, b -> a - b }, row, { a, b -> a - b }) // ↖
-        sum += search(col, { a, b -> a + b }, row, { a, b -> a - b }) // ↗
+        sum += search(row, col, { a, _ -> a }, { a, b -> a + b }) // →
+        sum += search(row, col, { a, _ -> a }, { a, b -> a - b }) // ←
+        sum += search(row, col, { a, b -> a + b }, { a, _ -> a }) // ↓
+        sum += search(row, col, { a, b -> a - b }, { a, _ -> a }) // ↑
+        sum += search(row, col, { a, b -> a + b }, { a, b -> a + b }) // ↘
+        sum += search(row, col, { a, b -> a + b }, { a, b -> a - b }) // ↙
+        sum += search(row, col, { a, b -> a - b }, { a, b -> a - b }) // ↖
+        sum += search(row, col, { a, b -> a - b }, { a, b -> a + b }) // ↗
         return sum
     }
 
-    private fun search(col: Int, colOp: (Int, Int) -> Int, row: Int, rowOp: (Int, Int) -> Int): Int {
+    private fun search(row: Int, col: Int, rowOp: (Int, Int) -> Int, colOp: (Int, Int) -> Int): Int {
         var matchIndex = 0
         for (index in word.indices) {
-            if (charAt(colOp(col, index), rowOp(row, index)) == word[matchIndex]) {
+            if (charAt(rowOp(row, index), colOp(col, index)) == word[matchIndex]) {
                 if (matchIndex == word.lastIndex) {
                     return 1
                 }
