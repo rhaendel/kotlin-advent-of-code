@@ -1,4 +1,5 @@
 fun main() {
+    println("part 1")
 
     fun part1(input: List<String>): Int {
         return Grid(input).searchForXMAS()
@@ -16,11 +17,32 @@ fun main() {
         ), 5
     )
 
-    val testInput = readInput("Day04_test")
-    printAndCheck(part1(testInput), 18)
+    val test1Input = readInput("Day04_test1")
+    printAndCheck(part1(test1Input), 18)
 
     val input = readInput("Day04")
     printAndCheck(part1(input), 2500)
+
+
+    println("part 2")
+
+    fun part2(input: List<String>): Int {
+        return Grid(input).searchForMASCross()
+    }
+
+    printAndCheck(
+        part2(
+            listOf(
+                "M.S",
+                ".A.",
+                "M.S"
+            )
+        ), 1
+    )
+
+    val test2Input = readInput("Day04_test2")
+    printAndCheck(part2(test2Input), 9)
+    printAndCheck(part2(input), 1933)
 }
 
 class Grid(input: List<String>) {
@@ -38,11 +60,15 @@ class Grid(input: List<String>) {
         return grid.getOrNull(row)?.getOrNull(col) ?: ' '
     }
 
-    fun searchForXMAS(): Int {
+    fun searchForXMAS() = sumForEachInGrid(::searchForXMASAt)
+
+    fun searchForMASCross() = sumForEachInGrid(::searchForMASCrossAt)
+
+    private fun sumForEachInGrid(countAt: (Int, Int) -> Int): Int {
         var sum = 0
         for (row in grid.indices) {
             for (col in grid[0].indices) {
-                sum += searchForXMASAt(row, col)
+                sum += countAt(row, col)
             }
         }
         return sum
@@ -75,4 +101,24 @@ class Grid(input: List<String>) {
         }
         return 0
     }
+
+    private fun searchForMASCrossAt(row: Int, col: Int): Int {
+        if (charAt(row, col) != 'A') {
+            return 0
+        }
+        if ((mainDiagIsMAS(row, col) || mainDiagIsSAM(row, col)) &&
+            (secDiagIsMAS(row, col) || secDiagIsSAM(row, col))) {
+            return 1
+        }
+        return 0
+    }
+
+    private fun mainDiagIsMAS(row: Int, col: Int) = charAt(row - 1, col - 1) == 'M' && charAt(row + 1, col + 1) == 'S'
+
+    private fun mainDiagIsSAM(row: Int, col: Int) = charAt(row - 1, col - 1) == 'S' && charAt(row + 1, col + 1) == 'M'
+
+    private fun secDiagIsMAS(row: Int, col: Int) = charAt(row - 1, col + 1) == 'M' && charAt(row + 1, col - 1) == 'S'
+
+    private fun secDiagIsSAM(row: Int, col: Int) = charAt(row - 1, col + 1) == 'S' && charAt(row + 1, col - 1) == 'M'
+
 }
