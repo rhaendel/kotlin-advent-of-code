@@ -1,7 +1,7 @@
 fun main() {
 
     fun part1(input: List<String>): Int {
-        return Plane(input).search()
+        return Grid(input).searchForXMAS()
     }
 
     printAndCheck(
@@ -23,46 +23,45 @@ fun main() {
     printAndCheck(part1(input), 2500)
 }
 
-class Plane(input: List<String>) {
+class Grid(input: List<String>) {
 
     private val word = "XMAS".toCharArray()
-
-    private val plane = Array(input.size) { CharArray(input[0].length) }
+    private val grid = Array(input.size) { CharArray(input[0].length) }
 
     init {
         input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char -> plane[row][col] = char }
+            line.forEachIndexed { col, char -> grid[row][col] = char }
         }
     }
 
     private fun charAt(row: Int, col: Int): Char {
-        return plane.getOrNull(row)?.getOrNull(col) ?: ' '
+        return grid.getOrNull(row)?.getOrNull(col) ?: ' '
     }
 
-    fun search(): Int {
+    fun searchForXMAS(): Int {
         var sum = 0
-        for (row in plane.indices) {
-            for (col in plane[0].indices) {
-                sum += searchAt(col, row)
+        for (row in grid.indices) {
+            for (col in grid[0].indices) {
+                sum += searchForXMASAt(row, col)
             }
         }
         return sum
     }
 
-    private fun searchAt(col: Int, row: Int): Int {
+    private fun searchForXMASAt(row: Int, col: Int): Int {
         var sum = 0
-        sum += search(row, col, { a, _ -> a }, { a, b -> a + b }) // →
-        sum += search(row, col, { a, _ -> a }, { a, b -> a - b }) // ←
-        sum += search(row, col, { a, b -> a + b }, { a, _ -> a }) // ↓
-        sum += search(row, col, { a, b -> a - b }, { a, _ -> a }) // ↑
-        sum += search(row, col, { a, b -> a + b }, { a, b -> a + b }) // ↘
-        sum += search(row, col, { a, b -> a + b }, { a, b -> a - b }) // ↙
-        sum += search(row, col, { a, b -> a - b }, { a, b -> a - b }) // ↖
-        sum += search(row, col, { a, b -> a - b }, { a, b -> a + b }) // ↗
+        sum += searchForXMAS(row, col, { a, _ -> a }, { a, b -> a + b }) // →
+        sum += searchForXMAS(row, col, { a, _ -> a }, { a, b -> a - b }) // ←
+        sum += searchForXMAS(row, col, { a, b -> a + b }, { a, _ -> a }) // ↓
+        sum += searchForXMAS(row, col, { a, b -> a - b }, { a, _ -> a }) // ↑
+        sum += searchForXMAS(row, col, { a, b -> a + b }, { a, b -> a + b }) // ↘
+        sum += searchForXMAS(row, col, { a, b -> a + b }, { a, b -> a - b }) // ↙
+        sum += searchForXMAS(row, col, { a, b -> a - b }, { a, b -> a - b }) // ↖
+        sum += searchForXMAS(row, col, { a, b -> a - b }, { a, b -> a + b }) // ↗
         return sum
     }
 
-    private fun search(row: Int, col: Int, rowOp: (Int, Int) -> Int, colOp: (Int, Int) -> Int): Int {
+    private fun searchForXMAS(row: Int, col: Int, rowOp: (Int, Int) -> Int, colOp: (Int, Int) -> Int): Int {
         var matchIndex = 0
         for (index in word.indices) {
             if (charAt(rowOp(row, index), colOp(col, index)) == word[matchIndex]) {
