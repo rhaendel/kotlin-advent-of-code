@@ -36,10 +36,7 @@ class Plane(input: List<String>) {
     }
 
     private fun charAt(row: Int, col: Int): Char {
-        if (row < 0 || col < 0 || row >= plane.size || col >= plane[0].size) {
-            return ' '
-        }
-        return plane[row][col]
+        return plane.getOrNull(row)?.getOrNull(col) ?: ' '
     }
 
     fun search(): Int {
