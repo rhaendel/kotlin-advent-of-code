@@ -4,19 +4,23 @@ fun main() {
 
     println("part 1")
 
+    fun parseRules(input: List<String>): List<Pair<Int, Int>> = input
+        .takeWhile { it.contains("|") }
+        .map {
+            val (a, b) = it.split("|")
+            a.toInt() to b.toInt()
+        }
+
+    fun parseUpdates(input: List<String>): List<List<Int>> = input
+        .dropWhile { !it.contains(",") }
+        .map {
+            it.split(",")
+                .map(String::toInt)
+        }
+
     fun part1(input: List<String>): Int {
-        val rules = input
-            .takeWhile { it.contains("|") }
-            .map {
-                val (a, b) = it.split("|")
-                a.toInt() to b.toInt()
-            }
-        val updates = input
-            .dropWhile { !it.contains(",") }
-            .map {
-                it.split(",")
-                    .map(String::toInt)
-            }
+        val rules = parseRules(input)
+        val updates = parseUpdates(input)
         val pageComparator = PageComparator(rules)
         val orderedUpdates = updates.filter { it == it.sortedWith(pageComparator) }
         return orderedUpdates.sumOf { it[it.size / 2] }
@@ -31,11 +35,37 @@ fun main() {
         ), 5
     )
 
-    val test1Input = readInput("${DAY}_test1")
+    val test1Input = readInput("${DAY}_test")
     printAndCheck(part1(test1Input), 143)
 
     val input = readInput(DAY)
     printAndCheck(part1(input), 6384)
+
+
+    println("part 2")
+
+    fun part2(input: List<String>): Int {
+        val rules = parseRules(input)
+        val updates = parseUpdates(input)
+        val pageComparator = PageComparator(rules)
+        val notOrderedUpdates = updates.filter { it != it.sortedWith(pageComparator) }
+        return notOrderedUpdates
+            .map { it.sortedWith(pageComparator) }
+            .sumOf { it[it.size / 2] }
+    }
+
+    printAndCheck(
+        part2(
+            listOf(
+                "1|2", "2|3", "3|4", "4|5", "",
+                "1,2,3,4,5", "1,3,2", "1,2,3"
+            )
+        ), 2
+    )
+
+    val test2Input = readInput("${DAY}_test")
+    printAndCheck(part2(test2Input), 123)
+    printAndCheck(part2(input), 5353)
 }
 
 class PageComparator(rules: List<Pair<Int, Int>>) : Comparator<Int> {
