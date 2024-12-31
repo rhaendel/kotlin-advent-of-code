@@ -6,22 +6,21 @@ fun main() {
     }
 
     printAndCheck(
-        part1(
-            listOf(
-                "..X.......",
-                ".SAMX....S",
-                ".A..A...A.",
-                "XMAS.S.M..",
-                ".X....X..."
-            )
-        ), 5
+        listOf(
+            "..X.......",
+            ".SAMX....S",
+            ".A..A...A.",
+            "XMAS.S.M..",
+            ".X....X..."
+        ),
+        ::part1, 5
     )
 
     val test1Input = readInput("Day04_test1")
-    printAndCheck(part1(test1Input), 18)
+    printAndCheck(test1Input, ::part1, 18)
 
     val input = readInput("Day04")
-    printAndCheck(part1(input), 2500)
+    printAndCheck(input, ::part1, 2500)
 
 
     println("part 2")
@@ -31,18 +30,17 @@ fun main() {
     }
 
     printAndCheck(
-        part2(
-            listOf(
-                "M.S",
-                ".A.",
-                "M.S"
-            )
-        ), 1
+        listOf(
+            "M.S",
+            ".A.",
+            "M.S"
+        ),
+        ::part2, 1
     )
 
     val test2Input = readInput("Day04_test2")
-    printAndCheck(part2(test2Input), 9)
-    printAndCheck(part2(input), 1933)
+    printAndCheck(test2Input, ::part2, 9)
+    printAndCheck(input, ::part2, 1933)
 }
 
 class Grid(input: List<String>) {
@@ -107,7 +105,8 @@ class Grid(input: List<String>) {
             return 0
         }
         if ((mainDiagIsMAS(row, col) || mainDiagIsSAM(row, col)) &&
-            (secDiagIsMAS(row, col) || secDiagIsSAM(row, col))) {
+            (secDiagIsMAS(row, col) || secDiagIsSAM(row, col))
+        ) {
             return 1
         }
         return 0

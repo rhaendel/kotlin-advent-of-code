@@ -2,7 +2,7 @@ const val DAY = "Day05"
 
 fun main() {
 
-    println("part 1")
+    println("$DAY part 1")
 
     fun parseRules(input: List<String>): List<Pair<Int, Int>> = input
         .takeWhile { it.contains("|") }
@@ -27,22 +27,21 @@ fun main() {
     }
 
     printAndCheck(
-        part1(
-            listOf(
-                "1|2", "2|3", "3|4", "4|5", "",
-                "1,2,3,4,5", "1,3,2", "1,2,3"
-            )
-        ), 5
+        listOf(
+            "1|2", "2|3", "3|4", "4|5", "",
+            "1,2,3,4,5", "1,3,2", "1,2,3"
+        ),
+        ::part1, 5
     )
 
     val test1Input = readInput("${DAY}_test")
-    printAndCheck(part1(test1Input), 143)
+    printAndCheck(test1Input, ::part1, 143)
 
     val input = readInput(DAY)
-    printAndCheck(part1(input), 6384)
+    printAndCheck(input, ::part1, 6384)
 
 
-    println("part 2")
+    println("$DAY part 2")
 
     fun part2(input: List<String>): Int {
         val rules = parseRules(input)
@@ -55,17 +54,16 @@ fun main() {
     }
 
     printAndCheck(
-        part2(
-            listOf(
-                "1|2", "2|3", "3|4", "4|5", "",
-                "1,2,3,4,5", "1,3,2", "1,2,3"
-            )
-        ), 2
+        listOf(
+            "1|2", "2|3", "3|4", "4|5", "",
+            "1,2,3,4,5", "1,3,2", "1,2,3"
+        ),
+        ::part2, 2
     )
 
     val test2Input = readInput("${DAY}_test")
-    printAndCheck(part2(test2Input), 123)
-    printAndCheck(part2(input), 5353)
+    printAndCheck(test2Input, ::part2, 123)
+    printAndCheck(input, ::part2, 5353)
 }
 
 class PageComparator(rules: List<Pair<Int, Int>>) : Comparator<Int> {

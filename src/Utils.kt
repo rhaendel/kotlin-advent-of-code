@@ -2,6 +2,7 @@ import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
 import kotlin.io.path.readText
+import kotlin.time.measureTimedValue
 
 /**
  * Reads lines from the given input txt file.
@@ -20,7 +21,8 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
  */
 fun Any?.println() = println(this)
 
-fun printAndCheck(result: Int, expected: Int) {
-    println("result: $result, expexted: $expected")
-    check(result == expected)
+fun printAndCheck(input: List<String>, block: (List<String>) -> Int, expected: Int) {
+    val result = measureTimedValue { block(input) }
+    println("result: ${result.value}, expected: $expected, took: ${result.duration}")
+    check(result.value == expected)
 }
