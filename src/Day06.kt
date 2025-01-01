@@ -27,7 +27,7 @@ fun main() {
 }
 
 private data class Position(val row: Int, val col: Int) {
-    fun stepIn(direction: Direction) = Position(row + direction.row, col + direction.col)
+    operator fun plus(direction: Direction) = Position(row + direction.row, col + direction.col)
 }
 
 private enum class Direction(val row: Int, val col: Int) {
@@ -77,10 +77,10 @@ private class Lab(input: List<String>) {
 
         while (charAt(position) != offMap) {
             visited.add(position)
-            if (charAt(position.stepIn(direction)) == obstruction) {
+            if (charAt(position + direction) == obstruction) {
                 direction = direction.turnRight()
             }
-            position = position.stepIn(direction)
+            position += direction
         }
         return visited
     }
