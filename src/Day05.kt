@@ -70,12 +70,12 @@ class PageComparator(rules: List<Pair<Int, Int>>) : Comparator<Int> {
 
     private val rules: Map<Int, Set<Int>> = HashMap<Int, MutableSet<Int>>().apply {
         rules.forEach {
-            putIfAbsent(it.first, mutableSetOf(it.second))?.add(it.second)
+            getOrPut(it.first) { HashSet() }.add(it.second)
         }
     }
     private val rulesInverted: Map<Int, Set<Int>> = HashMap<Int, MutableSet<Int>>().apply {
         rules.forEach {
-            putIfAbsent(it.second, mutableSetOf(it.first))?.add(it.first)
+            getOrPut(it.second) { HashSet() }.add(it.first)
         }
     }
 
