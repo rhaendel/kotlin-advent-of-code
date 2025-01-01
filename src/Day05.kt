@@ -1,6 +1,5 @@
-const val DAY = "Day05"
-
 fun main() {
+    val DAY = "Day05"
 
     println("$DAY part 1")
 
@@ -34,8 +33,8 @@ fun main() {
         ::part1, 5
     )
 
-    val test1Input = readInput("${DAY}_test")
-    printAndCheck(test1Input, ::part1, 143)
+    val testInput = readInput("${DAY}_test")
+    printAndCheck(testInput, ::part1, 143)
 
     val input = readInput(DAY)
     printAndCheck(input, ::part1, 6384)
@@ -61,8 +60,7 @@ fun main() {
         ::part2, 2
     )
 
-    val test2Input = readInput("${DAY}_test")
-    printAndCheck(test2Input, ::part2, 123)
+    printAndCheck(testInput, ::part2, 123)
     printAndCheck(input, ::part2, 5353)
 }
 
