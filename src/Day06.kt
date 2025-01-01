@@ -1,4 +1,4 @@
-import Direction.NORTH
+import Direction.*
 
 fun main() {
     val DAY = "Day06"
@@ -31,20 +31,18 @@ private data class Position(val row: Int, val col: Int) {
 }
 
 private enum class Direction(val row: Int, val col: Int) {
-    NORTH(-1, 0) {
-        override fun turnRight() = EAST
-    },
-    EAST(0, +1) {
-        override fun turnRight() = SOUTH
-    },
-    SOUTH(+1, 0) {
-        override fun turnRight() = WEST
-    },
-    WEST(0, -1) {
-        override fun turnRight() = NORTH
-    };
+    NORTH(-1, 0),
+    EAST(0, +1),
+    SOUTH(+1, 0),
+    WEST(0, -1),
+    ;
 
-    abstract fun turnRight(): Direction
+    fun turnRight() = when(this) {
+        NORTH -> EAST
+        EAST -> SOUTH
+        SOUTH -> WEST
+        WEST -> NORTH
+    }
 }
 
 private class Lab(input: List<String>) {
