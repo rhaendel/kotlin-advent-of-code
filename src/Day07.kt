@@ -29,12 +29,32 @@ fun main() {
 
     val input = readInput(day)
     printAndCheck(input, ::part1, 1399219271639)
+
+
+    println("$day part 2")
+
+    fun part2(input: List<String>) = parseEquations(input)
+        .map { it.checkSolvability(listOf(Long::plus, Long::times, ::concat)) }
+        .filter { it.solvable }
+        .sumOf { it.result }
+
+    printAndCheck(
+        """
+            156: 15 6
+            7290: 6 8 6 15
+            192: 17 8 14
+        """.trimIndent().lines(),
+        ::part2, 7638
+    )
+
+    printAndCheck(testInput, ::part2, 11387)
+    printAndCheck(input, ::part2, 275791737999003)
 }
 
 private data class Equation(val result: Long, val numbers: List<Long>, var solvable: Boolean = false) {
 
     fun checkSolvability(operators: List<(Long, Long) -> Long>): Equation {
-        val sequence = operatorIndexSequenceFor(numbers.size - 1).iterator()
+        val sequence = operatorIndexSequenceFor(numbers.size - 1, operators.size).iterator()
         while (sequence.hasNext()) {
             val result = numbers.drop(1).fold(numbers.first()) { acc, number ->
                 operators[sequence.next()](acc, number)
@@ -48,16 +68,23 @@ private data class Equation(val result: Long, val numbers: List<Long>, var solva
     }
 
     /**
-     * Returns a sequence of `0`s and `1`s corresponding to the 0-padded binary
+     * With default parameters, returns a sequence of `0`s and `1`s corresponding to the 0-padded binary
      * representation of a counter value starting at 0.
      *
      * Examples:
-     * - `operatorIndexSequenceFor(1)` returns `[0,1]`
-     * - `operatorIndexSequenceFor(2)` returns `[0,0,0,1,1,0,1,1]` (counting from 0 `00` to 4 `11`)
+     * - `operatorIndexSequenceFor(1)` yields `[0,1]`
+     * - `operatorIndexSequenceFor(2)` yields `[0,0,0,1,1,0,1,1]` (counting from 0 `00` to 4 `11`)
+     *
+     * With different values of `operatorCount` the given value will be used as the radix for
+     * a radix-based representation of the counter value.
+     *
+     * Example:
+     * - `operatorIndexSequenceFor(1,3)` yields `[0,1,2]`
+     * - `operatorIndexSequenceFor(2,3)` yields `[0,0,0,1,0,2,1,0,1,1,1,2,2,0,2,1,2,2]` (counting from 0 `00` to 9 `22`)
      */
-    private fun operatorIndexSequenceFor(digits: Int) = sequence {
-        for (count in 0..<(2.0.pow(digits).toInt())) {
-            val binary = count.toString(2).fillLeadingZeros(digits)
+    private fun operatorIndexSequenceFor(digits: Int, operatorCount: Int = 2) = sequence {
+        for (count in 0..<(operatorCount.toDouble().pow(digits).toInt())) {
+            val binary = count.toString(operatorCount).fillLeadingZeros(digits)
             for (i in 0..<digits) {
                 yield(binary[i].digitToInt())
             }
@@ -67,3 +94,5 @@ private data class Equation(val result: Long, val numbers: List<Long>, var solva
     private fun String.fillLeadingZeros(digits: Int) = "0".repeat(digits - length) + this
 
 }
+
+private fun concat(first: Long, second: Long) = "$first$second".toLong()
