@@ -111,9 +111,9 @@ private class Lab(input: List<String>) {
     }
 
     fun freePositions() = sequence {
-        for ((rowNo, row) in grid.withIndex()) {
-            for ((colNo, col) in grid[rowNo].withIndex()) {
-                if (row[colNo] == free) {
+        grid.forEachIndexed { rowNo, row ->
+            row.forEachIndexed { colNo, char ->
+                if (char == free) {
                     yield(Position(rowNo, colNo))
                 }
             }
