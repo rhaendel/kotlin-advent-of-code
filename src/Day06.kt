@@ -6,7 +6,12 @@ fun main() {
     println("$DAY part 1")
 
     fun part1(input: List<String>): Int {
-        return Lab(input).doTheGuardWalk().size
+        val visited = mutableSetOf<Position>()
+        Lab(input).doTheGuardWalk { position, _ ->
+            visited.add(position)
+            true
+        }
+        return visited.size
     }
 
     printAndCheck(
@@ -24,6 +29,40 @@ fun main() {
 
     val input = readInput(DAY)
     printAndCheck(input, ::part1, 4580)
+
+
+    println("$DAY part 2")
+
+    fun part2(input: List<String>): Int {
+        val lab = Lab(input)
+        var loopCount = 0
+
+        lab.freePositions().forEach { additionalObstruction ->
+            val visited = mutableSetOf<Pair<Position, Direction>>()
+            lab.doTheGuardWalk(additionalObstruction) { position, direction ->
+                if (visited.add(position to direction)) {
+                    true
+                } else {
+                    loopCount++
+                    false
+                }
+            }
+        }
+        return loopCount
+    }
+
+    printAndCheck(
+        listOf(
+            ".#..",
+            "...#",
+            ".^..",
+            "..#."
+        ),
+        ::part2, 1
+    )
+
+    printAndCheck(testInput, ::part2, 6)
+    printAndCheck(input, ::part2, 1480)
 }
 
 private data class Position(val row: Int, val col: Int) {
@@ -49,6 +88,7 @@ private class Lab(input: List<String>) {
 
     private val guard = '^'
     private val obstruction = '#'
+    private val free = '.'
     private val offMap = ' '
 
     private val grid = Array(input.size) { CharArray(input[0].length) }
@@ -63,25 +103,39 @@ private class Lab(input: List<String>) {
         return grid.getOrNull(position.row)?.getOrNull(position.col) ?: offMap
     }
 
-    fun findTheGuard(): Position {
+    private fun findTheGuard(): Position {
         for ((rowNo, row) in grid.withIndex()) {
             row.indexOf(guard).let { if (it >= 0) return Position(rowNo, it) }
         }
-        return Position(-1, -1)
+        error("There was no initial guard position found in the lab.")
     }
 
-    fun doTheGuardWalk(): Set<Position> {
-        val visited = mutableSetOf<Position>()
+    fun freePositions() = sequence {
+        for ((rowNo, row) in grid.withIndex()) {
+            for ((colNo, col) in grid[rowNo].withIndex()) {
+                if (row[colNo] == free) {
+                    yield(Position(rowNo, colNo))
+                }
+            }
+        }
+    }
+
+    fun doTheGuardWalk(
+        additionalObstruction: Position? = null,
+        visit: (Position, Direction) -> Boolean,
+    ) {
         var direction = NORTH
         var position = findTheGuard()
+        var doWalkFurther = true
 
-        while (charAt(position) != offMap) {
-            visited.add(position)
-            if (charAt(position + direction) == obstruction) {
+        while (charAt(position) != offMap && doWalkFurther) {
+            doWalkFurther = visit(position, direction)
+            val stepAhead = position + direction
+            if (charAt(stepAhead) == obstruction || stepAhead == additionalObstruction) {
                 direction = direction.turnRight()
+            } else {
+                position = stepAhead
             }
-            position += direction
         }
-        return visited
     }
 }
