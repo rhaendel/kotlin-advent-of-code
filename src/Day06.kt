@@ -1,6 +1,10 @@
 import Direction.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.produce
+import java.lang.Runtime.getRuntime
+import java.util.concurrent.atomic.AtomicInteger
 
-fun main() {
+suspend fun main() {
     val DAY = "Day06"
 
     println("$DAY part 1")
@@ -33,22 +37,31 @@ fun main() {
 
     println("$DAY part 2")
 
-    fun part2(input: List<String>): Int {
+    suspend fun part2(input: List<String>): Int {
         val lab = Lab(input)
-        var loopCount = 0
+        val loopCount = AtomicInteger(0)
 
-        lab.freePositions().forEach { additionalObstruction ->
-            val visited = mutableSetOf<Pair<Position, Direction>>()
-            lab.doTheGuardWalk(additionalObstruction) { position, direction ->
-                if (visited.add(position to direction)) {
-                    true
-                } else {
-                    loopCount++
-                    false
+        withContext(Dispatchers.Default) {
+            val coresCount = getRuntime().availableProcessors()
+            val positions = lab.freePositions(this, coresCount)
+            (1..coresCount).map {
+                async {
+                    for (additionalObstruction in positions) {
+                        val visited = mutableSetOf<Pair<Position, Direction>>()
+                        lab.doTheGuardWalk(additionalObstruction) { position, direction ->
+                            if (visited.add(position to direction)) {
+                                true
+                            } else {
+                                loopCount.incrementAndGet()
+                                false
+                            }
+                        }
+                    }
                 }
-            }
+            }.awaitAll()
         }
-        return loopCount
+
+        return loopCount.get()
     }
 
     printAndCheck(
@@ -110,11 +123,12 @@ private class Lab(input: List<String>) {
         error("There was no initial guard position found in the lab.")
     }
 
-    fun freePositions() = sequence {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    fun freePositions(scope: CoroutineScope, bufferSize: Int) = scope.produce(capacity = bufferSize) {
         grid.forEachIndexed { rowNo, row ->
             row.forEachIndexed { colNo, char ->
                 if (char == free) {
-                    yield(Position(rowNo, colNo))
+                    send(Position(rowNo, colNo))
                 }
             }
         }
