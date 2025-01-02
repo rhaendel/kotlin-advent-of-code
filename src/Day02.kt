@@ -1,6 +1,8 @@
 import kotlin.math.abs
 
 fun main() {
+    val day = "Day02"
+
     fun parseReports(input: List<String>) = input
         .filter { it.isNotBlank() }
         .map { line ->
@@ -44,18 +46,23 @@ fun main() {
         .map { isSafeReport(it) || isSafeReportWithOneLevelRemoved(it) }
         .count { it }
 
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("5 4 5", "1 2 3", "1 1 2", "1 5 6", "7 6 5")) == 2)
+    println("$day part 1")
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day02_test")
-    check(part1(testInput) == 2)
+    printAndCheck(
+        listOf("5 4 5", "1 2 3", "1 1 2", "1 5 6", "7 6 5"),
+        ::part1, 2
+    )
 
-    check(part2(listOf("1 2 6 7", "5 4 5", "1 2 3", "1 1 2", "1 5 6", "7 6 5")) == 5)
-    check(part2(testInput) == 4)
+    val testInput = readInput("${day}_test")
+    printAndCheck(testInput, ::part1, 2)
 
-    // Read the input from the `src/Day01.txt` file.
-    val input = readInput("Day02")
-    part1(input).println()
-    part2(input).println()
+    val input = readInput(day)
+    printAndCheck(input, ::part1, 670)
+
+
+    println("$day part 2")
+
+    printAndCheck(listOf("1 2 6 7", "5 4 5", "1 2 3", "1 1 2", "1 5 6", "7 6 5"), ::part2, 5)
+    printAndCheck(testInput, ::part2, 4)
+    printAndCheck(input, ::part2, 700)
 }

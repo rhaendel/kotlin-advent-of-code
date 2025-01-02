@@ -5,9 +5,9 @@ import java.lang.Runtime.getRuntime
 import java.util.concurrent.atomic.AtomicInteger
 
 suspend fun main() {
-    val DAY = "Day06"
+    val day = "Day06"
 
-    println("$DAY part 1")
+    println("$day part 1")
 
     fun part1(input: List<String>): Int {
         val visited = mutableSetOf<Position>()
@@ -28,14 +28,14 @@ suspend fun main() {
         ::part1, 5
     )
 
-    val testInput = readInput("${DAY}_test")
+    val testInput = readInput("${day}_test")
     printAndCheck(testInput, ::part1, 41)
 
-    val input = readInput(DAY)
+    val input = readInput(day)
     printAndCheck(input, ::part1, 4580)
 
 
-    println("$DAY part 2")
+    println("$day part 2")
 
     suspend fun part2(input: List<String>): Int {
         val lab = Lab(input)

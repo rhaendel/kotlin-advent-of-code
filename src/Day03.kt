@@ -1,4 +1,6 @@
 fun main() {
+    val day = "Day03"
+
     val mulRegex = """(?<mul>mul\((\d{1,3}),(\d{1,3})\))"""
     val doRegex = """(?<do>do\(\))"""
     val dontRegex = """(?<dont>don't\(\))"""
@@ -32,18 +34,23 @@ fun main() {
             }
     }
 
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("blamul(2,3)*x_mul(2,2)+mul(32,64]t")) == 10)
+    println("$day part 1")
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day03_test")
-    check(part1(testInput) == 161)
+    printAndCheck(listOf("blamul(2,3)*x_mul(2,2)+mul(32,64]t"), ::part1, 10)
 
-    check(part2(listOf("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")) == 48)
-    check(part2(testInput) == 161)
+    val testInput = readInput("${day}_test")
+    printAndCheck(testInput, ::part1, 161)
 
-    // Read the input from the `src/Day01.txt` file.
-    val input = readInput("Day03")
-    part1(input).println()
-    part2(input).println()
+    val input = readInput(day)
+    printAndCheck(input, ::part1, 174960292)
+
+
+    println("$day part 2")
+
+    printAndCheck(
+        listOf("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"),
+        ::part2, 48
+    )
+    printAndCheck(testInput, ::part2, 161)
+    printAndCheck(input, ::part2, 56275602)
 }

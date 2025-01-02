@@ -1,5 +1,7 @@
 fun main() {
-    println("part 1")
+    val day = "Day04"
+
+    println("$day part 1")
 
     fun part1(input: List<String>): Int {
         return Grid(input).searchForXMAS()
@@ -16,14 +18,14 @@ fun main() {
         ::part1, 5
     )
 
-    val test1Input = readInput("Day04_test1")
+    val test1Input = readInput("${day}_test1")
     printAndCheck(test1Input, ::part1, 18)
 
-    val input = readInput("Day04")
+    val input = readInput(day)
     printAndCheck(input, ::part1, 2500)
 
 
-    println("part 2")
+    println("$day part 2")
 
     fun part2(input: List<String>): Int {
         return Grid(input).searchForMASCross()
@@ -38,7 +40,7 @@ fun main() {
         ::part2, 1
     )
 
-    val test2Input = readInput("Day04_test2")
+    val test2Input = readInput("${day}_test2")
     printAndCheck(test2Input, ::part2, 9)
     printAndCheck(input, ::part2, 1933)
 }

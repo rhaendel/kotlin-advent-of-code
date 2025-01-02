@@ -1,7 +1,7 @@
 fun main() {
-    val DAY = "Day05"
+    val day = "Day05"
 
-    println("$DAY part 1")
+    println("$day part 1")
 
     fun parseRules(input: List<String>): List<Pair<Int, Int>> = input
         .takeWhile { it.contains("|") }
@@ -33,14 +33,14 @@ fun main() {
         ::part1, 5
     )
 
-    val testInput = readInput("${DAY}_test")
+    val testInput = readInput("${day}_test")
     printAndCheck(testInput, ::part1, 143)
 
-    val input = readInput(DAY)
+    val input = readInput(day)
     printAndCheck(input, ::part1, 6384)
 
 
-    println("$DAY part 2")
+    println("$day part 2")
 
     fun part2(input: List<String>): Int {
         val rules = parseRules(input)

@@ -1,6 +1,8 @@
 import kotlin.math.abs
 
 fun main() {
+    val day = "Day01"
+
     fun part1(input: List<String>): Int {
         val teamOne = input
             .filter { it.isNotBlank() }
@@ -25,18 +27,32 @@ fun main() {
         return teamOne.sumOf { one -> one * teamTwo.count { it == one } }
     }
 
-    // Test if implementation meets criteria from the description, like:
-    check(part1(listOf("7   1", "0   0", "1   6")) == 1)
+    println("$day part 1")
 
-    // Or read a large test input from the `src/Day01_test.txt` file:
-    val testInput = readInput("Day01_test")
-    check(part1(testInput) == 11)
+    printAndCheck(
+        listOf(
+            "7   1",
+            "0   0",
+            "1   6"
+        ), ::part1, 1
+    )
 
-    check(part2(listOf("7   1", "0   0", "1   6")) == 1)
-    check(part2(testInput) == 31)
+    val testInput = readInput("${day}_test")
+    printAndCheck(testInput, ::part1, 11)
 
-    // Read the input from the `src/Day01.txt` file.
-    val input = readInput("Day01")
-    part1(input).println()
-    part2(input).println()
+    val input = readInput(day)
+    printAndCheck(input, ::part1, 3714264)
+
+
+    println("$day part 2")
+
+    printAndCheck(
+        listOf(
+            "7   1",
+            "0   0",
+            "1   6"
+        ), ::part2, 1
+    )
+    printAndCheck(testInput, ::part2, 31)
+    printAndCheck(input, ::part2, 18805872)
 }
