@@ -61,7 +61,7 @@ private class CityMap(input: List<String>) {
     // just for printing; the algorithm itself does not need the complete grid
     private val grid = Array(input.size) { CharArray(input[0].length) }
 
-    private val antennas: Map<Char, List<Coordinates>> = HashMap<Char, MutableList<Coordinates>>().apply {
+    private val antennas: Map<Char, List<Coordinates>> = buildMap<Char, MutableList<Coordinates>> {
         input.forEachIndexed { row, line ->
             line.forEachIndexed { col, char ->
                 grid[row][col] = char
