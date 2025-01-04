@@ -3,70 +3,15 @@ fun main() {
 
     println("$day part 1")
 
-    val idOfFreeBlock = -1
-
-    fun calculateChecksum(blocks: IntArray): Long {
-        var checksum: Long = 0
-        blocks.forEachIndexed { position, id ->
-            if (id == idOfFreeBlock) {
-                return checksum
-            }
-            checksum += position * id
-        }
-        return checksum
-    }
-
     fun part1(input: List<String>): Long {
-        val diskMap = input.first().map(Char::digitToInt)
-        // even (starting at 0): file content; consecutively numbered IDs
-        val files = diskMap.filterIndexed { i, _ -> i % 2 == 0 }
-        // odd: (starting at 1): free space
-        val free = diskMap.filterIndexed { i, _ -> i % 2 == 1 }
-        val blockCount = diskMap.sumOf { it }
-        val blocks = IntArray(blockCount)
-        println("- ${files.size} files: $files")
-        println("- ${free.size} free blocks: $free")
-        println("- blockCount: $blockCount")
-
-        var index = 0
-        var indexBackwards = blocks.lastIndex
-        var idToMove = files.lastIndex
-        var stillToMove = files[idToMove]
-
-        for (id in files.indices) {
-            // forwards: fill the file blocks that remain on their place
-            repeat(files[id]) {
-                blocks[index] = if (index >= indexBackwards - 1) {
-                    idOfFreeBlock // we're done. there's nothing left to move
-                } else {
-                    id
-                }
-                index++
-            }
-            // backwards: move the file blocks to the free slots (that still are traversed forwards)
-            if (id < free.size) {
-                repeat(free[id]) {
-                    blocks[index] = if (index >= indexBackwards - 1) {
-                        idOfFreeBlock // we're done. there's nothing left to move
-                    } else {
-                        idToMove
-                    }
-                    stillToMove--
-                    if (stillToMove == 0) {
-                        idToMove--
-                        stillToMove = files[idToMove]
-                    }
-                    index++
-                    indexBackwards--
-                }
-            }
-        }
+        val diskMap = DiskMap(input)
+        diskMap.printInfo()
+        val blocks = diskMap.compact()
         println("- compacted blocks: ${blocks.joinToString(" ")}")
-
-        return calculateChecksum(blocks)
+        return diskMap.calculateChecksum(blocks)
     }
 
-    // disk map 12345 represents these individual
+    // disk map 12345 represents individual
     // blocks   : 0..111....22222
     // compacted: 022111222......
     printAndCheck(
@@ -104,4 +49,72 @@ fun main() {
 //    )
 //
 //    printAndCheck(input, ::part2, 809)
+}
+
+private class DiskMap(input: List<String>) {
+    val idOfFreeBlock = -1
+
+    val diskMap = input.first().map(Char::digitToInt)
+
+    // even (starting at 0): file content; consecutively numbered IDs
+    val files = diskMap.filterIndexed { i, _ -> i % 2 == 0 }
+    // odd: (starting at 1): free space
+    val free = diskMap.filterIndexed { i, _ -> i % 2 == 1 }
+    val blockCount = diskMap.sumOf { it }
+
+    fun printInfo() {
+        println("- ${files.size} files: $files")
+        println("- ${free.size} free blocks: $free")
+        println("- blockCount: $blockCount")
+    }
+
+    fun compact(): IntArray {
+        val blocks = IntArray(blockCount)
+
+        var index = 0
+        var indexBackwards = blocks.lastIndex
+        var idToMove = files.lastIndex
+        var stillToMove = files[idToMove]
+
+        for (id in files.indices) {
+            // forwards: fill the file blocks that remain on their place
+            repeat(files[id]) {
+                blocks[index] = if (index >= indexBackwards - 1) {
+                    idOfFreeBlock // we're done. there's nothing left to move
+                } else {
+                    id
+                }
+                index++
+            }
+            // backwards: move the file blocks to the free slots (that still are traversed forwards)
+            if (id < free.size) {
+                repeat(free[id]) {
+                    blocks[index] = if (index >= indexBackwards - 1) {
+                        idOfFreeBlock // we're done. there's nothing left to move
+                    } else {
+                        idToMove
+                    }
+                    stillToMove--
+                    if (stillToMove == 0) {
+                        idToMove--
+                        stillToMove = files[idToMove]
+                    }
+                    index++
+                    indexBackwards--
+                }
+            }
+        }
+        return blocks
+    }
+
+    fun calculateChecksum(blocks: IntArray): Long {
+        var checksum: Long = 0
+        blocks.forEachIndexed { position, id ->
+            if (id == idOfFreeBlock) {
+                return checksum
+            }
+            checksum += position * id
+        }
+        return checksum
+    }
 }
