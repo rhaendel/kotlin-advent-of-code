@@ -31,10 +31,18 @@ fun main() {
         ::part1, 1928
     )
 
+    // disk map 1234 represents individual
+    // blocks   : 0..111....
+    // compacted: 0111......
+    printAndCheck(
+        """
+            1234
+        """.trimIndent().lines(),
+        ::part1, 6
+    )
+
     val input = readInput(day)
-    printAndCheck(input, ::part1, 10819742216294)
-    // too high: 10819742216294
-    // too low :      719597670
+    printAndCheck(input, ::part1, 6398608069280)
 
 
 //    println("$day part 2")
@@ -60,11 +68,15 @@ private class DiskMap(input: List<String>) {
     val files = diskMap.filterIndexed { i, _ -> i % 2 == 0 }
     // odd: (starting at 1): free space
     val free = diskMap.filterIndexed { i, _ -> i % 2 == 1 }
-    val blockCount = diskMap.sumOf { it }
+    val filesCount = files.sumOf { it }
+    val freeCount = free.sumOf { it }
+    val blockCount = filesCount + freeCount
 
     fun printInfo() {
         println("- ${files.size} files: $files")
         println("- ${free.size} free blocks: $free")
+        println("- filesCount: $filesCount")
+        println("- freeCount : $freeCount")
         println("- blockCount: $blockCount")
     }
 
@@ -76,10 +88,18 @@ private class DiskMap(input: List<String>) {
         var idToMove = files.lastIndex
         var stillToMove = files[idToMove]
 
+        // if diskMap ends with free blocks (an even number), set them free in the result up front
+        if (files.size == free.size) {
+            repeat(free.last()) {
+                blocks[indexBackwards] = idOfFreeBlock
+                indexBackwards--
+            }
+        }
+
         for (id in files.indices) {
             // forwards: fill the file blocks that remain on their place
             repeat(files[id]) {
-                blocks[index] = if (index >= indexBackwards - 1) {
+                blocks[index] = if (index >= filesCount) {
                     idOfFreeBlock // we're done. there's nothing left to move
                 } else {
                     id
@@ -89,7 +109,7 @@ private class DiskMap(input: List<String>) {
             // backwards: move the file blocks to the free slots (that still are traversed forwards)
             if (id < free.size) {
                 repeat(free[id]) {
-                    blocks[index] = if (index >= indexBackwards - 1) {
+                    blocks[index] = if (index >= filesCount) {
                         idOfFreeBlock // we're done. there's nothing left to move
                     } else {
                         idToMove
@@ -97,7 +117,9 @@ private class DiskMap(input: List<String>) {
                     stillToMove--
                     if (stillToMove == 0) {
                         idToMove--
-                        stillToMove = files[idToMove]
+                        if (idToMove >= 0) {
+                            stillToMove = files[idToMove]
+                        }
                     }
                     index++
                     indexBackwards--
