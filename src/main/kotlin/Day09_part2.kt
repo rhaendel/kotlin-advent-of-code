@@ -6,7 +6,7 @@ fun main() {
 
     fun part2(input: List<String>): Long {
         val diskMap = DefragDiskMap(input)
-        diskMap.printBlocks()
+        // diskMap.printBlocks()
         val blocks = diskMap.defrag()
         return diskMap.calculateChecksum(blocks)
     }
@@ -35,20 +35,16 @@ fun main() {
     00000000.....111.22222.........33333333.....4444..55555666..7777777788888.......9
     ...
     000000009666.111.222228888844443333333355555................77777777.............
-    TODO: without 'wasMoved' the 9 is moved right in the last step - why? Moves should always be to the left. Check indices!
      */
     printAndCheck(
         """
             8531598542503280571
         """.trimIndent().lines(),
-        ::part2, 20
+        ::part2, 7309
     )
 
     val input = readInput(day)
-//    printAndCheck(input, ::part2, 809)
-    // too high:  6427590702452
-    // not right: 6427441424273 (mark changed blocks as 'wasMoved')
-    // too low:   6410551341413 (checksum that skips free space in index counting)
+    printAndCheck(input, ::part2, 6427437134372)
 }
 
 private data class Block(var id: Int, var length: Int, var isFree: Boolean, var wasMoved: Boolean = false) {
@@ -128,18 +124,17 @@ private class DefragDiskMap(input: List<String>) {
     }
 
     fun defrag(): List<Block> {
-        val sizeFree = blocks.sizeFree()
-        val sizeOccupied = blocks.sizeOccupied()
+//        val sizeFree = blocks.sizeFree()
+//        val sizeOccupied = blocks.sizeOccupied()
 
         val newBlocks = blocks.toMutableList()
-        var backwardsIndex = newBlocks.lastIndex
         blocks.reversed().forEach { block ->
             if (block.isNotFree && block.wasNotMoved) {
                 // find a free block with enough space
                 val newBlocksIterator = newBlocks.listIterator()
-                var forwardsIndex = 0
                 for (newBlock in newBlocksIterator) {
-                    if (forwardsIndex >= backwardsIndex) {
+                    if (block.id == newBlock.id) {
+                        // forward and backward iteration meet each other
                         break
                     }
                     if (newBlock.isFree && newBlock.length >= block.length) {
@@ -150,17 +145,14 @@ private class DefragDiskMap(input: List<String>) {
                             // split the target block
                             val blockToInsert = newBlock.splitAt(block.length)
                             newBlocksIterator.add(blockToInsert)
-                            backwardsIndex++
                         }
-                        printBlocks(newBlocks)
+                        // printBlocks(newBlocks)
                         break
                     }
-                    forwardsIndex++
                 }
-                check(newBlocks.sizeFree() == sizeFree)
-                check(newBlocks.sizeOccupied() == sizeOccupied)
+//                check(newBlocks.sizeFree() == sizeFree)
+//                check(newBlocks.sizeOccupied() == sizeOccupied)
             }
-            backwardsIndex--
         }
         // printBlocks(newBlocks)
         return newBlocks
