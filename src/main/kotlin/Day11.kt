@@ -3,28 +3,58 @@ fun main() {
 
     println("$day part 1")
 
-    fun part1(input: List<String>): Int {
-        val stones = input.first().split(" ").map(String::toLong).toMutableList()
+    fun parseStones(input: List<String>) = input
+        .first()
+        .split(" ")
+        .map(String::toLong)
+        .toMutableList()
 
-        repeat(25) {
-            val iterator = stones.listIterator()
+    fun Long.digitCount(): Int {
+        if (this == 0L) return 1
+
+        var count = 0
+        var currentNumber = this
+        while (currentNumber > 0) {
+            currentNumber /= 10
+            count++
+        }
+        return count
+    }
+
+    fun tenToPowerOf(digitCount: Int): Int {
+        var tens = 10
+        repeat((digitCount / 2) - 1) {
+            tens *= 10
+        }
+        return tens
+    }
+
+    fun MutableList<Long>.blink(times: Int): MutableList<Long> {
+        repeat(times) { count ->
+            if (count % 5 == 0) println(count)
+
+            val iterator = listIterator()
             for (stone in iterator) {
                 if (stone == 0L) {
                     iterator.set(1)
                 } else {
-                    val stoneString = "$stone"
-                    if (stoneString.length % 2 == 0) {
-                        iterator.set(stoneString.substring(0, stoneString.length / 2).toLong())
-                        iterator.add(stoneString.substring(stoneString.length / 2, stoneString.length).toLong())
+                    val digitCount = stone.digitCount()
+                    if (digitCount % 2 == 0) {
+                        val tens = tenToPowerOf(digitCount)
+                        iterator.set(stone.div(tens))
+                        iterator.add(stone % tens)
                     } else {
                         iterator.set(stone * 2024)
                     }
                 }
             }
         }
-
-        return stones.count()
+        return this
     }
+
+    fun part1(input: List<String>) = parseStones(input)
+        .blink(25)
+        .count()
 
     printAndCheck(
         """
@@ -35,4 +65,13 @@ fun main() {
 
     val input = readInput(day)
     printAndCheck(input, ::part1, 193899)
+
+
+    println("$day part 2")
+
+    fun part2(input: List<String>) = parseStones(input)
+        .blink(75)
+        .count()
+
+    printAndCheck(input, ::part2, 1960)
 }
