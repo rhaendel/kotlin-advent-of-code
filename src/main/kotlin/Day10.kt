@@ -25,6 +25,29 @@ fun main() {
 
     val input = readInput(day)
     printAndCheck(input, ::part1, 816)
+
+
+    println("$day part 2")
+
+    fun part2(input: List<String>) = TopographicMap(input)
+        .searchTrailheads()
+        .sumOf { it.rating }
+
+    printAndCheck(
+        """
+            .....0.
+            ..4321.
+            ..5..2.
+            ..6543.
+            ..7..4.
+            ..8765.
+            ..9....
+        """.trimIndent().lines(),
+        ::part2, 3
+    )
+
+    printAndCheck(testInput, ::part2, 81)
+    printAndCheck(input, ::part2, 1960)
 }
 
 private class TopographicMap(input: List<String>) {
@@ -35,7 +58,7 @@ private class TopographicMap(input: List<String>) {
 
     init {
         input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char -> grid[row][col] = char.digitToInt() }
+            line.forEachIndexed { col, char -> grid[row][col] = if (char.isDigit()) char.digitToInt() else offMap }
         }
     }
 
@@ -72,9 +95,15 @@ class Trailhead(private val startPosition: Coordinates) {
     val score: Int
         get() = reachableNines.size
 
+    var rating: Int = 0
+        private set
+
     private val reachableNines = mutableSetOf<Coordinates>()
 
-    private fun addReachable(coordinates: Coordinates) = reachableNines.add(coordinates)
+    private fun addReachable(coordinates: Coordinates) {
+        reachableNines.add(coordinates)
+        rating++
+    }
 
     fun findPathsToNines(heightAt: (Coordinates) -> Int): Boolean {
         findPathsToNines(startPosition, -1, heightAt)
