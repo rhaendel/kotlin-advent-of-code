@@ -1,4 +1,5 @@
-import Direction.*
+import de.ronny_h.extensions.Direction
+import de.ronny_h.extensions.Direction.NORTH
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
 import java.lang.Runtime.getRuntime
@@ -80,21 +81,6 @@ suspend fun main() {
 
 private data class Position(val row: Int, val col: Int) {
     operator fun plus(direction: Direction) = Position(row + direction.row, col + direction.col)
-}
-
-private enum class Direction(val row: Int, val col: Int) {
-    NORTH(-1, 0),
-    EAST(0, +1),
-    SOUTH(+1, 0),
-    WEST(0, -1),
-    ;
-
-    fun turnRight() = when(this) {
-        NORTH -> EAST
-        EAST -> SOUTH
-        SOUTH -> WEST
-        WEST -> NORTH
-    }
 }
 
 private class Lab(input: List<String>) {

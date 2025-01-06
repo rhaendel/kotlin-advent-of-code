@@ -54,4 +54,19 @@ class CoordinatesTest {
             Arguments.of(-3, Coordinates(5, 7), Coordinates(-15, -21)),
         )
     }
+
+    @ParameterizedTest
+    @MethodSource("provideCoordinatesForAddDirection")
+    fun `Add a direction`(coordinates: Coordinates, direction: Direction, result: Coordinates) {
+        assertThat(coordinates + direction).isEqualTo(result)
+    }
+
+    private fun provideCoordinatesForAddDirection(): Stream<Arguments> {
+        return Stream.of(
+            Arguments.of(Coordinates(5, 5), Direction.NORTH, Coordinates(4, 5)),
+            Arguments.of(Coordinates(5, 5), Direction.SOUTH, Coordinates(6, 5)),
+            Arguments.of(Coordinates(5, 5), Direction.EAST, Coordinates(5, 6)),
+            Arguments.of(Coordinates(5, 5), Direction.WEST, Coordinates(5, 4)),
+        )
+    }
 }
