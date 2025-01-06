@@ -30,17 +30,21 @@ fun main() {
     }
 
     fun MutableList<Long>.blink(times: Int): MutableList<Long> {
+        val cacheDigitCounts = mutableMapOf<Long, Int>()
+        val cachePowers = mutableMapOf<Int, Int>()
+
+        val start = System.currentTimeMillis()
         repeat(times) { count ->
-            if (count % 5 == 0) println(count)
+            println("$count, ${System.currentTimeMillis() - start} ms; size: ${this.size}; cached digitCounts: ${cacheDigitCounts.size}, powers: ${cachePowers.size}")
 
             val iterator = listIterator()
             for (stone in iterator) {
                 if (stone == 0L) {
                     iterator.set(1)
                 } else {
-                    val digitCount = stone.digitCount()
+                    val digitCount = cacheDigitCounts.getOrPut(stone) { stone.digitCount() }
                     if (digitCount % 2 == 0) {
-                        val tens = tenToPowerOf(digitCount)
+                        val tens = cachePowers.getOrPut(digitCount) { tenToPowerOf(digitCount) }
                         iterator.set(stone.div(tens))
                         iterator.add(stone % tens)
                     } else {
