@@ -53,6 +53,18 @@ fun main() {
         return this
     }
 
+    fun blink(stone: Long): List<Long> {
+        if (stone == 0L) {
+            return listOf(1)
+        }
+        val digitCount = cacheDigitCounts.getOrPut(stone) { stone.digitCount() }
+        if (digitCount % 2 == 0) {
+            val tens = cachePowers.getOrPut(digitCount) { tenToPowerOf(digitCount) }
+            return listOf(stone.div(tens), stone % tens)
+        }
+        return listOf(stone * 2024)
+    }
+
     fun List<Long>.blink(times: Int): List<Long> {
         val start = System.currentTimeMillis()
         val mutableList = toMutableList()
@@ -73,7 +85,7 @@ fun main() {
         } else if (state.stones.size > 1) {
             blinkRec(State(state.height, listOf(state.stones.first()))) + blinkRec(State(state.height, state.stones.drop(1)))
         } else {
-            blinkRec(State(state.height - 1, state.stones.toMutableList().blink()))
+            blinkRec(State(state.height - 1, blink(state.stones.single())))
         }
     }.memoize()
 
