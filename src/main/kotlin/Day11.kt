@@ -34,25 +34,6 @@ fun main() {
     val cacheDigitCounts = mutableMapOf<Long, Int>()
     val cachePowers = IntArray(20) { tenToPowerOf(it) }
 
-    fun MutableList<Long>.blink(): List<Long> {
-        val iterator = listIterator()
-        for (stone in iterator) {
-            if (stone == 0L) {
-                iterator.set(1)
-            } else {
-                val digitCount = cacheDigitCounts.getOrPut(stone) { stone.digitCount() }
-                if (digitCount % 2 == 0) {
-                    val tens = cachePowers[digitCount]
-                    iterator.set(stone.div(tens))
-                    iterator.add(stone % tens)
-                } else {
-                    iterator.set(stone * 2024)
-                }
-            }
-        }
-        return this
-    }
-
     fun blink(stone: Long): List<Long> {
         if (stone == 0L) {
             return listOf(1)
@@ -63,16 +44,6 @@ fun main() {
             return listOf(stone.div(tens), stone % tens)
         }
         return listOf(stone * 2024)
-    }
-
-    fun List<Long>.blink(times: Int): List<Long> {
-        val start = System.currentTimeMillis()
-        val mutableList = toMutableList()
-        repeat(times) { count ->
-            println("$count, ${System.currentTimeMillis() - start} ms; size: ${mutableList.size}; cached digitCounts: ${cacheDigitCounts.size}, powers: ${cachePowers.size}")
-            mutableList.blink()
-        }
-        return mutableList
     }
 
     data class State(val height: Int, val stones: List<Long>)
