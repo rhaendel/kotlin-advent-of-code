@@ -83,7 +83,7 @@ fun main() {
         if (state.height == 0) {
             state.stones
         } else if (state.stones.size > 1) {
-            blinkRec(State(state.height, listOf(state.stones.first()))) + blinkRec(State(state.height, state.stones.drop(1)))
+            blinkRec(State(state.height, state.stones.subList(0, state.stones.size/2))) + blinkRec(State(state.height, state.stones.subList(state.stones.size/2, state.stones.size)))
         } else {
             blinkRec(State(state.height - 1, blink(state.stones.single())))
         }
