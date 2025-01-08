@@ -63,16 +63,16 @@ fun main() {
 
     data class State(val height: Int, val stones: List<Long>)
 
-    fun blinkRec(state: State): List<Long> {
+    lateinit var blinkRec: (State) -> List<Long>
+
+    blinkRec = { state ->
         if (state.height == 0) {
-            return state.stones
+            state.stones
+        } else if (state.stones.size > 1) {
+            blinkRec(State(state.height, listOf(state.stones.first()))) + blinkRec(State(state.height, state.stones.drop(1)))
+        } else {
+            blinkRec(State(state.height - 1, state.stones.toMutableList().blink()))
         }
-
-        if (state.stones.size > 1) {
-            return blinkRec(State(state.height, listOf(state.stones.first()))) + blinkRec(State(state.height, state.stones.drop(1)))
-        }
-
-        return blinkRec(State(state.height - 1, state.stones.toMutableList().blink()))
     }
 
     fun List<Long>.blinkRec(times: Int): List<Long> {
