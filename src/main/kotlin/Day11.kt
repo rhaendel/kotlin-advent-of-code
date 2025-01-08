@@ -1,3 +1,5 @@
+import de.ronny_h.extensions.memoize
+
 fun main() {
     val day = "Day11"
 
@@ -65,7 +67,7 @@ fun main() {
 
     lateinit var blinkRec: (State) -> List<Long>
 
-    blinkRec = { state ->
+    blinkRec = { state: State ->
         if (state.height == 0) {
             state.stones
         } else if (state.stones.size > 1) {
@@ -73,7 +75,7 @@ fun main() {
         } else {
             blinkRec(State(state.height - 1, state.stones.toMutableList().blink()))
         }
-    }
+    }.memoize()
 
     fun List<Long>.blinkRec(times: Int): List<Long> {
         return blinkRec(State(times, this))
