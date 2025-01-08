@@ -77,11 +77,11 @@ fun main() {
 
     data class State(val height: Int, val stones: List<Long>)
 
-    lateinit var blinkRec: (State) -> List<Long>
+    lateinit var blinkRec: (State) -> Long
 
     blinkRec = { state: State ->
         if (state.height == 0) {
-            state.stones
+            state.stones.size.toLong()
         } else if (state.stones.size > 1) {
             blinkRec(State(state.height, state.stones.subList(0, state.stones.size/2))) + blinkRec(State(state.height, state.stones.subList(state.stones.size/2, state.stones.size)))
         } else {
@@ -89,13 +89,12 @@ fun main() {
         }
     }.memoize()
 
-    fun List<Long>.blinkRec(times: Int): List<Long> {
+    fun List<Long>.blinkRec(times: Int): Long {
         return blinkRec(State(times, this))
     }
 
     fun part1(input: List<String>) = parseStones(input)
         .blinkRec(25)
-        .count()
 
     printAndCheck(
         """
@@ -112,7 +111,6 @@ fun main() {
 
     fun part2(input: List<String>) = parseStones(input)
         .blinkRec(75)
-        .count()
 
-    printAndCheck(input, ::part2, 1960)
+    printAndCheck(input, ::part2, 229682160383225)
 }
