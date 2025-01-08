@@ -32,27 +32,31 @@ fun main() {
     val cacheDigitCounts = mutableMapOf<Long, Int>()
     val cachePowers = mutableMapOf<Int, Int>()
 
+    fun MutableList<Long>.blink(): List<Long> {
+        val iterator = listIterator()
+        for (stone in iterator) {
+            if (stone == 0L) {
+                iterator.set(1)
+            } else {
+                val digitCount = cacheDigitCounts.getOrPut(stone) { stone.digitCount() }
+                if (digitCount % 2 == 0) {
+                    val tens = cachePowers.getOrPut(digitCount) { tenToPowerOf(digitCount) }
+                    iterator.set(stone.div(tens))
+                    iterator.add(stone % tens)
+                } else {
+                    iterator.set(stone * 2024)
+                }
+            }
+        }
+        return this
+    }
+
     fun List<Long>.blink(times: Int): List<Long> {
         val start = System.currentTimeMillis()
         val mutableList = toMutableList()
         repeat(times) { count ->
             println("$count, ${System.currentTimeMillis() - start} ms; size: ${mutableList.size}; cached digitCounts: ${cacheDigitCounts.size}, powers: ${cachePowers.size}")
-
-            val iterator = mutableList.listIterator()
-            for (stone in iterator) {
-                if (stone == 0L) {
-                    iterator.set(1)
-                } else {
-                    val digitCount = cacheDigitCounts.getOrPut(stone) { stone.digitCount() }
-                    if (digitCount % 2 == 0) {
-                        val tens = cachePowers.getOrPut(digitCount) { tenToPowerOf(digitCount) }
-                        iterator.set(stone.div(tens))
-                        iterator.add(stone % tens)
-                    } else {
-                        iterator.set(stone * 2024)
-                    }
-                }
-            }
+            mutableList.blink()
         }
         return mutableList
     }
@@ -63,7 +67,12 @@ fun main() {
         if (state.height == 0) {
             return state.stones
         }
-        return blinkRec(State(state.height - 1, state.stones.blink(1)))
+
+        if (state.stones.size > 1) {
+            return blinkRec(State(state.height, listOf(state.stones.first()))) + blinkRec(State(state.height, state.stones.drop(1)))
+        }
+
+        return blinkRec(State(state.height - 1, state.stones.toMutableList().blink()))
     }
 
     fun List<Long>.blinkRec(times: Int): List<Long> {
@@ -88,7 +97,7 @@ fun main() {
     println("$day part 2")
 
     fun part2(input: List<String>) = parseStones(input)
-        .blink(75)
+        .blinkRec(75)
         .count()
 
     printAndCheck(input, ::part2, 1960)
