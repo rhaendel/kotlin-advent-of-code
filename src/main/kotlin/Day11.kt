@@ -32,7 +32,7 @@ fun main() {
     }
 
     val cacheDigitCounts = mutableMapOf<Long, Int>()
-    val cachePowers = mutableMapOf<Int, Int>()
+    val cachePowers = IntArray(20) { tenToPowerOf(it) }
 
     fun MutableList<Long>.blink(): List<Long> {
         val iterator = listIterator()
@@ -42,7 +42,7 @@ fun main() {
             } else {
                 val digitCount = cacheDigitCounts.getOrPut(stone) { stone.digitCount() }
                 if (digitCount % 2 == 0) {
-                    val tens = cachePowers.getOrPut(digitCount) { tenToPowerOf(digitCount) }
+                    val tens = cachePowers[digitCount]
                     iterator.set(stone.div(tens))
                     iterator.add(stone % tens)
                 } else {
@@ -59,7 +59,7 @@ fun main() {
         }
         val digitCount = cacheDigitCounts.getOrPut(stone) { stone.digitCount() }
         if (digitCount % 2 == 0) {
-            val tens = cachePowers.getOrPut(digitCount) { tenToPowerOf(digitCount) }
+            val tens = cachePowers[digitCount]
             return listOf(stone.div(tens), stone % tens)
         }
         return listOf(stone * 2024)
