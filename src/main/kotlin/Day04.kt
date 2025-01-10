@@ -52,9 +52,9 @@ class XMasGrid(input: List<String>) : Grid(input) {
     private val word = "XMAS".toCharArray()
     override val nullElement = ' '
 
-    fun searchForXMAS() = forEach(::searchForXMASAt).sum()
+    fun searchForXMAS() = forEachIndex(::searchForXMASAt).sum()
 
-    fun searchForMASCross() = forEach(::searchForMASCrossAt).sum()
+    fun searchForMASCross() = forEachIndex(::searchForMASCrossAt).sum()
 
     private fun searchForXMASAt(row: Int, col: Int): Int {
         var sum = 0

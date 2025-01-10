@@ -17,7 +17,7 @@ abstract class Grid(input: List<String>) {
         return grid.getOrNull(row)?.getOrNull(col) ?: nullElement
     }
 
-    fun <T> forEach(block: (Int, Int) -> T): Sequence<T> = sequence {
+    fun <T> forEachIndex(block: (Int, Int) -> T): Sequence<T> = sequence {
         for (row in grid.indices) {
             for (col in grid[0].indices) {
                 yield(block(row, col))

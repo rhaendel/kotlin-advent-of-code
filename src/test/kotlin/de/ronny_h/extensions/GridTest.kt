@@ -45,11 +45,11 @@ class GridTest {
     }
 
     @Test
-    fun `forEach calls the provided function on each element in the expected order`() {
+    fun `forEachIndex calls the provided function on each element in the expected order`() {
         val grid = object : Grid(listOf("12", "34")) {
             override val nullElement = ' '
         }
-        val chars = grid.forEach { row, column ->
+        val chars = grid.forEachIndex { row, column ->
             grid.charAt(row, column)
         }.toList()
         assertThat(chars).isEqualTo(listOf('1', '2', '3', '4'))
