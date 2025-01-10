@@ -17,10 +17,18 @@ abstract class Grid(input: List<String>) {
         return grid.getOrNull(row)?.getOrNull(col) ?: nullElement
     }
 
-    fun <T> forEachIndex(block: (Int, Int) -> T): Sequence<T> = sequence {
+    fun <T> forEachIndex(action: (Int, Int) -> T): Sequence<T> = sequence {
         for (row in grid.indices) {
             for (col in grid[0].indices) {
-                yield(block(row, col))
+                yield(action(row, col))
+            }
+        }
+    }
+
+    fun <T> forEachElement(action: (Int, Int, Char) -> T): Sequence<T> = sequence {
+        for (row in grid.indices) {
+            for (col in grid[0].indices) {
+                yield(action(row, col, charAt(row, col)))
             }
         }
     }

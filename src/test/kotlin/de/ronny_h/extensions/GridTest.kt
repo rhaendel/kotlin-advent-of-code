@@ -54,4 +54,22 @@ class GridTest {
         }.toList()
         assertThat(chars).isEqualTo(listOf('1', '2', '3', '4'))
     }
+
+    @Test
+    fun `forEachElement calls the provided function on each element in the expected order`() {
+        val grid = object : Grid(listOf("12", "34")) {
+            override val nullElement = ' '
+        }
+        val strings = grid.forEachElement { row, column, char ->
+            "$row,$column:$char"
+        }.toList()
+        assertThat(strings).isEqualTo(
+            listOf(
+                "0,0:1",
+                "0,1:2",
+                "1,0:3",
+                "1,1:4",
+            )
+        )
+    }
 }

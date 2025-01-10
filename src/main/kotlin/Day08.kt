@@ -60,8 +60,7 @@ private class CityMap(input: List<String>) : Grid(input) {
     private val rowIndices = input.indices
 
     private val antennas: Map<Char, List<Coordinates>> = buildMap<Char, MutableList<Coordinates>> {
-        super.forEachIndex { row, col ->
-            val char = charAt(row, col)
+        forEachElement { row, col, char ->
             if (char != nullElement) {
                 getOrPut(char, ::mutableListOf).add(Coordinates(row, col))
             }
@@ -98,14 +97,13 @@ private class CityMap(input: List<String>) : Grid(input) {
     private fun Coordinates.isOnTheMap() = col in colIndices && row in rowIndices
 
     fun printGrid(antinodes: Set<Coordinates> = setOf()) {
-        forEachIndex { r, c ->
-            val char = charAt(r, c)
-            if (antinodes.contains(Coordinates(r, c))) {
+        forEachElement { row, col, char ->
+            if (antinodes.contains(Coordinates(row, col))) {
                 print("#")
             } else {
                 print(char)
             }
-            if (c == width - 1) println()
+            if (col == width - 1) println()
         }.last()
     }
 }
