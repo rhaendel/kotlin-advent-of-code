@@ -1,6 +1,8 @@
 package de.ronny_h.extensions
 
+import de.ronny_h.extensions.Direction.*
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -63,10 +65,18 @@ class CoordinatesTest {
 
     private fun provideCoordinatesForAddDirection(): Stream<Arguments> {
         return Stream.of(
-            Arguments.of(Coordinates(5, 5), Direction.NORTH, Coordinates(4, 5)),
-            Arguments.of(Coordinates(5, 5), Direction.SOUTH, Coordinates(6, 5)),
-            Arguments.of(Coordinates(5, 5), Direction.EAST, Coordinates(5, 6)),
+            Arguments.of(Coordinates(5, 5), NORTH, Coordinates(4, 5)),
+            Arguments.of(Coordinates(5, 5), SOUTH, Coordinates(6, 5)),
+            Arguments.of(Coordinates(5, 5), EAST, Coordinates(5, 6)),
             Arguments.of(Coordinates(5, 5), Direction.WEST, Coordinates(5, 4)),
         )
+    }
+
+    @Test
+    fun `Direction turnRight() turns right`() {
+        assertThat(NORTH.turnRight()).isEqualTo(EAST)
+        assertThat(EAST.turnRight()).isEqualTo(SOUTH)
+        assertThat(SOUTH.turnRight()).isEqualTo(WEST)
+        assertThat(WEST.turnRight()).isEqualTo(NORTH)
     }
 }
