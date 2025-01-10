@@ -37,6 +37,14 @@ abstract class Grid<T>(input: List<String>) {
         }
     }
 
+    fun <R> forEachCoordinates(action: (position: Coordinates, element: T) -> R): Sequence<R> = sequence {
+        for (row in grid.indices) {
+            for (col in grid[0].indices) {
+                yield(action(Coordinates(row, col), get(row, col)))
+            }
+        }
+    }
+
     fun printGrid(overrides: Set<Coordinates> = setOf(), overrideChar: Char = '#') {
         forEachElement { row, col, element ->
             if (overrides.contains(Coordinates(row, col))) {
