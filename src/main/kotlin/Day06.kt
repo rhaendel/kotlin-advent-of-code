@@ -1,5 +1,7 @@
+import de.ronny_h.extensions.Coordinates
 import de.ronny_h.extensions.Direction
 import de.ronny_h.extensions.Direction.NORTH
+import de.ronny_h.extensions.Grid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
 import java.lang.Runtime.getRuntime
@@ -11,7 +13,7 @@ suspend fun main() {
     println("$day part 1")
 
     fun part1(input: List<String>): Int {
-        val visited = mutableSetOf<Position>()
+        val visited = mutableSetOf<Coordinates>()
         Lab(input).doTheGuardWalk { position, _ ->
             visited.add(position)
             true
@@ -48,7 +50,7 @@ suspend fun main() {
             (1..coresCount).map {
                 async {
                     for (additionalObstruction in positions) {
-                        val visited = mutableSetOf<Pair<Position, Direction>>()
+                        val visited = mutableSetOf<Pair<Coordinates, Direction>>()
                         lab.doTheGuardWalk(additionalObstruction) { position, direction ->
                             if (visited.add(position to direction)) {
                                 true
@@ -79,50 +81,32 @@ suspend fun main() {
     printAndCheck(input, ::part2, 1480)
 }
 
-private data class Position(val row: Int, val col: Int) {
-    operator fun plus(direction: Direction) = Position(row + direction.row, col + direction.col)
-}
-
-private class Lab(input: List<String>) {
+private class Lab(input: List<String>) : Grid(input) {
 
     private val guard = '^'
     private val obstruction = '#'
     private val free = '.'
     private val offMap = ' '
+    override val nullElement = offMap
 
-    private val grid = Array(input.size) { CharArray(input[0].length) }
-
-    init {
-        input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char -> grid[row][col] = char }
-        }
-    }
-
-    private fun charAt(position: Position): Char {
-        return grid.getOrNull(position.row)?.getOrNull(position.col) ?: offMap
-    }
-
-    private fun findTheGuard(): Position {
-        for ((rowNo, row) in grid.withIndex()) {
-            row.indexOf(guard).let { if (it >= 0) return Position(rowNo, it) }
-        }
-        error("There was no initial guard position found in the lab.")
-    }
+    private fun findTheGuard(): Coordinates = forEachElement { row, col, element ->
+        if (element == guard) Coordinates(row, col) else null
+    }.filterNotNull().first()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun freePositions(scope: CoroutineScope, bufferSize: Int) = scope.produce(capacity = bufferSize) {
-        grid.forEachIndexed { rowNo, row ->
-            row.forEachIndexed { colNo, char ->
-                if (char == free) {
-                    send(Position(rowNo, colNo))
-                }
-            }
+        forEachElement { row, col, char ->
+            if (char == free) Coordinates(row, col) else null
         }
+            .filterNotNull()
+            .forEach {
+                send(it)
+            }
     }
 
     fun doTheGuardWalk(
-        additionalObstruction: Position? = null,
-        visit: (Position, Direction) -> Boolean,
+        additionalObstruction: Coordinates? = null,
+        visit: (Coordinates, Direction) -> Boolean,
     ) {
         var direction = NORTH
         var position = findTheGuard()

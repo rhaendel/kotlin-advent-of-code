@@ -34,6 +34,17 @@ class GridTest {
     }
 
     @Test
+    fun `charAt with indices returns the same as charAt with Coordinates`() {
+        val grid = object : Grid(listOf("12", "34")) {
+            override val nullElement = ' '
+        }
+        assertThat(grid.charAt(0, 0)).isEqualTo(grid.charAt(Coordinates(0, 0)))
+        assertThat(grid.charAt(0, 1)).isEqualTo(grid.charAt(Coordinates(0, 1)))
+        assertThat(grid.charAt(1, 0)).isEqualTo(grid.charAt(Coordinates(1, 0)))
+        assertThat(grid.charAt(1, 1)).isEqualTo(grid.charAt(Coordinates(1, 1)))
+    }
+
+    @Test
     fun `charAt with index out of the input values returns the nullElement`() {
         val grid = object : Grid(listOf("12", "34")) {
             override val nullElement = ' '
