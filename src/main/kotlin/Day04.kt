@@ -1,10 +1,12 @@
+import de.ronny_h.extensions.Grid
+
 fun main() {
     val day = "Day04"
 
     println("$day part 1")
 
     fun part1(input: List<String>): Int {
-        return Grid(input).searchForXMAS()
+        return XMasGrid(input).searchForXMAS()
     }
 
     printAndCheck(
@@ -28,7 +30,7 @@ fun main() {
     println("$day part 2")
 
     fun part2(input: List<String>): Int {
-        return Grid(input).searchForMASCross()
+        return XMasGrid(input).searchForMASCross()
     }
 
     printAndCheck(
@@ -45,34 +47,14 @@ fun main() {
     printAndCheck(input, ::part2, 1933)
 }
 
-class Grid(input: List<String>) {
+class XMasGrid(input: List<String>) : Grid(input) {
 
     private val word = "XMAS".toCharArray()
-    private val grid = Array(input.size) { CharArray(input[0].length) }
+    override val nullElement = ' '
 
-    init {
-        input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char -> grid[row][col] = char }
-        }
-    }
+    fun searchForXMAS() = forEach(::searchForXMASAt).sum()
 
-    private fun charAt(row: Int, col: Int): Char {
-        return grid.getOrNull(row)?.getOrNull(col) ?: ' '
-    }
-
-    fun searchForXMAS() = sumForEachInGrid(::searchForXMASAt)
-
-    fun searchForMASCross() = sumForEachInGrid(::searchForMASCrossAt)
-
-    private fun sumForEachInGrid(countAt: (Int, Int) -> Int): Int {
-        var sum = 0
-        for (row in grid.indices) {
-            for (col in grid[0].indices) {
-                sum += countAt(row, col)
-            }
-        }
-        return sum
-    }
+    fun searchForMASCross() = forEach(::searchForMASCrossAt).sum()
 
     private fun searchForXMASAt(row: Int, col: Int): Int {
         var sum = 0
