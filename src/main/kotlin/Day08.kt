@@ -52,9 +52,10 @@ fun main() {
     printAndCheck(input, ::part2, 809)
 }
 
-private class CityMap(input: List<String>) : Grid(input) {
+private class CityMap(input: List<String>) : Grid<Char>(input) {
 
     override val nullElement = '.'
+    override fun Char.toElementType() = this
 
     private val colIndices = input[0].indices
     private val rowIndices = input.indices

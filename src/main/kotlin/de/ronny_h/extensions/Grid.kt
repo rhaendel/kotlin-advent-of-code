@@ -1,26 +1,27 @@
 package de.ronny_h.extensions
 
-abstract class Grid(input: List<String>) {
+abstract class Grid<T>(input: List<String>) {
     val height = input.size
     val width = input[0].length
 
-    abstract val nullElement: Char
+    abstract val nullElement: T
+    abstract fun Char.toElementType(): T
 
-    private val grid = Array(height) { CharArray(width) }
+    private val grid = MutableList(height) { MutableList(width) { nullElement } }
 
     init {
         input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char -> grid[row][col] = char }
+            line.forEachIndexed { col, char -> grid[row][col] = char.toElementType() }
         }
     }
 
-    fun charAt(row: Int, col: Int): Char {
+    fun charAt(row: Int, col: Int): T {
         return grid.getOrNull(row)?.getOrNull(col) ?: nullElement
     }
 
     fun charAt(position: Coordinates) = charAt(position.row, position.col)
 
-    fun <T> forEachIndex(action: (row: Int, col: Int) -> T): Sequence<T> = sequence {
+    fun <R> forEachIndex(action: (row: Int, col: Int) -> R): Sequence<R> = sequence {
         for (row in grid.indices) {
             for (col in grid[0].indices) {
                 yield(action(row, col))
@@ -28,7 +29,7 @@ abstract class Grid(input: List<String>) {
         }
     }
 
-    fun <T> forEachElement(action: (row: Int, col: Int, element: Char) -> T): Sequence<T> = sequence {
+    fun <R> forEachElement(action: (row: Int, col: Int, element: T) -> R): Sequence<R> = sequence {
         for (row in grid.indices) {
             for (col in grid[0].indices) {
                 yield(action(row, col, charAt(row, col)))
