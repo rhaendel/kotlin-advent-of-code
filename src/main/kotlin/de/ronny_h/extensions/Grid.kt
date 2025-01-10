@@ -15,11 +15,11 @@ abstract class Grid<T>(input: List<String>) {
         }
     }
 
-    fun charAt(row: Int, col: Int): T {
+    operator fun get(row: Int, col: Int): T {
         return grid.getOrNull(row)?.getOrNull(col) ?: nullElement
     }
 
-    fun charAt(position: Coordinates) = charAt(position.row, position.col)
+    fun getAt(position: Coordinates) = get(position.row, position.col)
 
     fun <R> forEachIndex(action: (row: Int, col: Int) -> R): Sequence<R> = sequence {
         for (row in grid.indices) {
@@ -32,17 +32,17 @@ abstract class Grid<T>(input: List<String>) {
     fun <R> forEachElement(action: (row: Int, col: Int, element: T) -> R): Sequence<R> = sequence {
         for (row in grid.indices) {
             for (col in grid[0].indices) {
-                yield(action(row, col, charAt(row, col)))
+                yield(action(row, col, get(row, col)))
             }
         }
     }
 
     fun printGrid(overrides: Set<Coordinates> = setOf(), overrideChar: Char = '#') {
-        forEachElement { row, col, char ->
+        forEachElement { row, col, element ->
             if (overrides.contains(Coordinates(row, col))) {
                 print(overrideChar)
             } else {
-                print(char)
+                print(element)
             }
             if (col == width - 1) println()
         }.last()

@@ -73,7 +73,7 @@ class XMasGrid(input: List<String>) : Grid<Char>(input) {
     private fun searchForXMAS(row: Int, col: Int, rowOp: (Int, Int) -> Int, colOp: (Int, Int) -> Int): Int {
         var matchIndex = 0
         for (index in word.indices) {
-            if (charAt(rowOp(row, index), colOp(col, index)) == word[matchIndex]) {
+            if (get(rowOp(row, index), colOp(col, index)) == word[matchIndex]) {
                 if (matchIndex == word.lastIndex) {
                     return 1
                 }
@@ -86,7 +86,7 @@ class XMasGrid(input: List<String>) : Grid<Char>(input) {
     }
 
     private fun searchForMASCrossAt(row: Int, col: Int): Int {
-        if (charAt(row, col) != 'A') {
+        if (get(row, col) != 'A') {
             return 0
         }
         if ((mainDiagIsMAS(row, col) || mainDiagIsSAM(row, col)) &&
@@ -97,12 +97,12 @@ class XMasGrid(input: List<String>) : Grid<Char>(input) {
         return 0
     }
 
-    private fun mainDiagIsMAS(row: Int, col: Int) = charAt(row - 1, col - 1) == 'M' && charAt(row + 1, col + 1) == 'S'
+    private fun mainDiagIsMAS(row: Int, col: Int) = get(row - 1, col - 1) == 'M' && get(row + 1, col + 1) == 'S'
 
-    private fun mainDiagIsSAM(row: Int, col: Int) = charAt(row - 1, col - 1) == 'S' && charAt(row + 1, col + 1) == 'M'
+    private fun mainDiagIsSAM(row: Int, col: Int) = get(row - 1, col - 1) == 'S' && get(row + 1, col + 1) == 'M'
 
-    private fun secDiagIsMAS(row: Int, col: Int) = charAt(row - 1, col + 1) == 'M' && charAt(row + 1, col - 1) == 'S'
+    private fun secDiagIsMAS(row: Int, col: Int) = get(row - 1, col + 1) == 'M' && get(row + 1, col - 1) == 'S'
 
-    private fun secDiagIsSAM(row: Int, col: Int) = charAt(row - 1, col + 1) == 'S' && charAt(row + 1, col - 1) == 'M'
+    private fun secDiagIsSAM(row: Int, col: Int) = get(row - 1, col + 1) == 'S' && get(row + 1, col - 1) == 'M'
 
 }

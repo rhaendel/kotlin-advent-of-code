@@ -28,10 +28,10 @@ class GridTest {
     @Test
     fun `charAt returns the input values from the right indices`() {
         val grid = simpleCharGridOf(listOf("12", "34"))
-        assertThat(grid.charAt(0, 0)).isEqualTo('1')
-        assertThat(grid.charAt(0, 1)).isEqualTo('2')
-        assertThat(grid.charAt(1, 0)).isEqualTo('3')
-        assertThat(grid.charAt(1, 1)).isEqualTo('4')
+        assertThat(grid[0, 0]).isEqualTo('1')
+        assertThat(grid[0, 1]).isEqualTo('2')
+        assertThat(grid[1, 0]).isEqualTo('3')
+        assertThat(grid[1, 1]).isEqualTo('4')
     }
 
     @Test
@@ -40,28 +40,28 @@ class GridTest {
             override val nullElement = Int.MIN_VALUE
             override fun Char.toElementType() = digitToInt()
         }
-        assertThat(grid.charAt(0, 0)).isEqualTo(1)
-        assertThat(grid.charAt(0, 1)).isEqualTo(2)
-        assertThat(grid.charAt(1, 0)).isEqualTo(3)
-        assertThat(grid.charAt(1, 1)).isEqualTo(4)
+        assertThat(grid[0, 0]).isEqualTo(1)
+        assertThat(grid[0, 1]).isEqualTo(2)
+        assertThat(grid[1, 0]).isEqualTo(3)
+        assertThat(grid[1, 1]).isEqualTo(4)
     }
 
     @Test
     fun `charAt with indices returns the same as charAt with Coordinates`() {
         val grid = simpleCharGridOf(listOf("12", "34"))
-        assertThat(grid.charAt(0, 0)).isEqualTo(grid.charAt(Coordinates(0, 0)))
-        assertThat(grid.charAt(0, 1)).isEqualTo(grid.charAt(Coordinates(0, 1)))
-        assertThat(grid.charAt(1, 0)).isEqualTo(grid.charAt(Coordinates(1, 0)))
-        assertThat(grid.charAt(1, 1)).isEqualTo(grid.charAt(Coordinates(1, 1)))
+        assertThat(grid[0, 0]).isEqualTo(grid.getAt(Coordinates(0, 0)))
+        assertThat(grid[0, 1]).isEqualTo(grid.getAt(Coordinates(0, 1)))
+        assertThat(grid[1, 0]).isEqualTo(grid.getAt(Coordinates(1, 0)))
+        assertThat(grid[1, 1]).isEqualTo(grid.getAt(Coordinates(1, 1)))
     }
 
     @Test
     fun `charAt with index out of the input values returns the nullElement of a Char Grid`() {
         val grid = simpleCharGridOf(listOf("12", "34"))
-        assertThat(grid.charAt(-1, 0)).isEqualTo(' ')
-        assertThat(grid.charAt(0, 2)).isEqualTo(' ')
-        assertThat(grid.charAt(1, -1)).isEqualTo(' ')
-        assertThat(grid.charAt(2, 2)).isEqualTo(' ')
+        assertThat(grid[-1, 0]).isEqualTo(' ')
+        assertThat(grid[0, 2]).isEqualTo(' ')
+        assertThat(grid[1, -1]).isEqualTo(' ')
+        assertThat(grid[2, 2]).isEqualTo(' ')
     }
 
     @Test
@@ -70,17 +70,17 @@ class GridTest {
             override val nullElement = Int.MIN_VALUE
             override fun Char.toElementType() = digitToInt()
         }
-        assertThat(grid.charAt(-1, 0)).isEqualTo(Int.MIN_VALUE)
-        assertThat(grid.charAt(0, 2)).isEqualTo(Int.MIN_VALUE)
-        assertThat(grid.charAt(1, -1)).isEqualTo(Int.MIN_VALUE)
-        assertThat(grid.charAt(2, 2)).isEqualTo(Int.MIN_VALUE)
+        assertThat(grid[-1, 0]).isEqualTo(Int.MIN_VALUE)
+        assertThat(grid[0, 2]).isEqualTo(Int.MIN_VALUE)
+        assertThat(grid[1, -1]).isEqualTo(Int.MIN_VALUE)
+        assertThat(grid[2, 2]).isEqualTo(Int.MIN_VALUE)
     }
 
     @Test
     fun `forEachIndex calls the provided function on each element in the expected order`() {
         val grid = simpleCharGridOf(listOf("12", "34"))
         val chars = grid.forEachIndex { row, column ->
-            grid.charAt(row, column)
+            grid[row, column]
         }.toList()
         assertThat(chars).isEqualTo(listOf('1', '2', '3', '4'))
     }
