@@ -1,5 +1,6 @@
 package de.ronny_h.extensions
 
+import com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -9,6 +10,7 @@ class GridTest {
         override val nullElement = ' '
         override fun Char.toElementType() = this
     }
+    private val newLine: String = System.lineSeparator()
 
     @Test
     fun `a grid can be constructed from List of String`() {
@@ -97,5 +99,37 @@ class GridTest {
                 "1,1:4",
             )
         )
+    }
+
+    @Test
+    fun `printGrid prints the grid`() {
+        val output = tapSystemOut {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.printGrid()
+        }
+        assertThat(output).isEqualTo("12${newLine}34$newLine")
+    }
+
+    @Test
+    fun `printGrid overrides specified coordinates`() {
+        val output = tapSystemOut {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.printGrid(
+                setOf(Coordinates(0,1), Coordinates(1,0))
+            )
+        }
+        assertThat(output).isEqualTo("1#${newLine}#4$newLine")
+    }
+
+    @Test
+    fun `printGrid overrides specified coordinates with given overrideChar`() {
+        val output = tapSystemOut {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.printGrid(
+                setOf(Coordinates(0,1), Coordinates(1,0)),
+                '?'
+            )
+        }
+        assertThat(output).isEqualTo("1?${newLine}?4$newLine")
     }
 }

@@ -13,6 +13,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
     testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.4")
     testImplementation("org.assertj:assertj-core:3.27.1")
+    testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
 }
 
 tasks {

@@ -97,14 +97,4 @@ private class CityMap(input: List<String>) : Grid<Char>(input) {
 
     private fun Coordinates.isOnTheMap() = col in colIndices && row in rowIndices
 
-    fun printGrid(antinodes: Set<Coordinates> = setOf()) {
-        forEachElement { row, col, char ->
-            if (antinodes.contains(Coordinates(row, col))) {
-                print("#")
-            } else {
-                print(char)
-            }
-            if (col == width - 1) println()
-        }.last()
-    }
 }

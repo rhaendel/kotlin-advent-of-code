@@ -36,4 +36,15 @@ abstract class Grid<T>(input: List<String>) {
             }
         }
     }
+
+    fun printGrid(overrides: Set<Coordinates> = setOf(), overrideChar: Char = '#') {
+        forEachElement { row, col, char ->
+            if (overrides.contains(Coordinates(row, col))) {
+                print(overrideChar)
+            } else {
+                print(char)
+            }
+            if (col == width - 1) println()
+        }.last()
+    }
 }
