@@ -1,5 +1,6 @@
 import de.ronny_h.extensions.Coordinates
 import de.ronny_h.extensions.Direction.*
+import de.ronny_h.extensions.Grid
 
 fun main() {
     val day = "Day10"
@@ -50,29 +51,16 @@ fun main() {
     printAndCheck(input, ::part2, 1960)
 }
 
-private class TopographicMap(input: List<String>) {
+private class TopographicMap(input: List<String>) : Grid<Int>(input) {
 
-    private val offMap = Integer.MIN_VALUE
+    override val nullElement = Int.MIN_VALUE
+    override fun Char.toElementType() = if (isDigit()) digitToInt() else Int.MIN_VALUE
 
-    private val grid = Array(input.size) { IntArray(input[0].length) }
-
-    init {
-        input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char -> grid[row][col] = if (char.isDigit()) char.digitToInt() else offMap }
-        }
+    private fun heights(): Sequence<Pair<Coordinates, Int>> = forEachElement { row, col, height ->
+        Coordinates(row, col) to height
     }
 
-    private fun heights(): Sequence<Pair<Coordinates, Int>> = sequence {
-        grid.forEachIndexed { rowIndex, row ->
-            row.forEachIndexed { colIndex, height ->
-                yield(Coordinates(rowIndex, colIndex) to height)
-            }
-        }
-    }
-
-    private fun heightAt(coordinates: Coordinates): Int {
-        return grid.getOrNull(coordinates.row)?.getOrNull(coordinates.col) ?: offMap
-    }
+    private fun heightAt(coordinates: Coordinates) = getAt(coordinates)
 
     fun searchTrailheads(): List<Trailhead> {
         val startPositions = heights().filter { it.second == 0 }
@@ -88,7 +76,6 @@ private class TopographicMap(input: List<String>) {
             .mapNotNull { it }
             .toList()
     }
-
 }
 
 class Trailhead(private val startPosition: Coordinates) {
