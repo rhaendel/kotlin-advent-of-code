@@ -1,4 +1,5 @@
 import de.ronny_h.extensions.Coordinates
+import de.ronny_h.extensions.Grid
 import de.ronny_h.extensions.combinations
 
 fun main() {
@@ -51,25 +52,20 @@ fun main() {
     printAndCheck(input, ::part2, 809)
 }
 
-private class CityMap(input: List<String>) {
+private class CityMap(input: List<String>) : Grid(input) {
 
-    private val empty = '.'
+    override val nullElement = '.'
 
     private val colIndices = input[0].indices
     private val rowIndices = input.indices
 
-    // just for printing; the algorithm itself does not need the complete grid
-    private val grid = Array(input.size) { CharArray(input[0].length) }
-
     private val antennas: Map<Char, List<Coordinates>> = buildMap<Char, MutableList<Coordinates>> {
-        input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char ->
-                grid[row][col] = char
-                if (char != empty) {
-                    getOrPut(char, ::mutableListOf).add(Coordinates(row, col))
-                }
+        super.forEach { row, col ->
+            val char = charAt(row, col)
+            if (char != nullElement) {
+                getOrPut(char, ::mutableListOf).add(Coordinates(row, col))
             }
-        }
+        }.last()
     }
 
     fun collectAntinodes(withResonantHarmonics: Boolean = false): HashSet<Coordinates> {
@@ -102,15 +98,14 @@ private class CityMap(input: List<String>) {
     private fun Coordinates.isOnTheMap() = col in colIndices && row in rowIndices
 
     fun printGrid(antinodes: Set<Coordinates> = setOf()) {
-        grid.forEachIndexed { r, row ->
-            row.forEachIndexed { c, char ->
-                if (antinodes.contains(Coordinates(r, c))) {
-                    print("#")
-                } else {
-                    print(char)
-                }
+        forEach { r, c ->
+            val char = charAt(r, c)
+            if (antinodes.contains(Coordinates(r, c))) {
+                print("#")
+            } else {
+                print(char)
             }
-            println("")
-        }
+            if (c == width - 1) println()
+        }.last()
     }
 }

@@ -14,6 +14,15 @@ class GridTest {
     }
 
     @Test
+    fun `width and height have the right values`() {
+        val grid = object : Grid(listOf("00", "00", "00")) {
+            override val nullElement = ' '
+        }
+        assertThat(grid.height).isEqualTo(3)
+        assertThat(grid.width).isEqualTo(2)
+    }
+
+    @Test
     fun `charAt returns the input values from the right indices`() {
         val grid = object : Grid(listOf("12", "34")) {
             override val nullElement = ' '

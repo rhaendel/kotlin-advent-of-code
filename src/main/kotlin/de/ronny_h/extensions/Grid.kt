@@ -1,7 +1,9 @@
 package de.ronny_h.extensions
 
 abstract class Grid(input: List<String>) {
-    private val grid = Array(input.size) { CharArray(input[0].length) }
+    val height = input.size
+    val width = input[0].length
+    private val grid = Array(height) { CharArray(width) }
 
     init {
         input.forEachIndexed { row, line ->
