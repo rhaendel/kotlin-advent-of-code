@@ -45,14 +45,21 @@ abstract class Grid<T>(input: List<String>) {
         }
     }
 
-    fun printGrid(overrides: Set<Coordinates> = setOf(), overrideChar: Char = '#') {
-        forEachElement { row, col, element ->
-            if (overrides.contains(Coordinates(row, col))) {
+    fun printGrid(
+        overrides: Set<Coordinates> = setOf(),
+        overrideChar: Char = '#',
+        highlightPosition: Coordinates? = null,
+        highlightDirection: Direction? = null
+    ) {
+        forEachCoordinates { position, element ->
+            if (highlightPosition == position && highlightDirection != null) {
+                print(highlightDirection.asChar())
+            } else if (overrides.contains(position)) {
                 print(overrideChar)
             } else {
                 print(element)
             }
-            if (col == width - 1) println()
+            if (position.col == width - 1) println()
         }.last()
     }
 }

@@ -24,4 +24,18 @@ enum class Direction(val row: Int, val col: Int) {
         SOUTH -> WEST
         WEST -> NORTH
     }
+
+    fun turnLeft() = when(this) {
+        NORTH -> WEST
+        EAST -> NORTH
+        SOUTH -> EAST
+        WEST -> SOUTH
+    }
+
+    fun asChar() = when(this) {
+        NORTH -> '↑'
+        EAST -> '→'
+        SOUTH -> '↓'
+        WEST -> '←'
+    }
 }

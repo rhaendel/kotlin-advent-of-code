@@ -132,4 +132,41 @@ class GridTest {
         }
         assertThat(output).isEqualTo("1?${newLine}?4$newLine")
     }
+
+    @Test
+    fun `printGrid highlights specified coordinates with given highlightDirection's Char`() {
+        val output = tapSystemOut {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.printGrid(
+                highlightPosition = Coordinates(0, 1),
+                highlightDirection = Direction.SOUTH
+            )
+        }
+        assertThat(output).isEqualTo("1↓${newLine}34$newLine")
+    }
+
+    @Test
+    fun `printGrid - highlight has higher priority than overrides`() {
+        val output = tapSystemOut {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.printGrid(
+                overrides = setOf(Coordinates(0, 1)),
+                highlightPosition = Coordinates(0, 1),
+                highlightDirection = Direction.SOUTH
+            )
+        }
+        assertThat(output).isEqualTo("1↓${newLine}34$newLine")
+    }
+
+    @Test
+    fun `printGrid - highlight without a direction falls back to overrides`() {
+        val output = tapSystemOut {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.printGrid(
+                overrides = setOf(Coordinates(0, 1)),
+                highlightPosition = Coordinates(0, 1),
+            )
+        }
+        assertThat(output).isEqualTo("1#${newLine}34$newLine")
+    }
 }

@@ -79,4 +79,20 @@ class CoordinatesTest {
         assertThat(SOUTH.turnRight()).isEqualTo(WEST)
         assertThat(WEST.turnRight()).isEqualTo(NORTH)
     }
+
+    @Test
+    fun `Direction turnLeft() turns left`() {
+        assertThat(NORTH.turnLeft()).isEqualTo(WEST)
+        assertThat(EAST.turnLeft()).isEqualTo(NORTH)
+        assertThat(SOUTH.turnLeft()).isEqualTo(EAST)
+        assertThat(WEST.turnLeft()).isEqualTo(SOUTH)
+    }
+
+    @Test
+    fun `asChar gives a graphical representation`() {
+        assertThat(NORTH.asChar()).isEqualTo('↑')
+        assertThat(EAST.asChar()).isEqualTo('→')
+        assertThat(SOUTH.asChar()).isEqualTo('↓')
+        assertThat(WEST.asChar()).isEqualTo('←')
+    }
 }
