@@ -33,12 +33,38 @@ fun main() {
         counts
     }
 
+    fun List<Robot>.toGrid(
+        width: Int,
+        height: Int
+    ): List<List<Int>> {
+        val grid = MutableList(height) { MutableList(width) { 0 } }
+        forEach {
+            grid[it.py][it.px]++
+        }
+        return grid
+    }
+
+    fun List<List<Int>>.print() {
+        forEach { row ->
+            row.forEach {
+                when (it) {
+                    0 -> print('.')
+                    else -> print(it.digitToChar())
+                }
+            }
+            println()
+        }
+    }
+
     fun part1Small(input: List<String>): Int {
         val width = 11
         val height = 7
-        val (q1, q2, q3, q4) = input.parseRobots()
-            .move(width, height, 100)
-            .countQuadrants(width, height)
+        val robots = input.parseRobots()
+        robots.toGrid(width, height).print()
+        println("---------------------")
+        val robotsMoved = robots.move(width, height, 100)
+        robotsMoved.toGrid(width, height).print()
+        val (q1, q2, q3, q4) = robotsMoved.countQuadrants(width, height)
         return q1 * q2 * q3 * q4
     }
 
