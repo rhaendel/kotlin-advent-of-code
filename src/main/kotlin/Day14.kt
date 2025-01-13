@@ -1,5 +1,3 @@
-import de.ronny_h.extensions.isSymmetrical
-
 fun main() {
     val day = "Day14"
 
@@ -103,49 +101,27 @@ fun main() {
 
     println("$day part 2")
 
-    fun List<Robot>.isNotSymmetrical(width: Int, height: Int): Boolean {
+    fun List<Robot>.isNotUnique(width: Int, height: Int): Boolean {
         val grid = toGrid(width, height)
-        val symmetrical = grid.all { row ->
-            row.isSymmetrical()
+        val allUnique = grid.all { row ->
+            row.all { it <= 1 }
         }
-        if (symmetrical) {
+        if (allUnique) {
             grid.print()
         }
-        return !symmetrical
+        return !allUnique
     }
 
     fun iterateUntilSymmetrical(robots: List<Robot>, width: Int, height: Int): Long {
         var seconds = 0L
         do {
             seconds++
-            if (seconds % 10000 == 0L) print('.')
-            if (seconds % 1000000 == 0L) println()
             val result = robots.move(width, height, seconds)
-        } while (result.isNotSymmetrical(width, height))
+        } while (result.isNotUnique(width, height))
         return seconds
     }
 
-    fun part2Small(input: List<String>) = iterateUntilSymmetrical(input.parseRobots(), 11, 7)
-
     fun part2(input: List<String>) = iterateUntilSymmetrical(input.parseRobots(), 101, 103)
-
-    printAndCheck(
-        """
-            p=0,4 v=3,-3
-            p=6,3 v=-1,-3
-            p=10,3 v=-1,2
-            p=2,0 v=2,-1
-            p=0,0 v=1,3
-            p=3,0 v=-2,-2
-            p=7,6 v=-1,-3
-            p=3,0 v=-1,-2
-            p=9,3 v=2,3
-            p=7,3 v=-1,2
-            p=2,4 v=2,-3
-            p=9,5 v=-3,-3
-        """.trimIndent().lines(),
-        ::part2Small, 2
-    )
 
     printAndCheck(input, ::part2, 91649162)
 }
