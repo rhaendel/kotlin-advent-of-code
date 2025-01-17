@@ -112,7 +112,7 @@ fun main() {
         return !allUnique
     }
 
-    fun iterateUntilSymmetrical(robots: List<Robot>, width: Int, height: Int): Long {
+    fun iterateUntilUnique(robots: List<Robot>, width: Int, height: Int): Long {
         var seconds = 0L
         do {
             seconds++
@@ -121,7 +121,7 @@ fun main() {
         return seconds
     }
 
-    fun part2(input: List<String>) = iterateUntilSymmetrical(input.parseRobots(), 101, 103)
+    fun part2(input: List<String>) = iterateUntilUnique(input.parseRobots(), 101, 103)
 
     printAndCheck(input, ::part2, 6512)
 }
