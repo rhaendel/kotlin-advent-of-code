@@ -72,4 +72,16 @@ class CoordinatesTest : StringSpec({
         SOUTH.asChar() shouldBe '↓'
         WEST.asChar() shouldBe '←'
     }
+
+    "A Direction's orientation is checked right" {
+        NORTH.isVertical() shouldBe true
+        NORTH.isHorizontal() shouldBe false
+        SOUTH.isVertical() shouldBe true
+        SOUTH.isHorizontal() shouldBe false
+
+        EAST.isVertical() shouldBe false
+        EAST.isHorizontal() shouldBe true
+        WEST.isVertical() shouldBe false
+        WEST.isHorizontal() shouldBe true
+    }
 })
