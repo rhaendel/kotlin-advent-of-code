@@ -1,22 +1,19 @@
 package de.ronny_h.extensions
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import io.kotlintest.shouldBe
+import io.kotlintest.specs.StringSpec
 
-class SymmetriesTest {
+class SymmetriesTest : StringSpec({
 
-    @Test
-    fun `an empty list is symmetrical`() {
-        assertThat(listOf<Int>().isSymmetrical()).isTrue()
+    "an empty list is symmetrical" {
+        listOf<Int>().isSymmetrical() shouldBe true
     }
 
-    @Test
-    fun `a symmetrical list is symmetrical`() {
-        assertThat(listOf(1, 2, 3, 2, 1).isSymmetrical()).isTrue()
+    "a symmetrical list is symmetrical" {
+        listOf(1, 2, 3, 2, 1).isSymmetrical() shouldBe true
     }
 
-    @Test
-    fun `a asymmetrical list is not symmetrical`() {
-        assertThat(listOf(4, 2, 3, 2, 1).isSymmetrical()).isFalse()
+    "a asymmetrical list is not symmetrical" {
+        listOf(4, 2, 3, 2, 1).isSymmetrical() shouldBe false
     }
-}
+})
