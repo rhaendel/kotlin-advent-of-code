@@ -123,7 +123,7 @@ fun main() {
 
     fun part2(input: List<String>) = iterateUntilSymmetrical(input.parseRobots(), 101, 103)
 
-    printAndCheck(input, ::part2, 91649162)
+    printAndCheck(input, ::part2, 6512)
 }
 
 data class Robot(val px: Int, val py: Int, val vx: Int, val vy: Int)

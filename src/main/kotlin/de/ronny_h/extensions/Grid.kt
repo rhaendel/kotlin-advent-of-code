@@ -20,6 +20,9 @@ abstract class Grid<T>(input: List<String>) {
     }
 
     fun getAt(position: Coordinates) = get(position.row, position.col)
+    fun setAt(position: Coordinates, element: T) {
+        grid[position.row][position.col] = element
+    }
 
     fun <R> forEachIndex(action: (row: Int, col: Int) -> R): Sequence<R> = sequence {
         for (row in grid.indices) {

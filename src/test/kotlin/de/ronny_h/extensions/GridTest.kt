@@ -73,6 +73,15 @@ class GridTest : StringSpec() {
             grid[2, 2] shouldBe Int.MIN_VALUE
         }
 
+        "setAt sets the element at the given coordinates" {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.setAt(Coordinates(1, 0), '5')
+            grid[0, 0] shouldBe '1'
+            grid[0, 1] shouldBe '2'
+            grid[1, 0] shouldBe '5'
+            grid[1, 1] shouldBe '4'
+        }
+
         "forEachIndex calls the provided function on each element in the expected order" {
             val grid = simpleCharGridOf(listOf("12", "34"))
             val chars = grid.forEachIndex { row, column ->
