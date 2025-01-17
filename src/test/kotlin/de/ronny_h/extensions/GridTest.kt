@@ -1,172 +1,162 @@
 package de.ronny_h.extensions
 
 import com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
+import io.kotlintest.specs.StringSpec
 
-class GridTest {
+class GridTest : StringSpec() {
 
     private fun simpleCharGridOf(input: List<String>) = object : Grid<Char>(input) {
         override val nullElement = ' '
         override fun Char.toElementType() = this
     }
+
     private val newLine: String = System.lineSeparator()
 
-    @Test
-    fun `a grid can be constructed from List of String`() {
-        val grid = simpleCharGridOf(listOf("12", "34"))
-        assertThat(grid).isNotNull
-    }
+    init {
 
-    @Test
-    fun `width and height have the right values`() {
-        val grid = simpleCharGridOf(listOf("00", "00", "00"))
-        assertThat(grid.height).isEqualTo(3)
-        assertThat(grid.width).isEqualTo(2)
-    }
-
-    @Test
-    fun `charAt returns the input values from the right indices`() {
-        val grid = simpleCharGridOf(listOf("12", "34"))
-        assertThat(grid[0, 0]).isEqualTo('1')
-        assertThat(grid[0, 1]).isEqualTo('2')
-        assertThat(grid[1, 0]).isEqualTo('3')
-        assertThat(grid[1, 1]).isEqualTo('4')
-    }
-
-    @Test
-    fun `toElementType converts the input values`() {
-        val grid = object : Grid<Int>(listOf("12", "34")) {
-            override val nullElement = Int.MIN_VALUE
-            override fun Char.toElementType() = digitToInt()
-        }
-        assertThat(grid[0, 0]).isEqualTo(1)
-        assertThat(grid[0, 1]).isEqualTo(2)
-        assertThat(grid[1, 0]).isEqualTo(3)
-        assertThat(grid[1, 1]).isEqualTo(4)
-    }
-
-    @Test
-    fun `charAt with indices returns the same as charAt with Coordinates`() {
-        val grid = simpleCharGridOf(listOf("12", "34"))
-        assertThat(grid[0, 0]).isEqualTo(grid.getAt(Coordinates(0, 0)))
-        assertThat(grid[0, 1]).isEqualTo(grid.getAt(Coordinates(0, 1)))
-        assertThat(grid[1, 0]).isEqualTo(grid.getAt(Coordinates(1, 0)))
-        assertThat(grid[1, 1]).isEqualTo(grid.getAt(Coordinates(1, 1)))
-    }
-
-    @Test
-    fun `charAt with index out of the input values returns the nullElement of a Char Grid`() {
-        val grid = simpleCharGridOf(listOf("12", "34"))
-        assertThat(grid[-1, 0]).isEqualTo(' ')
-        assertThat(grid[0, 2]).isEqualTo(' ')
-        assertThat(grid[1, -1]).isEqualTo(' ')
-        assertThat(grid[2, 2]).isEqualTo(' ')
-    }
-
-    @Test
-    fun `charAt with index out of the input values returns the nullElement of an Int Grid`() {
-        val grid = object : Grid<Int>(listOf("12", "34")) {
-            override val nullElement = Int.MIN_VALUE
-            override fun Char.toElementType() = digitToInt()
-        }
-        assertThat(grid[-1, 0]).isEqualTo(Int.MIN_VALUE)
-        assertThat(grid[0, 2]).isEqualTo(Int.MIN_VALUE)
-        assertThat(grid[1, -1]).isEqualTo(Int.MIN_VALUE)
-        assertThat(grid[2, 2]).isEqualTo(Int.MIN_VALUE)
-    }
-
-    @Test
-    fun `forEachIndex calls the provided function on each element in the expected order`() {
-        val grid = simpleCharGridOf(listOf("12", "34"))
-        val chars = grid.forEachIndex { row, column ->
-            grid[row, column]
-        }.toList()
-        assertThat(chars).isEqualTo(listOf('1', '2', '3', '4'))
-    }
-
-    @Test
-    fun `forEachElement calls the provided function on each element in the expected order`() {
-        val grid = simpleCharGridOf(listOf("12", "34"))
-        val strings = grid.forEachElement { row, column, char ->
-            "$row,$column:$char"
-        }.toList()
-        assertThat(strings).isEqualTo(
-            listOf(
-                "0,0:1",
-                "0,1:2",
-                "1,0:3",
-                "1,1:4",
-            )
-        )
-    }
-
-    @Test
-    fun `printGrid prints the grid`() {
-        val output = tapSystemOut {
+        "a grid can be constructed from List of String" {
             val grid = simpleCharGridOf(listOf("12", "34"))
-            grid.printGrid()
+            grid shouldNotBe null
         }
-        assertThat(output).isEqualTo("12${newLine}34$newLine")
-    }
 
-    @Test
-    fun `printGrid overrides specified coordinates`() {
-        val output = tapSystemOut {
-            val grid = simpleCharGridOf(listOf("12", "34"))
-            grid.printGrid(
-                setOf(Coordinates(0,1), Coordinates(1,0))
-            )
+        "width and height have the right values" {
+            val grid = simpleCharGridOf(listOf("00", "00", "00"))
+            grid.height shouldBe 3
+            grid.width shouldBe 2
         }
-        assertThat(output).isEqualTo("1#${newLine}#4$newLine")
-    }
 
-    @Test
-    fun `printGrid overrides specified coordinates with given overrideChar`() {
-        val output = tapSystemOut {
+        "charAt returns the input values from the right indices" {
             val grid = simpleCharGridOf(listOf("12", "34"))
-            grid.printGrid(
-                setOf(Coordinates(0,1), Coordinates(1,0)),
-                '?'
-            )
+            grid[0, 0] shouldBe '1'
+            grid[0, 1] shouldBe '2'
+            grid[1, 0] shouldBe '3'
+            grid[1, 1] shouldBe '4'
         }
-        assertThat(output).isEqualTo("1?${newLine}?4$newLine")
-    }
 
-    @Test
-    fun `printGrid highlights specified coordinates with given highlightDirection's Char`() {
-        val output = tapSystemOut {
-            val grid = simpleCharGridOf(listOf("12", "34"))
-            grid.printGrid(
-                highlightPosition = Coordinates(0, 1),
-                highlightDirection = Direction.SOUTH
-            )
+        "toElementType converts the input values" {
+            val grid = object : Grid<Int>(listOf("12", "34")) {
+                override val nullElement = Int.MIN_VALUE
+                override fun Char.toElementType() = digitToInt()
+            }
+            grid[0, 0] shouldBe 1
+            grid[0, 1] shouldBe 2
+            grid[1, 0] shouldBe 3
+            grid[1, 1] shouldBe 4
         }
-        assertThat(output).isEqualTo("1↓${newLine}34$newLine")
-    }
 
-    @Test
-    fun `printGrid - highlight has higher priority than overrides`() {
-        val output = tapSystemOut {
+        "charAt with indices returns the same as charAt with Coordinates" {
             val grid = simpleCharGridOf(listOf("12", "34"))
-            grid.printGrid(
-                overrides = setOf(Coordinates(0, 1)),
-                highlightPosition = Coordinates(0, 1),
-                highlightDirection = Direction.SOUTH
-            )
+            grid[0, 0] shouldBe grid.getAt(Coordinates(0, 0))
+            grid[0, 1] shouldBe grid.getAt(Coordinates(0, 1))
+            grid[1, 0] shouldBe grid.getAt(Coordinates(1, 0))
+            grid[1, 1] shouldBe grid.getAt(Coordinates(1, 1))
         }
-        assertThat(output).isEqualTo("1↓${newLine}34$newLine")
-    }
 
-    @Test
-    fun `printGrid - highlight without a direction falls back to overrides`() {
-        val output = tapSystemOut {
+        "charAt with index out of the input values returns the nullElement of a Char Grid" {
             val grid = simpleCharGridOf(listOf("12", "34"))
-            grid.printGrid(
-                overrides = setOf(Coordinates(0, 1)),
-                highlightPosition = Coordinates(0, 1),
-            )
+            grid[-1, 0] shouldBe ' '
+            grid[0, 2] shouldBe ' '
+            grid[1, -1] shouldBe ' '
+            grid[2, 2] shouldBe ' '
         }
-        assertThat(output).isEqualTo("1#${newLine}34$newLine")
+
+        "charAt with index out of the input values returns the nullElement of an Int Grid" {
+            val grid = object : Grid<Int>(listOf("12", "34")) {
+                override val nullElement = Int.MIN_VALUE
+                override fun Char.toElementType() = digitToInt()
+            }
+            grid[-1, 0] shouldBe Int.MIN_VALUE
+            grid[0, 2] shouldBe Int.MIN_VALUE
+            grid[1, -1] shouldBe Int.MIN_VALUE
+            grid[2, 2] shouldBe Int.MIN_VALUE
+        }
+
+        "forEachIndex calls the provided function on each element in the expected order" {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            val chars = grid.forEachIndex { row, column ->
+                grid[row, column]
+            }.toList()
+            chars shouldBe listOf('1', '2', '3', '4')
+        }
+
+        "forEachElement calls the provided function on each element in the expected order" {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            val strings = grid.forEachElement { row, column, char ->
+                "$row,$column:$char"
+            }.toList()
+            strings shouldBe
+                    listOf(
+                        "0,0:1",
+                        "0,1:2",
+                        "1,0:3",
+                        "1,1:4",
+                    )
+        }
+
+        "printGrid prints the grid" {
+            val output = tapSystemOut {
+                val grid = simpleCharGridOf(listOf("12", "34"))
+                grid.printGrid()
+            }
+            output shouldBe "12${newLine}34$newLine"
+        }
+
+        "printGrid overrides specified coordinates" {
+            val output = tapSystemOut {
+                val grid = simpleCharGridOf(listOf("12", "34"))
+                grid.printGrid(
+                    setOf(Coordinates(0, 1), Coordinates(1, 0))
+                )
+            }
+            output shouldBe "1#${newLine}#4$newLine"
+        }
+
+        "printGrid overrides specified coordinates with given overrideChar" {
+            val output = tapSystemOut {
+                val grid = simpleCharGridOf(listOf("12", "34"))
+                grid.printGrid(
+                    setOf(Coordinates(0, 1), Coordinates(1, 0)),
+                    '?'
+                )
+            }
+            output shouldBe "1?${newLine}?4$newLine"
+        }
+
+        "printGrid highlights specified coordinates with given highlightDirection's Char" {
+            val output = tapSystemOut {
+                val grid = simpleCharGridOf(listOf("12", "34"))
+                grid.printGrid(
+                    highlightPosition = Coordinates(0, 1),
+                    highlightDirection = Direction.SOUTH
+                )
+            }
+            output shouldBe "1↓${newLine}34$newLine"
+        }
+
+        "printGrid - highlight has higher priority than overrides" {
+            val output = tapSystemOut {
+                val grid = simpleCharGridOf(listOf("12", "34"))
+                grid.printGrid(
+                    overrides = setOf(Coordinates(0, 1)),
+                    highlightPosition = Coordinates(0, 1),
+                    highlightDirection = Direction.SOUTH
+                )
+            }
+            output shouldBe "1↓${newLine}34$newLine"
+        }
+
+        "printGrid - highlight without a direction falls back to overrides" {
+            val output = tapSystemOut {
+                val grid = simpleCharGridOf(listOf("12", "34"))
+                grid.printGrid(
+                    overrides = setOf(Coordinates(0, 1)),
+                    highlightPosition = Coordinates(0, 1),
+                )
+            }
+            output shouldBe "1#${newLine}34$newLine"
+        }
+
     }
 }

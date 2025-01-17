@@ -11,10 +11,11 @@ repositories {
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
 
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.4")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("org.assertj:assertj-core:3.27.2")
+    testImplementation("ch.qos.logback:logback-classic:1.5.16")
+
+    // for tapSystemOut
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
 }
 

@@ -1,51 +1,44 @@
 package de.ronny_h.extensions
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import io.kotlintest.shouldBe
+import io.kotlintest.specs.StringSpec
 
-class CombinationsTest {
+class CombinationsTest : StringSpec({
 
-    @Test
-    fun `an empty list yields an empty sequence`() {
-        assertThat(listOf<Int>().combinations().toList()).isEmpty()
+    "an empty list yields an empty sequence" {
+        listOf<Int>().combinations().toList() shouldBe emptyList()
     }
 
-    @Test
-    fun `a list with one element yields an empty sequence`() {
-        assertThat(listOf(1).combinations().toList()).isEmpty()
+    "a list with one element yields an empty sequence" {
+        listOf(1).combinations().toList() shouldBe emptyList()
     }
 
-    @Test
-    fun `a list with two elements yields both combinations`() {
-        assertThat(listOf(1, 2).combinations().toList()).isEqualTo(listOf(1 to 2, 2 to 1))
+    "a list with two elements yields both combinations" {
+        listOf(1, 2).combinations().toList() shouldBe listOf(1 to 2, 2 to 1)
     }
 
-    @Test
-    fun `a list with three elements yields all six combinations`() {
-        assertThat(listOf(1, 2, 3).combinations().toList()).isEqualTo(
-            listOf(
-                1 to 2,
-                1 to 3,
-                2 to 1,
-                2 to 3,
-                3 to 1,
-                3 to 2
-            )
-        )
+    "a list with three elements yields all six combinations" {
+        listOf(1, 2, 3).combinations().toList() shouldBe
+                listOf(
+                    1 to 2,
+                    1 to 3,
+                    2 to 1,
+                    2 to 3,
+                    3 to 1,
+                    3 to 2
+                )
     }
 
-    @Test
-    fun `a list with non-unique elements yields non-unique combinations but still skips the identical ones`() {
-        assertThat(listOf(1, 1, 2).combinations().toList()).isEqualTo(
-            listOf(
-                1 to 1,
-                1 to 2,
-                1 to 1,
-                1 to 2,
-                2 to 1,
-                2 to 1
-            )
-        )
+    "a list with non-unique elements yields non-unique combinations but still skips the identical ones" {
+        listOf(1, 1, 2).combinations().toList() shouldBe
+                listOf(
+                    1 to 1,
+                    1 to 2,
+                    1 to 1,
+                    1 to 2,
+                    2 to 1,
+                    2 to 1
+                )
     }
 
-}
+})

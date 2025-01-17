@@ -1,98 +1,75 @@
 package de.ronny_h.extensions
 
 import de.ronny_h.extensions.Direction.*
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.MethodSource
-import java.util.stream.Stream
+import io.kotlintest.data.forall
+import io.kotlintest.shouldBe
+import io.kotlintest.specs.StringSpec
+import io.kotlintest.tables.row
 
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class CoordinatesTest {
+class CoordinatesTest : StringSpec({
 
-    @ParameterizedTest
-    @MethodSource("provideCoordinatesForPlus")
-    fun `Coordinates are added`(first: Coordinates, second: Coordinates, result: Coordinates) {
-        assertThat(first + second).isEqualTo(result)
+    "Coordinates are added" {
+        forall(
+            row(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
+            row(Coordinates(0, 0), Coordinates(1, 1), Coordinates(1, 1)),
+            row(Coordinates(1, 2), Coordinates(3, 4), Coordinates(4, 6)),
+        ) { first, second, result ->
+            first + second shouldBe result
+        }
     }
 
-    private fun provideCoordinatesForPlus(): Stream<Arguments> {
-        return Stream.of(
-            Arguments.of(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
-            Arguments.of(Coordinates(0, 0), Coordinates(1, 1), Coordinates(1, 1)),
-            Arguments.of(Coordinates(1, 2), Coordinates(3, 4), Coordinates(4, 6)),
-        )
+    "Coordinates are subtracted" {
+        forall(
+            row(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
+            row(Coordinates(0, 0), Coordinates(1, 1), Coordinates(-1, -1)),
+            row(Coordinates(3, 5), Coordinates(2, 1), Coordinates(1, 4)),
+        ) { first, second, result ->
+            first - second shouldBe result
+        }
     }
 
-    @ParameterizedTest
-    @MethodSource("provideCoordinatesForMinus")
-    fun `Coordinates are subtracted`(first: Coordinates, second: Coordinates, result: Coordinates) {
-        assertThat(first - second).isEqualTo(result)
+    "Multiplication with a scalar" {
+        forall(
+            row(0, Coordinates(5, 7), Coordinates(0, 0)),
+            row(7, Coordinates(0, 0), Coordinates(0, 0)),
+            row(3, Coordinates(5, 7), Coordinates(15, 21)),
+            row(-3, Coordinates(5, 7), Coordinates(-15, -21)),
+        ) { scalar, coordinates, result ->
+            scalar * coordinates shouldBe result
+            coordinates * scalar shouldBe result
+        }
     }
 
-    private fun provideCoordinatesForMinus(): Stream<Arguments> {
-        return Stream.of(
-            Arguments.of(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
-            Arguments.of(Coordinates(0, 0), Coordinates(1, 1), Coordinates(-1, -1)),
-            Arguments.of(Coordinates(3, 5), Coordinates(2, 1), Coordinates(1, 4)),
-        )
+    "Add a direction" {
+        forall(
+            row(Coordinates(5, 5), NORTH, Coordinates(4, 5)),
+            row(Coordinates(5, 5), SOUTH, Coordinates(6, 5)),
+            row(Coordinates(5, 5), EAST, Coordinates(5, 6)),
+            row(Coordinates(5, 5), WEST, Coordinates(5, 4)),
+        ) { coordinates, direction, result ->
+            coordinates + direction shouldBe result
+        }
     }
 
-    @ParameterizedTest
-    @MethodSource("provideCoordinatesForScalarMultiplication")
-    fun `Multiplication with a scalar`(scalar: Int, coordinates: Coordinates, result: Coordinates) {
-        assertThat(scalar * coordinates).isEqualTo(result)
-        assertThat(coordinates * scalar).isEqualTo(result)
+    "Direction turnRight() turns right" {
+        NORTH.turnRight() shouldBe EAST
+        EAST.turnRight() shouldBe SOUTH
+        SOUTH.turnRight() shouldBe WEST
+        WEST.turnRight() shouldBe NORTH
     }
 
-    private fun provideCoordinatesForScalarMultiplication(): Stream<Arguments> {
-        return Stream.of(
-            Arguments.of(0, Coordinates(5, 7), Coordinates(0, 0)),
-            Arguments.of(7, Coordinates(0, 0), Coordinates(0, 0)),
-            Arguments.of(3, Coordinates(5, 7), Coordinates(15, 21)),
-            Arguments.of(-3, Coordinates(5, 7), Coordinates(-15, -21)),
-        )
+    "Direction turnLeft() turns left" {
+        NORTH.turnLeft() shouldBe WEST
+        EAST.turnLeft() shouldBe NORTH
+        SOUTH.turnLeft() shouldBe EAST
+        WEST.turnLeft() shouldBe SOUTH
     }
 
-    @ParameterizedTest
-    @MethodSource("provideCoordinatesForAddDirection")
-    fun `Add a direction`(coordinates: Coordinates, direction: Direction, result: Coordinates) {
-        assertThat(coordinates + direction).isEqualTo(result)
+    "asChar gives a graphical representation" {
+        NORTH.asChar() shouldBe '↑'
+        EAST.asChar() shouldBe '→'
+        SOUTH.asChar() shouldBe '↓'
+        WEST.asChar() shouldBe '←'
     }
-
-    private fun provideCoordinatesForAddDirection(): Stream<Arguments> {
-        return Stream.of(
-            Arguments.of(Coordinates(5, 5), NORTH, Coordinates(4, 5)),
-            Arguments.of(Coordinates(5, 5), SOUTH, Coordinates(6, 5)),
-            Arguments.of(Coordinates(5, 5), EAST, Coordinates(5, 6)),
-            Arguments.of(Coordinates(5, 5), Direction.WEST, Coordinates(5, 4)),
-        )
-    }
-
-    @Test
-    fun `Direction turnRight() turns right`() {
-        assertThat(NORTH.turnRight()).isEqualTo(EAST)
-        assertThat(EAST.turnRight()).isEqualTo(SOUTH)
-        assertThat(SOUTH.turnRight()).isEqualTo(WEST)
-        assertThat(WEST.turnRight()).isEqualTo(NORTH)
-    }
-
-    @Test
-    fun `Direction turnLeft() turns left`() {
-        assertThat(NORTH.turnLeft()).isEqualTo(WEST)
-        assertThat(EAST.turnLeft()).isEqualTo(NORTH)
-        assertThat(SOUTH.turnLeft()).isEqualTo(EAST)
-        assertThat(WEST.turnLeft()).isEqualTo(SOUTH)
-    }
-
-    @Test
-    fun `asChar gives a graphical representation`() {
-        assertThat(NORTH.asChar()).isEqualTo('↑')
-        assertThat(EAST.asChar()).isEqualTo('→')
-        assertThat(SOUTH.asChar()).isEqualTo('↓')
-        assertThat(WEST.asChar()).isEqualTo('←')
-    }
-}
+})
