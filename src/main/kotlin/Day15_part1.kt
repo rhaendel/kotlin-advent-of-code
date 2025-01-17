@@ -8,21 +8,10 @@ fun main() {
     println("$day part 1")
 
     fun part1(input: List<String>): Int {
-        val warehouse = Warehouse(input.takeWhile { it.isNotBlank() })
+        val warehouse = NormalWarehouse(input.takeWhile { it.isNotBlank() })
         warehouse.printGrid()
 
-        val movements = input
-            .takeLastWhile { it.isNotBlank() }
-            .joinToString(separator = "")
-            .map {
-                when (it) {
-                    '^' -> Direction.NORTH
-                    '>' -> Direction.EAST
-                    'v' -> Direction.SOUTH
-                    '<' -> Direction.WEST
-                    else -> error("Unexpected direction Char: $it")
-                }
-            }
+        val movements = input.toDay15Movements()
 
         warehouse.moveRobot(movements)
         warehouse.printGrid()
@@ -53,14 +42,29 @@ fun main() {
     printAndCheck(input, ::part1, 1463715)
 }
 
-private class Warehouse(input: List<String>) : Grid<Char>(input) {
-    private val wall = '#'
-    private val robot = '@'
-    private val free = '.'
-    private val goods = 'O'
+fun List<String>.toDay15Movements(): List<Direction> = takeLastWhile { it.isNotBlank() }
+    .joinToString(separator = "")
+    .map {
+        when (it) {
+            '^' -> Direction.NORTH
+            '>' -> Direction.EAST
+            'v' -> Direction.SOUTH
+            '<' -> Direction.WEST
+            else -> error("Unexpected direction Char: $it")
+        }
+    }
+
+
+abstract class Warehouse(input: List<String>) : Grid<Char>(input) {
+    protected val wall = '#'
+    protected val robot = '@'
+    protected val free = '.'
 
     override val nullElement = wall
     override fun Char.toElementType(): Char = this
+
+    protected abstract val leftGoodsChar: Char
+    protected abstract fun tryToMove(from: Coordinates, direction: Direction, thing: Char): Boolean
 
     fun moveRobot(movements: List<Direction>) {
         movements.fold(findTheRobot()) { position, direction ->
@@ -72,7 +76,25 @@ private class Warehouse(input: List<String>) : Grid<Char>(input) {
         }
     }
 
-    private fun tryToMove(from: Coordinates, direction: Direction, thing: Char): Boolean {
+    private fun findTheRobot(): Coordinates = forEachElement { row, col, element ->
+        if (element == robot) Coordinates(row, col) else null
+    }.filterNotNull().first()
+
+    // GPS = Goods Positioning System
+    fun sumGPSCoordinates(): Int = forEachElement { row, col, element ->
+        if (element == leftGoodsChar) {
+            100 * row + col
+        } else {
+            0
+        }
+    }.sum()
+}
+
+private class NormalWarehouse(input: List<String>) : Warehouse(input) {
+    private val goods = 'O'
+    override val leftGoodsChar = goods
+
+    override fun tryToMove(from: Coordinates, direction: Direction, thing: Char): Boolean {
         val target = from + direction
         if (getAt(target) == free) {
             setAt(target, thing)
@@ -90,17 +112,4 @@ private class Warehouse(input: List<String>) : Grid<Char>(input) {
         }
         return false
     }
-
-    private fun findTheRobot(): Coordinates = forEachElement { row, col, element ->
-        if (element == robot) Coordinates(row, col) else null
-    }.filterNotNull().first()
-
-    fun sumGPSCoordinates(): Int = forEachElement { row, col, element ->
-        if (element == goods) {
-            100 * row + col
-        } else {
-            0
-        }
-    }.sum()
-
 }

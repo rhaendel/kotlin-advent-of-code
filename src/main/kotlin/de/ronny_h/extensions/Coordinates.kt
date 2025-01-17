@@ -38,4 +38,7 @@ enum class Direction(val row: Int, val col: Int) {
         SOUTH -> '↓'
         WEST -> '←'
     }
+
+    fun isHorizontal(): Boolean = this == EAST || this == WEST
+    fun isVertical(): Boolean = this == NORTH || this == SOUTH
 }
