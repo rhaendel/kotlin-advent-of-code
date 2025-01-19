@@ -216,5 +216,3 @@ private class Farm(input: List<String>) : Grid<Char>(input) {
     }
 
 }
-
-private fun Coordinates.neighbours() = listOf(this + EAST, this + SOUTH, this + WEST, this + NORTH)

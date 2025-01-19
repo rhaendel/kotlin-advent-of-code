@@ -2,6 +2,7 @@ package de.ronny_h.extensions
 
 import de.ronny_h.extensions.Direction.*
 import io.kotlintest.data.forall
+import io.kotlintest.matchers.collections.shouldContainAll
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import io.kotlintest.tables.row
@@ -50,6 +51,15 @@ class CoordinatesTest : StringSpec({
         ) { coordinates, direction, result ->
             coordinates + direction shouldBe result
         }
+    }
+
+    "Neighbours" {
+        Coordinates(5, 5).neighbours() shouldContainAll listOf(
+            Coordinates(4, 5),
+            Coordinates(6, 5),
+            Coordinates(5, 4),
+            Coordinates(5, 6),
+        )
     }
 
     "Direction turnRight() turns right" {

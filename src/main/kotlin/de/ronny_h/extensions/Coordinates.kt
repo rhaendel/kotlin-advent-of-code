@@ -1,5 +1,6 @@
 package de.ronny_h.extensions
 
+import de.ronny_h.extensions.Direction.*
 import kotlin.math.abs
 
 data class Coordinates(val row: Int, val col: Int) {
@@ -9,6 +10,8 @@ data class Coordinates(val row: Int, val col: Int) {
     operator fun times(other: Int) = Coordinates(row * other, col * other)
 
     operator fun plus(direction: Direction) = Coordinates(row + direction.row, col + direction.col)
+
+    fun neighbours() = listOf(this + EAST, this + SOUTH, this + WEST, this + NORTH)
 
     /**
      * Calculates the taxi distance, a.k.a. Manhattan distance, between this and the other Coordinates instance.
