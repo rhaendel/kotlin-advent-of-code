@@ -12,7 +12,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
-    testImplementation("org.assertj:assertj-core:3.27.2")
+    testImplementation("org.assertj:assertj-core:3.27.3")
     testImplementation("ch.qos.logback:logback-classic:1.5.16")
 
     // for tapSystemOut
