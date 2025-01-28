@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.1.10"
     java
 //    id("org.barfuin.gradle.jacocolog") version "3.1.0"
 }
