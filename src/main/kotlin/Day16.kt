@@ -1,7 +1,4 @@
-import de.ronny_h.extensions.Coordinates
-import de.ronny_h.extensions.Direction
-import de.ronny_h.extensions.Grid
-import de.ronny_h.extensions.aStar
+import de.ronny_h.extensions.*
 
 fun main() {
     val day = "Day16"
@@ -60,6 +57,59 @@ fun main() {
 
     val input = readInput(day)
     printAndCheck(input, ::part1, 89460)
+
+
+    println("$day part 2")
+
+    fun part2(input: List<String>): Int {
+        val maze = ReindeerMaze(input)
+        return maze.collectAllShortestPathsTiles()
+    }
+
+    printAndCheck(
+        """
+            ###############
+            #.......#....E#
+            #.#.###.#.###.#
+            #.....#.#...#.#
+            #.###.#####.#.#
+            #.#.#.......#.#
+            #.#.#####.###.#
+            #...........#.#
+            ###.#.#####.#.#
+            #...#.....#.#.#
+            #.#.#.###.#.#.#
+            #.....#...#.#.#
+            #.###.#.#.#.#.#
+            #S..#.....#...#
+            ###############
+        """.trimIndent().lines(),
+        ::part2, 45
+    )
+
+    printAndCheck(
+        """
+            #################
+            #...#...#...#..E#
+            #.#.#.#.#.#.#.#.#
+            #.#.#.#...#...#.#
+            #.#.#.#.###.#.#.#
+            #...#.#.#.....#.#
+            #.#.#.#.#.#####.#
+            #.#...#.#.#.....#
+            #.#.#####.#.###.#
+            #.#.#.......#...#
+            #.#.###.#####.###
+            #.#.#...#.....#.#
+            #.#.#.#####.###.#
+            #.#.#.........#.#
+            #.#.#.#########.#
+            #S#.............#
+            #################
+        """.trimIndent().lines(),
+        ::part2, 64
+    )
+    printAndCheck(input, ::part2, 504)
 }
 
 private class ReindeerMaze(input: List<String>) : Grid<Char>(input) {
@@ -69,9 +119,23 @@ private class ReindeerMaze(input: List<String>) : Grid<Char>(input) {
 
     data class Node(val direction: Direction, val position: Coordinates) {
         override fun toString() = "$position$direction"
+        fun positionEquals(other: Node) = this.position == other.position
     }
 
     fun calculateLowestScore(): Int {
+        val allShortestPaths = getAllShortestPaths()
+
+        printGrid(path = allShortestPaths.map { it.path }.flatten().associate { it.position to it.direction.asChar() })
+        return allShortestPaths.first().distance
+    }
+
+    fun collectAllShortestPathsTiles() = getAllShortestPaths()
+        .flatMap { it.path }
+        .map { it.position }
+        .toSet()
+        .size
+
+    private fun getAllShortestPaths(): List<ShortestPath<Node>> {
         // A* algorithm
         // - heuristic function: manhattan distance
         // - weight function:
@@ -107,9 +171,7 @@ private class ReindeerMaze(input: List<String>) : Grid<Char>(input) {
             println(info.invoke())
         }
 
-        val shortestPath = aStar(start, goal, neighbours, d, h) //, printIt)
-        printGrid(path = shortestPath.path.associate { it.position to it.direction.asChar() })
-        return shortestPath.distance
+        return aStar(start, goal::positionEquals, neighbours, d, h)
     }
 
 }
