@@ -18,6 +18,8 @@ private fun <N> reconstructPath(cameFrom: Map<N, N>, last: N): List<N> {
 
 data class ShortestPath<N>(val path: List<N>, val distance: Int)
 
+private const val LARGE_VALUE = MAX_VALUE / 2
+
 /**
  * A* finds a path from `start` to `goal`.
  * @param start the start node
@@ -35,7 +37,7 @@ fun <N> aStar(start: N, goal: N, neighbors: (N) -> List<N>, d: (N, N) -> Int, h:
     // The set of discovered nodes that may need to be (re-)expanded.
     // Initially, only the start node is known.
     // This is usually implemented as a min-heap or priority queue rather than a hash-set.
-    val openSet = PriorityQueue<N> { a, b -> fScore.getValue(a).compareTo(fScore.getValue(b)) }
+    val openSet = PriorityQueue<N> { a, b -> fScore.getOrDefault(a, LARGE_VALUE).compareTo(fScore.getOrDefault(b, LARGE_VALUE)) }
     openSet.add(start)
 
     // For node n, cameFrom[n] is the node immediately preceding it on the cheapest path from the start
@@ -59,8 +61,8 @@ fun <N> aStar(start: N, goal: N, neighbors: (N) -> List<N>, d: (N, N) -> Int, h:
         for (neighbor in neighbors(current)) {
             // d(current,neighbor) is the weight of the edge from current to neighbor
             // tentative_gScore is the distance from start to the neighbor through current
-            val tentativeGScore = gScore.getOrDefault(current, MAX_VALUE) + d(current, neighbor)
-            if (tentativeGScore < gScore.getOrDefault(neighbor, MAX_VALUE)) {
+            val tentativeGScore = gScore.getOrDefault(current, LARGE_VALUE) + d(current, neighbor)
+            if (tentativeGScore < gScore.getOrDefault(neighbor, LARGE_VALUE)) {
                 // This path to neighbor is better than any previous one. Record it!
                 cameFrom[neighbor] = current
                 gScore[neighbor] = tentativeGScore

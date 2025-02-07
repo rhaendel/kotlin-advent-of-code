@@ -59,19 +59,7 @@ fun main() {
     )
 
     val input = readInput(day)
-    printAndCheck(input, ::part1, 89471)
-    // too high:  89472
-    // too high:  89471
-    // not right: 88971
-    // not right: 88721
-    // too low:   88472
-
-
-    println("$day part 2")
-
-    fun part2(input: List<String>) = input.size
-
-    printAndCheck(input, ::part2, 6512)
+    printAndCheck(input, ::part1, 89460)
 }
 
 private class ReindeerMaze(input: List<String>) : Grid<Char>(input) {
@@ -80,15 +68,6 @@ private class ReindeerMaze(input: List<String>) : Grid<Char>(input) {
     override fun Char.toElementType() = this
 
     data class Node(val direction: Direction, val position: Coordinates) {
-        // hashCode and equals are used to determine if a Node was already visited.
-        // -> don't distinguish directions
-        override fun hashCode() = position.hashCode()
-        override fun equals(other: Any?): Boolean {
-            if (other !is Node) {
-                return false
-            }
-            return position == other.position
-        }
         override fun toString() = "$position$direction"
     }
 
@@ -102,23 +81,22 @@ private class ReindeerMaze(input: List<String>) : Grid<Char>(input) {
         val goal = Node(Direction.EAST, Coordinates(1, width - 2))
 
         val neighbours: (Node) -> List<Node> = { n ->
-            n.position.directedNeighbours()
-                .filter { !it.first.isOpposite(n.direction) } // don't go back
-                .filter { getAt(it.second) != wall }
-                .map { Node(it.first, it.second) }
+            listOf(
+                Node(n.direction, n.position + n.direction),
+                Node(n.direction.turnLeft(), n.position),
+                Node(n.direction.turnRight(), n.position)
+            ).filter { getAt(it.position) != wall }
         }
 
         val d: (Node, Node) -> Int = { a, b ->
-            require(a.position in b.position.neighbours())
             if (a.position == goal.position && b.position == goal.position) {
                 // direction at goal doesn't care
                 0
-            } else if (a.direction - b.direction == 0) {
+            } else if (a.direction == b.direction) {
                 // straight ahead
                 1
             } else {
-                // turn left, right or u-turn -> turn cost + move cost
-                (a.direction - b.direction) * 1000 + 1
+                1000
             }
         }
 
