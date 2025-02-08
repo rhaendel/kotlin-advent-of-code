@@ -26,6 +26,10 @@ fun printAndCheck(input: List<String>, block: (List<String>) -> Long, expected: 
     printAndCheck(measureTimedValue { block(input) }, expected)
 }
 
+fun printAndCheck(input: List<String>, block: (List<String>) -> String, expected: String) {
+    printAndCheck(measureTimedValue { block(input) }, expected)
+}
+
 suspend fun printAndCheck(input: List<String>, block: KSuspendFunction1<List<String>, Int>, expected: Int) {
     printAndCheck(measureTimedValue { block(input).toLong() }, expected.toLong())
 }
@@ -35,6 +39,11 @@ suspend fun printAndCheck(input: List<String>, block: KSuspendFunction1<List<Str
 }
 
 private fun printAndCheck(result: TimedValue<Long>, expected: Long) {
+    println("result: ${result.value}, expected: $expected, took: ${result.duration}")
+    check(result.value == expected)
+}
+
+private fun printAndCheck(result: TimedValue<String>, expected: String) {
     println("result: ${result.value}, expected: $expected, took: ${result.duration}")
     check(result.value == expected)
 }
