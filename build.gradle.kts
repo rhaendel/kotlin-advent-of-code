@@ -13,7 +13,7 @@ dependencies {
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("org.assertj:assertj-core:3.27.3")
-    testImplementation("ch.qos.logback:logback-classic:1.5.16")
+    testImplementation("ch.qos.logback:logback-classic:1.5.17")
 
     // for tapSystemOut
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
