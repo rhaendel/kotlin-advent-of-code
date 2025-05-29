@@ -81,13 +81,12 @@ suspend fun main() {
     printAndCheck(input, ::part2, 1480)
 }
 
-private class Lab(input: List<String>) : Grid<Char>(input) {
+private class Lab(input: List<String>) : Grid<Char>(input, ' ') {
 
     private val guard = '^'
     private val obstruction = '#'
     private val free = '.'
-    private val offMap = ' '
-    override val nullElement = offMap
+    private val offMap = nullElement
     override fun Char.toElementType() = this
 
     private fun findTheGuard(): Coordinates = forEachElement { row, col, element ->

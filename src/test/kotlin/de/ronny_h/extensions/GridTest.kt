@@ -7,8 +7,7 @@ import io.kotlintest.specs.StringSpec
 
 class GridTest : StringSpec() {
 
-    private fun simpleCharGridOf(input: List<String>) = object : Grid<Char>(input) {
-        override val nullElement = ' '
+    private fun simpleCharGridOf(input: List<String>) = object : Grid<Char>(input, ' ') {
         override fun Char.toElementType() = this
     }
 
@@ -36,8 +35,7 @@ class GridTest : StringSpec() {
         }
 
         "toElementType converts the input values" {
-            val grid = object : Grid<Int>(listOf("12", "34")) {
-                override val nullElement = Int.MIN_VALUE
+            val grid = object : Grid<Int>(listOf("12", "34"), Int.MIN_VALUE) {
                 override fun Char.toElementType() = digitToInt()
             }
             grid[0, 0] shouldBe 1
@@ -63,8 +61,7 @@ class GridTest : StringSpec() {
         }
 
         "charAt with index out of the input values returns the nullElement of an Int Grid" {
-            val grid = object : Grid<Int>(listOf("12", "34")) {
-                override val nullElement = Int.MIN_VALUE
+            val grid = object : Grid<Int>(listOf("12", "34"), Int.MIN_VALUE) {
                 override fun Char.toElementType() = digitToInt()
             }
             grid[-1, 0] shouldBe Int.MIN_VALUE

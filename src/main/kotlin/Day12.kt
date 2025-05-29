@@ -98,9 +98,7 @@ fun main() {
 
 private data class Region(val area: Int, val perimeter: Int, val numberOfSides: Int)
 
-private class Farm(input: List<String>) : Grid<Char>(input) {
-    private val offMap = ' '
-    override val nullElement = offMap
+private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
     override fun Char.toElementType() = this
 
     val assigned = mutableSetOf<Coordinates>()

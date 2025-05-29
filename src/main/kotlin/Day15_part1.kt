@@ -55,12 +55,11 @@ fun List<String>.toDay15Movements(): List<Direction> = takeLastWhile { it.isNotB
     }
 
 
-abstract class Warehouse(input: List<String>) : Grid<Char>(input) {
-    protected val wall = '#'
+abstract class Warehouse(input: List<String>) : Grid<Char>(input, '#') {
+    protected val wall = nullElement
     protected val robot = '@'
     protected val free = '.'
 
-    override val nullElement = wall
     override fun Char.toElementType(): Char = this
 
     protected abstract val leftGoodsChar: Char

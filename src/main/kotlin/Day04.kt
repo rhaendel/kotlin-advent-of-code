@@ -47,10 +47,9 @@ fun main() {
     printAndCheck(input, ::part2, 1933)
 }
 
-class XMasGrid(input: List<String>) : Grid<Char>(input) {
+class XMasGrid(input: List<String>) : Grid<Char>(input, ' ') {
 
     private val word = "XMAS".toCharArray()
-    override val nullElement = ' '
     override fun Char.toElementType() = this
 
     fun searchForXMAS() = forEachIndex(::searchForXMASAt).sum()

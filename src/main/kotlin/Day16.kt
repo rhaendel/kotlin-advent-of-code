@@ -112,9 +112,8 @@ fun main() {
     printAndCheck(input, ::part2, 504)
 }
 
-private class ReindeerMaze(input: List<String>) : Grid<Char>(input) {
-    private val wall = '#'
-    override val nullElement = wall
+private class ReindeerMaze(input: List<String>) : Grid<Char>(input, '#') {
+    private val wall = nullElement
     override fun Char.toElementType() = this
 
     data class Node(val direction: Direction, val position: Coordinates) {

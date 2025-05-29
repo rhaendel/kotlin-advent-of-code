@@ -51,10 +51,9 @@ fun main() {
     printAndCheck(input, ::part2, 1960)
 }
 
-private class TopographicMap(input: List<String>) : Grid<Int>(input) {
+private class TopographicMap(input: List<String>) : Grid<Int>(input, Int.MIN_VALUE) {
 
-    override val nullElement = Int.MIN_VALUE
-    override fun Char.toElementType() = if (isDigit()) digitToInt() else Int.MIN_VALUE
+    override fun Char.toElementType() = if (isDigit()) digitToInt() else nullElement
 
     private fun heights(): Sequence<Pair<Coordinates, Int>> = forEachElement { row, col, height ->
         Coordinates(row, col) to height
