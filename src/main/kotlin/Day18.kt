@@ -1,9 +1,5 @@
 import de.ronny_h.extensions.Coordinates
 import de.ronny_h.extensions.Direction
-import de.ronny_h.extensions.Direction.EAST
-import de.ronny_h.extensions.Direction.NORTH
-import de.ronny_h.extensions.Direction.SOUTH
-import de.ronny_h.extensions.Direction.WEST
 import de.ronny_h.extensions.Grid
 import de.ronny_h.extensions.ShortestPath
 import de.ronny_h.extensions.aStar
@@ -18,9 +14,9 @@ fun main() {
         })
         memorySpace.printGrid()
         println("-----------------")
-        val shortestPaths = memorySpace.shortestPath(Coordinates(0,0), Coordinates(width-1, width-1))
-        memorySpace.printGrid(path = shortestPaths.first().path.associateWith { 'O' })
-        return shortestPaths.first().distance
+        val shortestPath = memorySpace.shortestPath(Coordinates(0,0), Coordinates(width-1, width-1))
+        memorySpace.printGrid(path = shortestPath.path.associateWith { 'O' })
+        return shortestPath.distance
     }
 
     fun part1Small(input: List<String>) = part1(input, 7) // 0..6
@@ -36,7 +32,7 @@ fun main() {
     printAndCheck(testInput.subList(0, 12), ::part1Small, 22)
 
     val input = readInput(day)
-    printAndCheck(input.subList(0, 1024), ::part1Big, 3714264)
+    printAndCheck(input.subList(0, 1024), ::part1Big, 416)
 
 
     println("$day part 2")
@@ -54,7 +50,7 @@ private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>
     private val corrupted = '#'
     override fun Char.toElementType() = this
 
-    fun shortestPath(start: Coordinates, goal: Coordinates): List<ShortestPath<Coordinates>> {
+    fun shortestPath(start: Coordinates, goal: Coordinates): ShortestPath<Coordinates> {
         val neighbours: (Coordinates) -> List<Coordinates> = { node ->
             Direction
                 .entries
@@ -69,6 +65,6 @@ private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>
 
         val h: (Coordinates) -> Int = { it taxiDistanceTo goal}
 
-        return aStar(start, goal::equals, neighbours, d, h)
+        return aStar(start, goal, neighbours, d, h)
     }
 }

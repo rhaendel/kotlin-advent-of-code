@@ -170,7 +170,7 @@ private class ReindeerMaze(input: List<String>) : Grid<Char>(input, '#') {
             println(info.invoke())
         }
 
-        return aStar(start, goal::positionEquals, neighbours, d, h)
+        return aStarAllPaths(start, goal::positionEquals, neighbours, d, h)
     }
 
 }

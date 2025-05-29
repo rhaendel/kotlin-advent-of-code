@@ -54,7 +54,8 @@ class ShortestPathTest : StringSpec({
         val d: (Node, Node) -> Int = { _, _ -> 1 }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStar(start, goal::positionEquals, neighbours, d, h) shouldBe listOf(ShortestPath(listOf(start, goal), 1))
+        aStarAllPaths(start, goal::positionEquals, neighbours, d, h) shouldBe listOf(ShortestPath(listOf(start, goal), 1))
+        aStar(start, goal, neighbours, d, h) shouldBe ShortestPath(listOf(start, goal), 1)
     }
 
     "With 2 different nodes between start and goal, the shorter path is taken" {
@@ -80,15 +81,10 @@ class ShortestPathTest : StringSpec({
         val d: (Node, Node) -> Int = { m, n -> distances.getValue(m to n) }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe listOf(
-            ShortestPath(
-                listOf(
-                    start,
-                    a,
-                    goal
-                ), 10
-            )
-        )
+        aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+                listOf(ShortestPath(listOf(start, a, goal), 10))
+        aStar(start, goal, { n -> neighbours.getValue(n) }, d, h) shouldBe
+                ShortestPath(listOf(start, a, goal), 10)
     }
 
     "When direct distance from start to goal is longer, the path through a third node is taken" {
@@ -111,15 +107,10 @@ class ShortestPathTest : StringSpec({
         val d: (Node, Node) -> Int = { m, n -> distances.getValue(m to n) }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe listOf(
-            ShortestPath(
-                listOf(
-                    start,
-                    a,
-                    goal
-                ), 9
-            )
-        )
+        aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+                listOf(ShortestPath(listOf(start, a, goal), 9))
+        aStar(start, goal, { n -> neighbours.getValue(n) }, d, h) shouldBe
+                ShortestPath(listOf(start, a, goal), 9)
     }
 
     "The shortest path in a not directed graph is found" {
@@ -146,15 +137,10 @@ class ShortestPathTest : StringSpec({
         val d: (Node, Node) -> Int = { m, n -> distances.getValue(m to n) }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe listOf(
-            ShortestPath(
-                listOf(
-                    start,
-                    a,
-                    goal
-                ), 9
-            )
-        )
+        aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+                listOf(ShortestPath(listOf(start, a, goal), 9))
+        aStar(start, goal, { n -> neighbours.getValue(n) }, d, h) shouldBe
+                ShortestPath(listOf(start, a, goal), 9)
     }
 
     "Distances of 0 can be taken and nodes with same coordinates don't cause problems" {
@@ -180,15 +166,9 @@ class ShortestPathTest : StringSpec({
         val d: (Node, Node) -> Int = { m, n -> distances.getValue(m to n) }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe listOf(
-            ShortestPath(
-                listOf(
-                    start,
-                    a,
-                    b,
-                    goal
-                ), 9
-            )
-        )
+        aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+                listOf(ShortestPath(listOf(start, a, b, goal), 9))
+        aStar(start, goal, { n -> neighbours.getValue(n) }, d, h) shouldBe
+                ShortestPath(listOf(start, a, b, goal), 9)
     }
 })
