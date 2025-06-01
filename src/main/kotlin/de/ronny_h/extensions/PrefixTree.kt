@@ -2,25 +2,22 @@ package de.ronny_h.extensions
 
 class PrefixTree {
 
-    fun insert(word: String, tokens: List<String>): Boolean {
+    fun insert(word: String, tokens: List<String>): Long {
 
-        lateinit var insertRec: (String) -> Boolean
+        lateinit var insertRec: (String) -> Long
 
         insertRec = { word: String ->
             if (word.isEmpty()) {
-                true
+                1L
             } else {
-                var success = false
+                var successes = 0L
                 for (token in tokens) {
                     if (!word.startsWith(token)) {
                         continue
                     }
-                    if (insertRec(word.substring(token.length))) {
-                        success = true
-                        break
-                    }
+                    successes += insertRec(word.substring(token.length))
                 }
-                success
+                successes
             }
         }.memoize()
 

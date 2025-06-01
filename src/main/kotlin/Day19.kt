@@ -3,17 +3,23 @@ import de.ronny_h.extensions.PrefixTree
 fun main() {
     val day = "Day19"
 
-    fun part1(input: List<String>): Int {
-        val towels = input.first().split(", ")
-        val designs = input.drop(2)
+    fun List<String>.parseTowels(): List<String> = this.first().split(", ")
+    fun List<String>.parseDesigns(): List<String> = drop(2)
 
+    fun part1(input: List<String>): Int {
+        val towels = input.parseTowels()
+        val designs = input.parseDesigns()
         println("${towels.size} towels, ${designs.size} designs")
 
         return designs.count { it.isPossibleWith(towels) }
     }
 
-    fun part2(input: List<String>): Int {
-        return input.size
+    fun part2(input: List<String>): Long {
+        val towels = input.parseTowels()
+        val designs = input.parseDesigns()
+        println("${towels.size} towels, ${designs.size} designs")
+
+        return designs.sumOf { it.countPossibilitiesWith(towels) }
     }
 
     println("$day part 1")
@@ -38,8 +44,9 @@ fun main() {
 
     println("$day part 2")
 
-    printAndCheck(testInput, ::part2, 0)
-    printAndCheck(input, ::part2, 0)
+    printAndCheck(testInput, ::part2, 16)
+    printAndCheck(input, ::part2, 616957151871345)
 }
 
-private fun String.isPossibleWith(towels: List<String>) = PrefixTree().insert(this, towels)
+private fun String.isPossibleWith(towels: List<String>): Boolean = (this.countPossibilitiesWith(towels) > 0)
+private fun String.countPossibilitiesWith(towels: List<String>): Long = PrefixTree().insert(this, towels)
