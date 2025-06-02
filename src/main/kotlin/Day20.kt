@@ -1,22 +1,19 @@
 import de.ronny_h.extensions.*
-import de.ronny_h.extensions.Direction.*
 
 fun main() {
     val day = "Day20"
 
-    fun part1(input: List<String>, minPicosecondsSaved: Int): Int {
+    fun part1(input: List<String>, minPicosecondsSaved: Int, shortcutMaxLength: Int): Int {
         val track = RaceTrack(input)
         track.printGrid()
-        val baseline = track.shortestPath().distance
-        return track.countAllShortcutsShorterThan(baseline - minPicosecondsSaved)
+        return track.countAllShortcutsSavingAtLeast(minPicosecondsSaved, shortcutMaxLength)
     }
 
-    fun part1Small(input: List<String>) = part1(input, 10)
-    fun part1Large(input: List<String>) = part1(input, 100)
+    fun part1Small(input: List<String>) = part1(input, 10, 2)
+    fun part1Large(input: List<String>) = part1(input, 100, 2)
 
-    fun part2(input: List<String>): Int {
-        return input.size
-    }
+    fun part2Small(input: List<String>) = part1(input, 76, 20)
+    fun part2Large(input: List<String>) = part1(input, 100, 20)
 
     println("$day part 1")
 
@@ -45,13 +42,12 @@ fun main() {
 
     println("$day part 2")
 
-    printAndCheck(testInput, ::part2, 31)
-    printAndCheck(input, ::part2, 18805872)
+    printAndCheck(testInput, ::part2Small, 3)
+    printAndCheck(input, ::part2Large, 1026446)
 }
 
 private class RaceTrack(input: List<String>) : Grid<Char>(input, '#') {
     private val wall = nullElement
-    private val free = '.'
     override fun Char.toElementType(): Char = this
 
     private val start = find('S')
@@ -82,32 +78,23 @@ private class RaceTrack(input: List<String>) : Grid<Char>(input, '#') {
         return aStar(start, goal, neighbours, d, h)
     }
 
-    fun countAllShortcutsShorterThan(picoseconds: Int): Int =
-        forEachCoordinates { pos, elem ->
-            when {
-                elem != wall -> null
-                pos.isOnTheBorder() -> null
-                pos.canNotBeCrossed() -> null
-                else -> pos
-            }
-        }
-            .filterNotNull()
-            .map { coord ->
-                setAt(coord, free)
-                val pathWithShortcut = shortestPath()
-                setAt(coord, wall)
-                pathWithShortcut.distance
-            }
-            .filter { it <= picoseconds }
-            .count()
+    fun countAllShortcutsSavingAtLeast(minToSave: Int, shortcutMaxLength: Int): Int {
+        val shortestPath = shortestPath()
+        val distances = shortestPath.path.reversed().mapIndexed { distanceToGoal, position ->
+            position to distanceToGoal
+        }.toMap()
 
-    private fun Coordinates.isOnTheBorder(): Boolean {
-        return row == 0 || row == (height - 1) || col == 0 || col == width - 1
+        fun Coordinates.isInShortcutRangeFrom(position: Coordinates): Boolean =
+            this taxiDistanceTo position <= shortcutMaxLength
+
+        fun Coordinates.isShorterToGoalThan(position: Coordinates): Boolean =
+            distances.getValue(this) + (this taxiDistanceTo position) <= distances.getValue(position) - minToSave
+
+        return shortestPath.path.flatMap { position ->
+            shortestPath
+                .path
+                .filter { it.isInShortcutRangeFrom(position) }
+                .filter { it.isShorterToGoalThan(position) }
+        }.size
     }
-
-    private fun Coordinates.canNotBeCrossed(): Boolean {
-        return (getAt(this + NORTH) == wall || getAt(this + SOUTH) == wall) &&
-                (getAt(this + EAST) == wall || getAt(this + WEST) == wall)
-    }
-
 }
