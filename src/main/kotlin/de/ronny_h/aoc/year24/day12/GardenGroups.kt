@@ -121,13 +121,8 @@ private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
                 position += direction
             } else {
                 sideCount++
-                when (plant) {
-                    leftOf(position, direction) -> {
-                        direction = direction.turnLeft()
-                        position += direction
-                    }
-                    else -> direction = direction.turnRight()
-                }
+                // here always leftOf(position, direction) != plant
+                direction = direction.turnRight()
             }
         }
         return sideCount
@@ -144,7 +139,7 @@ private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
             direction = direction.turnRight()
             inLastDirection = inDirection
             inDirection = getAt(start + direction)
-        } while (!(inLastDirection != plant && inDirection == plant) && direction != startDirection) // last condition prohibits endless loops on 1-tile gardens
+        } while ((inLastDirection == plant || inDirection != plant) && direction != startDirection) // last condition prohibits endless loops on 1-tile gardens
         return direction
     }
 }
