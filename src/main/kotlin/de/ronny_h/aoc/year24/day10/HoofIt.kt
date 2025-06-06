@@ -8,51 +8,24 @@ import readInput
 
 fun main() {
     val day = "Day10"
+    val input = readInput(day)
+    val hoofIt = HoofIt()
 
     println("$day part 1")
+    printAndCheck(input, hoofIt::part1, 816)
 
+    println("$day part 2")
+    printAndCheck(input, hoofIt::part2, 1960)
+}
+
+class HoofIt {
     fun part1(input: List<String>) = TopographicMap(input)
         .searchTrailheads()
         .sumOf { it.score }
 
-    printAndCheck(
-        """
-            0123
-            1234
-            8765
-            9876
-        """.trimIndent().lines(),
-        ::part1, 1
-    )
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 36)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 816)
-
-
-    println("$day part 2")
-
     fun part2(input: List<String>) = TopographicMap(input)
         .searchTrailheads()
         .sumOf { it.rating }
-
-    printAndCheck(
-        """
-            .....0.
-            ..4321.
-            ..5..2.
-            ..6543.
-            ..7..4.
-            ..8765.
-            ..9....
-        """.trimIndent().lines(),
-        ::part2, 3
-    )
-
-    printAndCheck(testInput, ::part2, 81)
-    printAndCheck(input, ::part2, 1960)
 }
 
 private class TopographicMap(input: List<String>) : Grid<Int>(input, Int.MIN_VALUE) {
