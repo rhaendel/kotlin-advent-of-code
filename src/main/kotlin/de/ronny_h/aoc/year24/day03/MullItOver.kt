@@ -17,22 +17,22 @@ fun main() {
 }
 
 class MullItOver {
-    val mulRegex = """(?<mul>mul\((\d{1,3}),(\d{1,3})\))"""
-    val doRegex = """(?<do>do\(\))"""
-    val dontRegex = """(?<dont>don't\(\))"""
+    private val mulRegex = """(?<mul>mul\((\d{1,3}),(\d{1,3})\))"""
+    private val doRegex = """(?<do>do\(\))"""
+    private val dontRegex = """(?<dont>don't\(\))"""
 
-    fun multiply(match: MatchResult): Int {
+    private fun multiply(match: MatchResult): Int {
         val (_, left, right) = match.destructured
         return left.toInt() * right.toInt()
     }
 
-    fun findAndMultiply(line: String) = mulRegex
+    private fun findAndMultiply(line: String) = mulRegex
         .toRegex()
         .findAll(line)
         .sumOf(::multiply)
 
     fun part1(input: List<String>): Int {
-        return input.map(::findAndMultiply).sum()
+        return input.sumOf(::findAndMultiply)
     }
 
     fun part2(input: List<String>): Int {
