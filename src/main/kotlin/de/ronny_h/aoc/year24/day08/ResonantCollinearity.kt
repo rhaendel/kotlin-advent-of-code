@@ -8,30 +8,18 @@ import readInput
 
 fun main() {
     val day = "Day08"
+    val input = readInput(day)
+    val collinearity = ResonantCollinearity()
 
     println("$day part 1")
-
-    fun part1(input: List<String>) = CityMap(input).collectAntinodes().size
-
-    printAndCheck(
-        """
-            A...b
-            ....b
-            ..A..
-            ..cc.
-            .....
-        """.trimIndent().lines(),
-        ::part1, 4
-    )
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 14)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 214)
-
+    printAndCheck(input, collinearity::part1, 214)
 
     println("$day part 2")
+    printAndCheck(input, collinearity::part2, 809)
+}
+
+class ResonantCollinearity {
+    fun part1(input: List<String>) = CityMap(input).collectAntinodes().size
 
     fun part2(input: List<String>): Int {
         val map = CityMap(input)
@@ -40,20 +28,6 @@ fun main() {
         // map.printGrid(antinodes)
         return antinodes.size
     }
-
-    printAndCheck(
-        """
-            A...b
-            ....b
-            ..A..
-            ..cc.
-            .....
-        """.trimIndent().lines(),
-        ::part2, 11
-    )
-
-    printAndCheck(testInput, ::part2, 34)
-    printAndCheck(input, ::part2, 809)
 }
 
 private class CityMap(input: List<String>) : Grid<Char>(input, '.') {
@@ -99,5 +73,4 @@ private class CityMap(input: List<String>) : Grid<Char>(input, '.') {
     }
 
     private fun Coordinates.isOnTheMap() = col in colIndices && row in rowIndices
-
 }
