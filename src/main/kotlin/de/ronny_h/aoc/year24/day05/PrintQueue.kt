@@ -17,14 +17,14 @@ fun main() {
 }
 
 class PrintQueue {
-    fun parseRules(input: List<String>): List<Pair<Int, Int>> = input
+    private fun parseRules(input: List<String>): List<Pair<Int, Int>> = input
         .takeWhile { it.contains("|") }
         .map {
             val (a, b) = it.split("|")
             a.toInt() to b.toInt()
         }
 
-    fun parseUpdates(input: List<String>): List<List<Int>> = input
+    private fun parseUpdates(input: List<String>): List<List<Int>> = input
         .dropWhile { !it.contains(",") }
         .map {
             it.split(",")
@@ -63,18 +63,15 @@ class PageComparator(rules: List<Pair<Int, Int>>) : Comparator<Int> {
         }
     }
 
-    override fun compare(o1: Int?, o2: Int?): Int {
-        if (rules[o1]?.contains(o2) == true) {
-            // pages are in the right order: o1 < o2
-            return -1
-        }
-        if (rulesInverted[o1]?.contains(o2) == true) {
-            // pages are in the wrong order: o1 > o2
-            return 1
-        }
+    override fun compare(o1: Int?, o2: Int?): Int = when {
+        // pages are in the right order: o1 < o2
+        rules[o1]?.contains(o2) == true -> -1
+
+        // pages are in the wrong order: o1 > o2
+        rulesInverted[o1]?.contains(o2) == true -> 1
+
         // the rules don't say anything about these two pages relatively to another
         // -> consider them equal
-        return 0
+        else -> 0
     }
-
 }
