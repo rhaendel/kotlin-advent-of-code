@@ -6,7 +6,17 @@ import kotlin.math.abs
 
 fun main() {
     val day = "Day01"
+    val input = readInput(day)
+    val historianHysteria = HistorianHysteria()
 
+    println("$day part 1")
+    printAndCheck(input, historianHysteria::part1, 3714264)
+
+    println("$day part 2")
+    printAndCheck(input, historianHysteria::part2, 18805872)
+}
+
+class HistorianHysteria {
     fun part1(input: List<String>): Int {
         val teamOne = input
             .filter { it.isNotBlank() }
@@ -30,33 +40,4 @@ fun main() {
             .unzip()
         return teamOne.sumOf { one -> one * teamTwo.count { it == one } }
     }
-
-    println("$day part 1")
-
-    printAndCheck(
-        listOf(
-            "7   1",
-            "0   0",
-            "1   6"
-        ), ::part1, 1
-    )
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 11)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 3714264)
-
-
-    println("$day part 2")
-
-    printAndCheck(
-        listOf(
-            "7   1",
-            "0   0",
-            "1   6"
-        ), ::part2, 1
-    )
-    printAndCheck(testInput, ::part2, 31)
-    printAndCheck(input, ::part2, 18805872)
 }
