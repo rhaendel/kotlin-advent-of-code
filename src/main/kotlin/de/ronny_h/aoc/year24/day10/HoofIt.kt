@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year24.day10
 
 import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction.*
+import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Grid
 import printAndCheck
 import readInput
@@ -83,9 +83,9 @@ class Trailhead(private val startPosition: Coordinates) {
             addReachable(coordinates)
             return
         }
-        findPathsToNines(coordinates + NORTH, height, heightAt)
-        findPathsToNines(coordinates + EAST, height, heightAt)
-        findPathsToNines(coordinates + SOUTH, height, heightAt)
-        findPathsToNines(coordinates + WEST, height, heightAt)
+
+        Direction.entries.forEach { direction ->
+            findPathsToNines(coordinates + direction, height, heightAt)
+        }
     }
 }
