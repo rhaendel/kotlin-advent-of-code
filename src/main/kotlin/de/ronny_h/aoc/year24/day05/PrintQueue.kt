@@ -6,9 +6,17 @@ import kotlin.collections.get
 
 fun main() {
     val day = "Day05"
+    val input = readInput(day)
+    val queue = PrintQueue()
 
     println("$day part 1")
+    printAndCheck(input, queue::part1, 6384)
 
+    println("$day part 2")
+    printAndCheck(input, queue::part2, 5353)
+}
+
+class PrintQueue {
     fun parseRules(input: List<String>): List<Pair<Int, Int>> = input
         .takeWhile { it.contains("|") }
         .map {
@@ -31,23 +39,6 @@ fun main() {
         return orderedUpdates.sumOf { it[it.size / 2] }
     }
 
-    printAndCheck(
-        listOf(
-            "1|2", "2|3", "3|4", "4|5", "",
-            "1,2,3,4,5", "1,3,2", "1,2,3"
-        ),
-        ::part1, 5
-    )
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 143)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 6384)
-
-
-    println("$day part 2")
-
     fun part2(input: List<String>): Int {
         val rules = parseRules(input)
         val updates = parseUpdates(input)
@@ -57,17 +48,6 @@ fun main() {
             .map { it.sortedWith(pageComparator) }
             .sumOf { it[it.size / 2] }
     }
-
-    printAndCheck(
-        listOf(
-            "1|2", "2|3", "3|4", "4|5", "",
-            "1,2,3,4,5", "1,3,2", "1,2,3"
-        ),
-        ::part2, 2
-    )
-
-    printAndCheck(testInput, ::part2, 123)
-    printAndCheck(input, ::part2, 5353)
 }
 
 class PageComparator(rules: List<Pair<Int, Int>>) : Comparator<Int> {
