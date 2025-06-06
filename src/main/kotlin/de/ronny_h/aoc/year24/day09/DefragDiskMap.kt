@@ -1,58 +1,9 @@
 package de.ronny_h.aoc.year24.day09
 
 import de.ronny_h.aoc.year24.day09.Block.Companion.freeBlockWithLength
-import printAndCheck
-import readInput
 import kotlin.collections.iterator
 
-fun main() {
-    val day = "Day09"
-    println("$day part 2")
-
-    fun part2(input: List<String>): Long {
-        val diskMap = DefragDiskMap(input)
-        // diskMap.printBlocks()
-        val blocks = diskMap.defrag()
-        return diskMap.calculateChecksum(blocks)
-    }
-
-    printAndCheck(
-        """
-            2333133121414131402
-        """.trimIndent().lines(),
-        ::part2, 2858
-    )
-
-    /*
-    1212122
-    0..1..2..33
-    0331..2....
-    03312......
-     */
-    printAndCheck(
-        """
-            1212122
-        """.trimIndent().lines(),
-        ::part2, 20
-    )
-
-    /*
-    00000000.....111.22222.........33333333.....4444..55555666..7777777788888.......9
-    ...
-    000000009666.111.222228888844443333333355555................77777777.............
-     */
-    printAndCheck(
-        """
-            8531598542503280571
-        """.trimIndent().lines(),
-        ::part2, 7309
-    )
-
-    val input = readInput(day)
-    printAndCheck(input, ::part2, 6427437134372)
-}
-
-private data class Block(var id: Int, var length: Int, var isFree: Boolean, var wasMoved: Boolean = false) {
+data class Block(var id: Int, var length: Int, var isFree: Boolean, var wasMoved: Boolean = false) {
 
     val isNotFree: Boolean
         get() = !isFree
@@ -95,7 +46,7 @@ private data class Block(var id: Int, var length: Int, var isFree: Boolean, var 
 
 }
 
-private class DefragDiskMap(input: List<String>) {
+class DefragDiskMap(input: List<String>) {
     val blocks = input
         .first()
         .map(Char::digitToInt)

@@ -1,55 +1,6 @@
 package de.ronny_h.aoc.year24.day09
 
-import printAndCheck
-import readInput
-
-fun main() {
-    val day = "Day09"
-    println("$day part 1")
-
-    fun part1(input: List<String>): Long {
-        val diskMap = DiskMap(input)
-        diskMap.printInfo()
-        val blocks = diskMap.compact()
-        // println("- compacted blocks: ${blocks.joinToString(" ")}")
-        return diskMap.calculateChecksum(blocks)
-    }
-
-    // disk map 12345 represents individual
-    // blocks   : 0..111....22222
-    // compacted: 022111222......
-    printAndCheck(
-        """
-            12345
-        """.trimIndent().lines(),
-        ::part1, 60
-    )
-
-    // the following represents
-    // blocks   : 00...111...2...333.44.5555.6666.777.888899
-    // compacted: 0099811188827773336446555566..............
-    printAndCheck(
-        """
-            2333133121414131402
-        """.trimIndent().lines(),
-        ::part1, 1928
-    )
-
-    // disk map 1234 represents individual
-    // blocks   : 0..111....
-    // compacted: 0111......
-    printAndCheck(
-        """
-            1234
-        """.trimIndent().lines(),
-        ::part1, 6
-    )
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 6398608069280)
-}
-
-private class DiskMap(input: List<String>) {
+class DiskMap(input: List<String>) {
     val idOfFreeBlock = -1
 
     val diskMap = input.first().map(Char::digitToInt)
