@@ -13,9 +13,17 @@ import java.util.concurrent.atomic.AtomicInteger
 
 suspend fun main() {
     val day = "Day06"
+    val input = readInput(day)
+    val guard = GuardGallivant()
 
     println("$day part 1")
+    printAndCheck(input, guard::part1, 4580)
 
+    println("$day part 2")
+    printAndCheck(input, guard::part2, 1480)
+}
+
+class GuardGallivant {
     fun part1(input: List<String>): Int {
         val visited = mutableSetOf<Coordinates>()
         Lab(input).doTheGuardWalk { position, _ ->
@@ -24,25 +32,6 @@ suspend fun main() {
         }
         return visited.size
     }
-
-    printAndCheck(
-        listOf(
-            ".#..",
-            "...#",
-            ".^..",
-            "..#."
-        ),
-        ::part1, 5
-    )
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 41)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 4580)
-
-
-    println("$day part 2")
 
     suspend fun part2(input: List<String>): Int {
         val lab = Lab(input)
@@ -70,19 +59,6 @@ suspend fun main() {
 
         return loopCount.get()
     }
-
-    printAndCheck(
-        listOf(
-            ".#..",
-            "...#",
-            ".^..",
-            "..#."
-        ),
-        ::part2, 1
-    )
-
-    printAndCheck(testInput, ::part2, 6)
-    printAndCheck(input, ::part2, 1480)
 }
 
 private class Lab(input: List<String>) : Grid<Char>(input, ' ') {
