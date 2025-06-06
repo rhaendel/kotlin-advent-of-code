@@ -6,7 +6,17 @@ import kotlin.text.get
 
 fun main() {
     val day = "Day03"
+    val input = readInput(day)
+    val mullItOver = MullItOver()
 
+    println("$day part 1")
+    printAndCheck(input, mullItOver::part1, 174960292)
+
+    println("$day part 2")
+    printAndCheck(input, mullItOver::part2, 56275602)
+}
+
+class MullItOver {
     val mulRegex = """(?<mul>mul\((\d{1,3}),(\d{1,3})\))"""
     val doRegex = """(?<do>do\(\))"""
     val dontRegex = """(?<dont>don't\(\))"""
@@ -39,24 +49,4 @@ fun main() {
                 match.groups["mul"]?.let { if (doIt) multiply(match) else 0 } ?: 0
             }
     }
-
-    println("$day part 1")
-
-    printAndCheck(listOf("blamul(2,3)*x_mul(2,2)+mul(32,64]t"), ::part1, 10)
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 161)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 174960292)
-
-
-    println("$day part 2")
-
-    printAndCheck(
-        listOf("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"),
-        ::part2, 48
-    )
-    printAndCheck(testInput, ::part2, 161)
-    printAndCheck(input, ::part2, 56275602)
 }
