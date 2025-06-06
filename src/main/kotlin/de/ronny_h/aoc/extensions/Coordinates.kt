@@ -1,6 +1,5 @@
-package de.ronny_h.extensions
+package de.ronny_h.aoc.extensions
 
-import de.ronny_h.extensions.Direction.*
 import kotlin.math.abs
 
 data class Coordinates(val row: Int, val col: Int) {
@@ -11,12 +10,12 @@ data class Coordinates(val row: Int, val col: Int) {
 
     operator fun plus(direction: Direction) = Coordinates(row + direction.row, col + direction.col)
 
-    fun neighbours() = listOf(this + EAST, this + SOUTH, this + WEST, this + NORTH)
+    fun neighbours() = listOf(this + Direction.EAST, this + Direction.SOUTH, this + Direction.WEST, this + Direction.NORTH)
     fun directedNeighbours() = listOf(
-        EAST to this + EAST,
-        SOUTH to this + SOUTH,
-        WEST to this + WEST,
-        NORTH to this + NORTH,
+        Direction.EAST to this + Direction.EAST,
+        Direction.SOUTH to this + Direction.SOUTH,
+        Direction.WEST to this + Direction.WEST,
+        Direction.NORTH to this + Direction.NORTH,
     )
 
     /**

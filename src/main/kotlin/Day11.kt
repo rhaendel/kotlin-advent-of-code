@@ -1,4 +1,4 @@
-import de.ronny_h.extensions.memoize
+import de.ronny_h.aoc.extensions.memoize
 
 fun main() {
     val day = "Day11"

@@ -1,6 +1,6 @@
-package de.ronny_h.extensions
+package de.ronny_h.aoc.extensions
 
-import de.ronny_h.extensions.Direction.*
+import de.ronny_h.aoc.extensions.Direction.*
 import io.kotlintest.data.forall
 import io.kotlintest.matchers.collections.shouldContainAll
 import io.kotlintest.shouldBe

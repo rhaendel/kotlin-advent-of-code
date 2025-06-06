@@ -1,4 +1,8 @@
-import de.ronny_h.extensions.*
+import de.ronny_h.aoc.extensions.Coordinates
+import de.ronny_h.aoc.extensions.Direction
+import de.ronny_h.aoc.extensions.Grid
+import de.ronny_h.aoc.extensions.ShortestPath
+import de.ronny_h.aoc.extensions.aStar
 
 fun main() {
     val day = "Day20"

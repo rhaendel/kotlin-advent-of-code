@@ -1,4 +1,4 @@
-package de.ronny_h.extensions
+package de.ronny_h.aoc.extensions
 
 
 /**

@@ -1,6 +1,6 @@
-import de.ronny_h.extensions.Coordinates
-import de.ronny_h.extensions.Grid
-import de.ronny_h.extensions.combinations
+import de.ronny_h.aoc.extensions.Coordinates
+import de.ronny_h.aoc.extensions.Grid
+import de.ronny_h.aoc.extensions.combinations
 
 fun main() {
     val day = "Day08"

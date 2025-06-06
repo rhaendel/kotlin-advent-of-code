@@ -1,7 +1,7 @@
-import de.ronny_h.extensions.Coordinates
-import de.ronny_h.extensions.Direction
-import de.ronny_h.extensions.Direction.EAST
-import de.ronny_h.extensions.Direction.WEST
+import de.ronny_h.aoc.extensions.Coordinates
+import de.ronny_h.aoc.extensions.Direction
+import de.ronny_h.aoc.extensions.Direction.EAST
+import de.ronny_h.aoc.extensions.Direction.WEST
 
 fun main() {
     val day = "Day15"

@@ -1,4 +1,4 @@
-package de.ronny_h.extensions
+package de.ronny_h.aoc.extensions
 
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
@@ -54,7 +54,12 @@ class ShortestPathTest : StringSpec({
         val d: (Node, Node) -> Int = { _, _ -> 1 }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStarAllPaths(start, goal::positionEquals, neighbours, d, h) shouldBe listOf(ShortestPath(listOf(start, goal), 1))
+        aStarAllPaths(start, goal::positionEquals, neighbours, d, h) shouldBe listOf(
+            ShortestPath(
+                listOf(start, goal),
+                1
+            )
+        )
         aStar(start, goal, neighbours, d, h) shouldBe ShortestPath(listOf(start, goal), 1)
     }
 

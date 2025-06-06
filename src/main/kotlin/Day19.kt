@@ -1,4 +1,4 @@
-import de.ronny_h.extensions.PrefixTree
+import de.ronny_h.aoc.extensions.PrefixTree
 
 fun main() {
     val day = "Day19"

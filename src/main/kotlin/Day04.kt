@@ -1,4 +1,4 @@
-import de.ronny_h.extensions.Grid
+import de.ronny_h.aoc.extensions.Grid
 
 fun main() {
     val day = "Day04"
