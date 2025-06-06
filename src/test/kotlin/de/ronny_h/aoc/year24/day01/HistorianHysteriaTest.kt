@@ -1,24 +1,23 @@
 package de.ronny_h.aoc.year24.day01
 
+import de.ronny_h.aoc.extensions.asList
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 class HistorianHysteriaTest : StringSpec({
-
-    val smallInput = listOf(
-        "7   1",
-        "0   0",
-        "1   6",
-    )
-
-    val mediumInput = listOf(
-        "3   4",
-        "4   3",
-        "2   5",
-        "1   3",
-        "3   9",
-        "3   3",
-    )
+    val smallInput = """
+        7   1
+        0   0
+        1   6
+    """.asList()
+    val mediumInput = """
+        3   4
+        4   3
+        2   5
+        1   3
+        3   9
+        3   3
+    """.asList()
 
     "part 1 - small lists with distance 1" {
         HistorianHysteria().part1(smallInput) shouldBe 1

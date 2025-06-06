@@ -5,7 +5,6 @@ import io.kotlintest.specs.StringSpec
 
 
 class MullItOverTest : StringSpec({
-
     val smallInput1 = listOf("blamul(2,3)*x_mul(2,2)+mul(32,64]t")
     val smallInput2 = listOf("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))")
     val mediumInput = listOf("xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))")

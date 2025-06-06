@@ -7,7 +7,6 @@ import io.kotlintest.specs.StringSpec
 import io.kotlintest.tables.row
 
 class DiskFragmenterTest : StringSpec({
-
     val verySmallInput = """
         1234
     """.asList()
@@ -45,7 +44,7 @@ class DiskFragmenterTest : StringSpec({
         forall(
             row(verySmallInput, 6),
             row(smallInput1, 60),
-            row(mediumInput1, 1928)
+            row(mediumInput1, 1928),
         ) { input, result ->
             DiskFragmenter().part1(input) shouldBe result
         }

@@ -7,7 +7,6 @@ import io.kotlintest.specs.StringSpec
 import io.kotlintest.tables.row
 
 class ResonantCollinearityTest : StringSpec({
-
     val smallInput = """
         A...b
         ....b
@@ -33,7 +32,7 @@ class ResonantCollinearityTest : StringSpec({
     "part 1: Unique antinode locations within the bounds of the map" {
         forall(
             row(smallInput, 4),
-            row(mediumInput, 14)
+            row(mediumInput, 14),
         ) { input, result ->
             ResonantCollinearity().part1(input) shouldBe result
         }
@@ -42,7 +41,7 @@ class ResonantCollinearityTest : StringSpec({
     "part 2: Unique antinode locations within the bounds of the map including resonant harmonics " {
         forall(
             row(smallInput, 11),
-            row(mediumInput, 34)
+            row(mediumInput, 34),
         ) { input, result ->
             ResonantCollinearity().part2(input) shouldBe result
         }

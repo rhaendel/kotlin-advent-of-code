@@ -30,7 +30,7 @@ class GuardGallivantTest : StringSpec({
     "part 1: Distinct positions the guard visits before leaving the mapped area" {
         forall(
             row(smallInput, 5),
-            row(mediumInput, 41)
+            row(mediumInput, 41),
         ) { input, result ->
             GuardGallivant().part1(input) shouldBe result
         }
@@ -39,7 +39,7 @@ class GuardGallivantTest : StringSpec({
     "part 2: Different positions for the obstruction" {
         forall(
             row(smallInput, 1),
-            row(mediumInput, 6)
+            row(mediumInput, 6),
         ) { input, result ->
             runBlocking {
                 GuardGallivant().part2(input) shouldBe result

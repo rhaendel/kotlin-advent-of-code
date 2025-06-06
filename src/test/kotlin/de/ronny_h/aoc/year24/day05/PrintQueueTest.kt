@@ -5,7 +5,6 @@ import io.kotlintest.specs.StringSpec
 
 
 class PrintQueueTest : StringSpec({
-
     val smallInput = listOf(
         "1|2", "2|3", "3|4", "4|5",
         "",

@@ -7,7 +7,6 @@ import io.kotlintest.specs.StringSpec
 import io.kotlintest.tables.row
 
 class HoofItTest : StringSpec({
-
     val smallInput1 = """
         0123
         1234
@@ -24,7 +23,6 @@ class HoofItTest : StringSpec({
         01329801
         10456732
     """.asList()
-
     val smallInput2 = """
         .....0.
         ..4321.
@@ -38,7 +36,7 @@ class HoofItTest : StringSpec({
     "part 1: The sum of the scores of all trailheads" {
         forall(
             row(smallInput1, 1),
-            row(mediumInput, 36)
+            row(mediumInput, 36),
         ) { input, result ->
             HoofIt().part1(input) shouldBe result
         }
@@ -47,7 +45,7 @@ class HoofItTest : StringSpec({
     "part 2: The sum of the ratings of all trailheads" {
         forall(
             row(smallInput2, 3),
-            row(mediumInput, 81)
+            row(mediumInput, 81),
         ) { input, result ->
             HoofIt().part2(input) shouldBe result
         }

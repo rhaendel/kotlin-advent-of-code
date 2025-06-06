@@ -32,7 +32,7 @@ class BridgeRepairTest : StringSpec({
     "part 1: Total calibration result of possibly true equations" {
         forall(
             row(smallInput1, 3749),
-            row(mediumInput, 3749)
+            row(mediumInput, 3749),
         ) { input, result ->
             BridgeRepair().part1(input) shouldBe result
         }
@@ -41,7 +41,7 @@ class BridgeRepairTest : StringSpec({
     "part 2: Total calibration result of possibly true equations including elephant hiding spots" {
         forall(
             row(smallInput2, 7638),
-            row(mediumInput, 11387)
+            row(mediumInput, 11387),
         ) { input, result ->
             BridgeRepair().part2(input) shouldBe result
         }
