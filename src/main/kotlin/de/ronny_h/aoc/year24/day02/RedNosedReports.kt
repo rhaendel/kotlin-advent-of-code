@@ -6,7 +6,17 @@ import kotlin.math.abs
 
 fun main() {
     val day = "Day02"
+    val input = readInput(day)
+    val reports = RedNosedReports()
 
+    println("$day part 1")
+    printAndCheck(input, reports::part1, 670)
+
+    println("$day part 2")
+    printAndCheck(input, reports::part2, 700)
+}
+
+class RedNosedReports {
     fun parseReports(input: List<String>) = input
         .filter { it.isNotBlank() }
         .map { line ->
@@ -50,23 +60,4 @@ fun main() {
         .map { isSafeReport(it) || isSafeReportWithOneLevelRemoved(it) }
         .count { it }
 
-    println("$day part 1")
-
-    printAndCheck(
-        listOf("5 4 5", "1 2 3", "1 1 2", "1 5 6", "7 6 5"),
-        ::part1, 2
-    )
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 2)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 670)
-
-
-    println("$day part 2")
-
-    printAndCheck(listOf("1 2 6 7", "5 4 5", "1 2 3", "1 1 2", "1 5 6", "7 6 5"), ::part2, 5)
-    printAndCheck(testInput, ::part2, 4)
-    printAndCheck(input, ::part2, 700)
 }
