@@ -11,93 +11,24 @@ const val verbose = false
 
 fun main() {
     val day = "Day12"
+    val input = readInput(day)
+    val gardenGroups = GardenGroups()
 
     println("$day part 1")
+    printAndCheck(input, gardenGroups::part1, 1546338)
 
+    println("$day part 2")
+    printAndCheck(input, gardenGroups::part2, 978590)
+}
+
+class GardenGroups {
     fun part1(input: List<String>) = Farm(input)
         .separateRegions()
         .sumOf { it.area * it.perimeter }
 
-    printAndCheck(
-        """
-            AAAA
-            BBCD
-            BBCC
-            EEEC
-        """.trimIndent().lines(),
-        ::part1, 140
-    )
-
-    printAndCheck(
-        """
-            OOOOO
-            OXOXO
-            OOOOO
-            OXOXO
-            OOOOO
-        """.trimIndent().lines(),
-        ::part1, 772
-    )
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 1930)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 1546338)
-
-
-    println("$day part 2")
-
     fun part2(input: List<String>) = Farm(input)
         .separateRegions()
         .sumOf { it.area * it.numberOfSides }
-
-    printAndCheck(
-        """
-            AAAA
-            BBCD
-            BBCC
-            EEEC
-        """.trimIndent().lines(),
-        ::part2, 80
-    )
-
-    printAndCheck(
-        """
-            OOOOO
-            OXOXO
-            OOOOO
-            OXOXO
-            OOOOO
-        """.trimIndent().lines(),
-        ::part2, 436
-    )
-
-    printAndCheck(
-        """
-            EEEEE
-            EXXXX
-            EEEEE
-            EXXXX
-            EEEEE
-        """.trimIndent().lines(),
-        ::part2, 236
-    )
-
-    printAndCheck(
-        """
-            AAAAAA
-            AAABBA
-            AAABBA
-            ABBAAA
-            ABBAAA
-            AAAAAA
-        """.trimIndent().lines(),
-        ::part2, 368
-    )
-
-    printAndCheck(testInput, ::part2, 1206)
-    printAndCheck(input, ::part2, 978590)
 }
 
 private data class Region(val area: Int, val perimeter: Int, val numberOfSides: Int)
@@ -105,7 +36,7 @@ private data class Region(val area: Int, val perimeter: Int, val numberOfSides: 
 private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
     override fun Char.toElementType() = this
 
-    val assigned = mutableSetOf<Coordinates>()
+    private val assigned = mutableSetOf<Coordinates>()
 
     fun separateRegions(): List<Region> = forEachCoordinates { position, plant ->
         if (position !in assigned) {
@@ -169,7 +100,7 @@ private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
         return sides
     }
 
-    fun walkAroundTheBoundary(
+    private fun walkAroundTheBoundary(
         start: Coordinates,
         plant: Char,
         visit: (Coordinates, Direction) -> Boolean,
@@ -192,7 +123,7 @@ private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
                 sideCount++
                 when (plant) {
                     leftOf(position, direction) -> {
-                        direction =direction.turnLeft()
+                        direction = direction.turnLeft()
                         position += direction
                     }
                     else -> direction = direction.turnRight()
@@ -216,5 +147,4 @@ private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
         } while (!(inLastDirection != plant && inDirection == plant) && direction != startDirection) // last condition prohibits endless loops on 1-tile gardens
         return direction
     }
-
 }
