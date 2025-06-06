@@ -1,9 +1,13 @@
+package de.ronny_h.aoc.year24.day06
+
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Direction.NORTH
 import de.ronny_h.aoc.extensions.Grid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
+import printAndCheck
+import readInput
 import java.lang.Runtime.getRuntime
 import java.util.concurrent.atomic.AtomicInteger
 

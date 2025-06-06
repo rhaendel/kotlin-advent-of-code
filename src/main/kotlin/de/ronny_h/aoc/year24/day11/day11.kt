@@ -1,4 +1,8 @@
+package de.ronny_h.aoc.year24.day11
+
 import de.ronny_h.aoc.extensions.memoize
+import printAndCheck
+import readInput
 
 fun main() {
     val day = "Day11"

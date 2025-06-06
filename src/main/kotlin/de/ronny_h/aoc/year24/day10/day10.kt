@@ -1,6 +1,10 @@
+package de.ronny_h.aoc.year24.day10
+
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction.*
 import de.ronny_h.aoc.extensions.Grid
+import printAndCheck
+import readInput
 
 fun main() {
     val day = "Day10"

@@ -1,3 +1,9 @@
+package de.ronny_h.aoc.year24.day05
+
+import printAndCheck
+import readInput
+import kotlin.collections.get
+
 fun main() {
     val day = "Day05"
 

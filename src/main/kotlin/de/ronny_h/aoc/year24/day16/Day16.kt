@@ -1,8 +1,12 @@
+package de.ronny_h.aoc.year24.day16
+
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Grid
 import de.ronny_h.aoc.extensions.ShortestPath
 import de.ronny_h.aoc.extensions.aStarAllPaths
+import printAndCheck
+import readInput
 
 fun main() {
     val day = "Day16"

@@ -1,4 +1,9 @@
-import Block.Companion.freeBlockWithLength
+package de.ronny_h.aoc.year24.day09
+
+import de.ronny_h.aoc.year24.day09.Block.Companion.freeBlockWithLength
+import printAndCheck
+import readInput
+import kotlin.collections.iterator
 
 fun main() {
     val day = "Day09"

@@ -1,7 +1,12 @@
+package de.ronny_h.aoc.year24.day15
+
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Direction.EAST
 import de.ronny_h.aoc.extensions.Direction.WEST
+import printAndCheck
+import readInput
+import kotlin.collections.iterator
 
 fun main() {
     val day = "Day15"

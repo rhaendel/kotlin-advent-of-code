@@ -1,3 +1,7 @@
+package de.ronny_h.aoc.year24.day01
+
+import printAndCheck
+import readInput
 import kotlin.math.abs
 
 fun main() {

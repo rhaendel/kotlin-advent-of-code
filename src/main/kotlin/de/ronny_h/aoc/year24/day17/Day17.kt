@@ -1,3 +1,7 @@
+package de.ronny_h.aoc.year24.day17
+
+import printAndCheck
+import readInput
 import kotlin.math.pow
 import kotlin.properties.Delegates
 

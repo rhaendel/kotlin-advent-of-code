@@ -1,4 +1,8 @@
+package de.ronny_h.aoc.year24.day04
+
 import de.ronny_h.aoc.extensions.Grid
+import printAndCheck
+import readInput
 
 fun main() {
     val day = "Day04"

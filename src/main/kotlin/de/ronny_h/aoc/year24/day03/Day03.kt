@@ -1,3 +1,9 @@
+package de.ronny_h.aoc.year24.day03
+
+import printAndCheck
+import readInput
+import kotlin.text.get
+
 fun main() {
     val day = "Day03"
 

@@ -1,3 +1,8 @@
+package de.ronny_h.aoc.year24.day09
+
+import printAndCheck
+import readInput
+
 fun main() {
     val day = "Day09"
     println("$day part 1")
