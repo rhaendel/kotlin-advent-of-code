@@ -6,49 +6,24 @@ import readInput
 
 fun main() {
     val day = "Day04"
+    val input = readInput(day)
+    val search = CeresSearch()
 
     println("$day part 1")
+    printAndCheck(input, search::part1, 2500)
 
+    println("$day part 2")
+    printAndCheck(input, search::part2, 1933)
+}
+
+class CeresSearch {
     fun part1(input: List<String>): Int {
         return XMasGrid(input).searchForXMAS()
     }
 
-    printAndCheck(
-        listOf(
-            "..X.......",
-            ".SAMX....S",
-            ".A..A...A.",
-            "XMAS.S.M..",
-            ".X....X..."
-        ),
-        ::part1, 5
-    )
-
-    val test1Input = readInput("${day}_test1")
-    printAndCheck(test1Input, ::part1, 18)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 2500)
-
-
-    println("$day part 2")
-
     fun part2(input: List<String>): Int {
         return XMasGrid(input).searchForMASCross()
     }
-
-    printAndCheck(
-        listOf(
-            "M.S",
-            ".A.",
-            "M.S"
-        ),
-        ::part2, 1
-    )
-
-    val test2Input = readInput("${day}_test2")
-    printAndCheck(test2Input, ::part2, 9)
-    printAndCheck(input, ::part2, 1933)
 }
 
 class XMasGrid(input: List<String>) : Grid<Char>(input, ' ') {
