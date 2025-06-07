@@ -8,11 +8,31 @@ import readInput
 
 fun main() {
     val day = "Day15"
+    val input = readInput(day)
+    val warehouseWoes = WarehouseWoes()
 
     println("$day part 1")
+    printAndCheck(input, warehouseWoes::part1, 1463715)
 
+    println("$day part 2")
+    printAndCheck(input, warehouseWoes::part2, 1481392)
+}
+
+class WarehouseWoes {
     fun part1(input: List<String>): Int {
-        val warehouse = NormalWarehouse(input.takeWhile { it.isNotBlank() })
+        val warehouse = NormalWarehouse(input.warehouseInput())
+        return moveRobotAndCalculateResult(warehouse, input)
+    }
+
+    fun part2(input: List<String>): Int {
+        val warehouse = WideWarehouse(input.widenedWarehouseInput())
+        return moveRobotAndCalculateResult(warehouse, input)
+    }
+
+    private fun moveRobotAndCalculateResult(
+        warehouse: Warehouse,
+        input: List<String>
+    ): Int {
         warehouse.printGrid()
 
         val movements = input.toDay15Movements()
@@ -22,31 +42,9 @@ fun main() {
 
         return warehouse.sumGPSCoordinates()
     }
-
-    printAndCheck(
-        """
-            ########
-            #..O.O.#
-            ##@.O..#
-            #...O..#
-            #.#.O..#
-            #...O..#
-            #......#
-            ########
-            
-            <^^>>>vv<v>>v<<
-        """.trimIndent().lines(),
-        ::part1, 2028
-    )
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput, ::part1, 10092)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 1463715)
 }
 
-fun List<String>.toDay15Movements(): List<Direction> = takeLastWhile { it.isNotBlank() }
+private fun List<String>.toDay15Movements(): List<Direction> = takeLastWhile { it.isNotBlank() }
     .joinToString(separator = "")
     .map {
         when (it) {
@@ -57,7 +55,6 @@ fun List<String>.toDay15Movements(): List<Direction> = takeLastWhile { it.isNotB
             else -> error("Unexpected direction Char: $it")
         }
     }
-
 
 abstract class Warehouse(input: List<String>) : Grid<Char>(input, '#') {
     protected val wall = nullElement
@@ -91,28 +88,4 @@ abstract class Warehouse(input: List<String>) : Grid<Char>(input, '#') {
             0
         }
     }.sum()
-}
-
-private class NormalWarehouse(input: List<String>) : Warehouse(input) {
-    private val goods = 'O'
-    override val leftGoodsChar = goods
-
-    override fun tryToMove(from: Coordinates, direction: Direction, thing: Char): Boolean {
-        val target = from + direction
-        if (getAt(target) == free) {
-            setAt(target, thing)
-            setAt(from, free)
-            return true
-        }
-        if (getAt(target) == wall) {
-            return false
-        }
-        check(getAt(target) == goods)
-        if (tryToMove(target, direction, goods)) {
-            setAt(target, thing)
-            setAt(from, free)
-            return true
-        }
-        return false
-    }
 }

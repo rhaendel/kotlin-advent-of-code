@@ -4,50 +4,9 @@ import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Direction.EAST
 import de.ronny_h.aoc.extensions.Direction.WEST
-import printAndCheck
-import readInput
 import kotlin.collections.iterator
 
-fun main() {
-    val day = "Day15"
-
-    println("$day part 2")
-
-    fun part2(input: List<String>): Int {
-        val widenedInput = input.widenTheWarehouseInput()
-        val warehouse = WideWarehouse(widenedInput)
-        warehouse.printGrid()
-
-        val movements = input.toDay15Movements()
-
-        warehouse.moveRobot(movements)
-        warehouse.printGrid()
-
-        return warehouse.sumGPSCoordinates()
-    }
-
-    printAndCheck(
-        """
-            #######
-            #...#.#
-            #.....#
-            #..OO@#
-            #..O..#
-            #.....#
-            #######
-            
-            <vv<<^^<<^^
-        """.trimIndent().lines(),
-        ::part2, 618
-    )
-
-    val testInput = readInput("${day}_test")
-    val input = readInput(day)
-    printAndCheck(testInput, ::part2, 9021)
-    printAndCheck(input, ::part2, 1481392)
-}
-
-private fun List<String>.widenTheWarehouseInput(): List<String> = takeWhile { it.isNotBlank() }
+fun List<String>.widenedWarehouseInput(): List<String> = takeWhile { it.isNotBlank() }
     .map {
         val chars = it.toMutableList()
         val listIterator = chars.listIterator()
@@ -71,7 +30,7 @@ private data class ThingInWarehouse(val thing: Char, val from: Coordinates, val 
     val to: Coordinates = from + direction
 }
 
-private class WideWarehouse(input: List<String>) : Warehouse(input) {
+class WideWarehouse(input: List<String>) : Warehouse(input) {
     private val goods = listOf('[', ']')
     override val leftGoodsChar = goods.first()
 
