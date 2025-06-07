@@ -5,24 +5,32 @@ import readInput
 
 fun main() {
     val day = "Day14"
-
-    val robotPattern = """p=(\d+),(\d+) v=(-?\d+),(-?\d+)""".toRegex()
+    val input = readInput(day)
+    val restroomRedoubt = RestroomRedoubt()
 
     println("$day part 1")
+    printAndCheck(input, restroomRedoubt::part1, 218433348)
 
-    fun List<String>.parseRobots() = map {
+    println("$day part 2")
+    printAndCheck(input, restroomRedoubt::part2, 6512)
+}
+
+class RestroomRedoubt {
+    private val robotPattern = """p=(\d+),(\d+) v=(-?\d+),(-?\d+)""".toRegex()
+
+    private fun List<String>.parseRobots() = map {
         val (px, py, vx, vy) = robotPattern.find(it)!!.destructured
         Robot(px.toInt(), py.toInt(), vx.toInt(), vy.toInt())
     }
 
-    fun List<Robot>.move(width: Int, height: Int, seconds: Long) = map {
+    private fun List<Robot>.move(width: Int, height: Int, seconds: Long) = map {
         it.copy(
             px = (it.px + seconds * it.vx).mod(width),
             py = (it.py + seconds * it.vy).mod(height),
         )
     }
 
-    fun List<Robot>.countQuadrants(width: Int, height: Int) = fold(QuadrantCounts(0, 0, 0, 0)) { counts, it ->
+    private fun List<Robot>.countQuadrants(width: Int, height: Int) = fold(QuadrantCounts(0, 0, 0, 0)) { counts, it ->
         if (it.px in 0..<width / 2 && it.py in 0..<height / 2) {
             counts.q1++
         }
@@ -38,7 +46,7 @@ fun main() {
         counts
     }
 
-    fun List<Robot>.toGrid(
+    private fun List<Robot>.toGrid(
         width: Int,
         height: Int
     ): List<List<Int>> {
@@ -49,7 +57,7 @@ fun main() {
         return grid
     }
 
-    fun List<List<Int>>.print() {
+    private fun List<List<Int>>.print() {
         forEach { row ->
             row.forEach {
                 when (it) {
@@ -82,31 +90,7 @@ fun main() {
         return q1 * q2 * q3 * q4
     }
 
-    printAndCheck(
-        """
-            p=0,4 v=3,-3
-            p=6,3 v=-1,-3
-            p=10,3 v=-1,2
-            p=2,0 v=2,-1
-            p=0,0 v=1,3
-            p=3,0 v=-2,-2
-            p=7,6 v=-1,-3
-            p=3,0 v=-1,-2
-            p=9,3 v=2,3
-            p=7,3 v=-1,2
-            p=2,4 v=2,-3
-            p=9,5 v=-3,-3
-        """.trimIndent().lines(),
-        ::part1Small, 12
-    )
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 218433348)
-
-
-    println("$day part 2")
-
-    fun List<Robot>.isNotUnique(width: Int, height: Int): Boolean {
+    private fun List<Robot>.isNotUnique(width: Int, height: Int): Boolean {
         val grid = toGrid(width, height)
         val allUnique = grid.all { row ->
             row.all { it <= 1 }
@@ -117,7 +101,7 @@ fun main() {
         return !allUnique
     }
 
-    fun iterateUntilUnique(robots: List<Robot>, width: Int, height: Int): Long {
+    private fun iterateUntilUnique(robots: List<Robot>, width: Int, height: Int): Long {
         var seconds = 0L
         do {
             seconds++
@@ -127,8 +111,6 @@ fun main() {
     }
 
     fun part2(input: List<String>) = iterateUntilUnique(input.parseRobots(), 101, 103)
-
-    printAndCheck(input, ::part2, 6512)
 }
 
 data class Robot(val px: Int, val py: Int, val vx: Int, val vy: Int)
