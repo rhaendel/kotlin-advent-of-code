@@ -7,26 +7,17 @@ import kotlin.properties.Delegates
 
 fun main() {
     val day = "Day17"
+    val input = readInput(day)
+    val computer = ChronospatialComputer()
 
     println("$day part 1")
+    printAndCheck(input, computer::part1, "4,1,7,6,4,1,0,2,7")
+}
 
+class ChronospatialComputer {
     fun part1(input: List<String>): String {
         return ThreeBitComputer().runProgram(input)
     }
-
-    printAndCheck(
-        """
-            Register A: 729
-            Register B: 0
-            Register C: 0
-            
-            Program: 0,1,5,4,3,0
-        """.trimIndent().lines(),
-        ::part1, "4,6,3,5,6,3,5,2,1,0"
-    )
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, "4,1,7,6,4,1,0,2,7")
 }
 
 /**

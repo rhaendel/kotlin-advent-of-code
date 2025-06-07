@@ -12,6 +12,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+    testImplementation("io.kotest:kotest-runner-junit5:6.0.0.M4")
     testImplementation("org.assertj:assertj-core:3.27.3")
     testImplementation("ch.qos.logback:logback-classic:1.5.18")
 
