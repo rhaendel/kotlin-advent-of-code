@@ -10,114 +10,27 @@ import readInput
 
 fun main() {
     val day = "Day16"
+    val input = readInput(day)
+    val maze = ReindeerMazeRunner()
 
     println("$day part 1")
+    printAndCheck(input, maze::part1, 89460)
 
+    println("$day part 2")
+    printAndCheck(input, maze::part2, 504)
+}
+
+class ReindeerMazeRunner {
     fun part1(input: List<String>): Int {
         val maze = ReindeerMaze(input)
         maze.printGrid()
         return maze.calculateLowestScore()
     }
 
-    printAndCheck(
-        """
-            ###############
-            #.......#....E#
-            #.#.###.#.###.#
-            #.....#.#...#.#
-            #.###.#####.#.#
-            #.#.#.......#.#
-            #.#.#####.###.#
-            #...........#.#
-            ###.#.#####.#.#
-            #...#.....#.#.#
-            #.#.#.###.#.#.#
-            #.....#...#.#.#
-            #.###.#.#.#.#.#
-            #S..#.....#...#
-            ###############
-        """.trimIndent().lines(),
-        ::part1, 7036
-    )
-
-    printAndCheck(
-        """
-            #################
-            #...#...#...#..E#
-            #.#.#.#.#.#.#.#.#
-            #.#.#.#...#...#.#
-            #.#.#.#.###.#.#.#
-            #...#.#.#.....#.#
-            #.#.#.#.#.#####.#
-            #.#...#.#.#.....#
-            #.#.#####.#.###.#
-            #.#.#.......#...#
-            #.#.###.#####.###
-            #.#.#...#.....#.#
-            #.#.#.#####.###.#
-            #.#.#.........#.#
-            #.#.#.#########.#
-            #S#.............#
-            #################
-        """.trimIndent().lines(),
-        ::part1, 11048
-    )
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1, 89460)
-
-
-    println("$day part 2")
-
     fun part2(input: List<String>): Int {
         val maze = ReindeerMaze(input)
         return maze.collectAllShortestPathsTiles()
     }
-
-    printAndCheck(
-        """
-            ###############
-            #.......#....E#
-            #.#.###.#.###.#
-            #.....#.#...#.#
-            #.###.#####.#.#
-            #.#.#.......#.#
-            #.#.#####.###.#
-            #...........#.#
-            ###.#.#####.#.#
-            #...#.....#.#.#
-            #.#.#.###.#.#.#
-            #.....#...#.#.#
-            #.###.#.#.#.#.#
-            #S..#.....#...#
-            ###############
-        """.trimIndent().lines(),
-        ::part2, 45
-    )
-
-    printAndCheck(
-        """
-            #################
-            #...#...#...#..E#
-            #.#.#.#.#.#.#.#.#
-            #.#.#.#...#...#.#
-            #.#.#.#.###.#.#.#
-            #...#.#.#.....#.#
-            #.#.#.#.#.#####.#
-            #.#...#.#.#.....#
-            #.#.#####.#.###.#
-            #.#.#.......#...#
-            #.#.###.#####.###
-            #.#.#...#.....#.#
-            #.#.#.#####.###.#
-            #.#.#.........#.#
-            #.#.#.#########.#
-            #S#.............#
-            #################
-        """.trimIndent().lines(),
-        ::part2, 64
-    )
-    printAndCheck(input, ::part2, 504)
 }
 
 private class ReindeerMaze(input: List<String>) : Grid<Char>(input, '#') {
@@ -180,5 +93,4 @@ private class ReindeerMaze(input: List<String>) : Grid<Char>(input, '#') {
 
         return aStarAllPaths(start, goal::positionEquals, neighbours, d, h)
     }
-
 }
