@@ -10,7 +10,17 @@ import readInput
 
 fun main() {
     val day = "Day18"
+    val input = readInput(day)
+    val ramRun = RAMRun()
 
+    println("$day part 1")
+    printAndCheck(input.subList(0, 1024), ramRun::part1Big, 416)
+
+    println("$day part 2")
+    printAndCheck(input, ramRun::part2Big, "50,23")
+}
+
+class RAMRun {
     fun List<String>.toCoordinates(): List<Coordinates> = map {
         val (x, y) = it.split(',')
         Coordinates(x.toInt(), y.toInt())
@@ -42,20 +52,6 @@ fun main() {
 
     fun part2Small(input: List<String>) = part2(input, 7, 12) // 0..6
     fun part2Big(input: List<String>) = part2(input, 71, 1024) // 0..70
-
-    println("$day part 1")
-
-    val testInput = readInput("${day}_test")
-    printAndCheck(testInput.subList(0, 12), ::part1Small, 22)
-
-    val input = readInput(day)
-    printAndCheck(input.subList(0, 1024), ::part1Big, 416)
-
-
-    println("$day part 2")
-
-    printAndCheck(testInput, ::part2Small, "6,1")
-    printAndCheck(input, ::part2Big, "50,23")
 }
 
 private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>(width, width, '.', '#', corrupted) {
