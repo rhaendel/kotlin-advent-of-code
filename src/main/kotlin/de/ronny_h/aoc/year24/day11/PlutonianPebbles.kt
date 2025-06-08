@@ -1,6 +1,7 @@
 package de.ronny_h.aoc.year24.day11
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.digitCount
 import de.ronny_h.aoc.extensions.memoize
 
 fun main() = PlutonianPebbles().run(193899, 229682160383225)
@@ -11,18 +12,6 @@ class PlutonianPebbles : AdventOfCode<Long>(2024, 11) {
         .split(" ")
         .map(String::toLong)
         .toMutableList()
-
-    private fun Long.digitCount(): Int {
-        if (this == 0L) return 1
-
-        var count = 0
-        var currentNumber = this
-        while (currentNumber > 0) {
-            currentNumber /= 10
-            count++
-        }
-        return count
-    }
 
     private fun tenToPowerOf(digitCount: Int): Int {
         var tens = 10
