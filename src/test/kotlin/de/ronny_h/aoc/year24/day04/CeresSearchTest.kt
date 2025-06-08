@@ -1,9 +1,8 @@
 package de.ronny_h.aoc.year24.day04
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class CeresSearchTest : StringSpec({
     val smallInput1 = """

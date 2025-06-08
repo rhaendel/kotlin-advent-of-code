@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year24.day12
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.data.forall
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.shouldBe
 
 class GardenGroupsTest : StringSpec({
     val smallInput = """
@@ -49,7 +49,7 @@ class GardenGroupsTest : StringSpec({
     """.asList()
 
     "part 1: The total price of fencing all regions" {
-        forall(
+        forAll(
             row(smallInput, 140),
             row(mediumInput1, 772),
             row(mediumInput2, 1930),
@@ -59,7 +59,7 @@ class GardenGroupsTest : StringSpec({
     }
 
     "part 2: The total price of fencing all regions with a bulk discount" {
-        forall(
+        forAll(
             row(smallInput, 80),
             row(mediumInput1, 436),
             row(mediumInput2, 1206),

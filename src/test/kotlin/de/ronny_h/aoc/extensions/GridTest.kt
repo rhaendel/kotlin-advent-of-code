@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.extensions
 
 import com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut
-import io.kotlintest.shouldBe
-import io.kotlintest.shouldNotBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 class GridTest : StringSpec() {
 

@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year24.day02
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class RedNosedReportsTest : StringSpec({
     val smallReports1 = listOf("5 4 5", "1 2 3", "1 1 2", "1 5 6", "7 6 5")

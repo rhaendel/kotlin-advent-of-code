@@ -1,8 +1,7 @@
 package de.ronny_h.aoc.year24.day05
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class PrintQueueTest : StringSpec({
     val smallInput = listOf(

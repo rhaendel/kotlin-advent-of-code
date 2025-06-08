@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year24.day09
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.data.forall
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.shouldBe
 
 class DiskFragmenterTest : StringSpec({
     val verySmallInput = """
@@ -41,7 +41,7 @@ class DiskFragmenterTest : StringSpec({
     """.asList()
 
     "part 1: Compacted hard drive's filesystem checksum" {
-        forall(
+        forAll(
             row(verySmallInput, 6),
             row(smallInput1, 60),
             row(mediumInput1, 1928),
@@ -51,7 +51,7 @@ class DiskFragmenterTest : StringSpec({
     }
 
     "part 2: Compacted hard drive's filesystem checksum" {
-        forall(
+        forAll(
             row(smallInput2, 20),
             row(mediumInput1, 2858),
             row(mediumInput2, 7309),

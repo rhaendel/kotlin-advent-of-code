@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year24.day06
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.data.forall
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.runBlocking
 
 class GuardGallivantTest : StringSpec({
@@ -28,7 +28,7 @@ class GuardGallivantTest : StringSpec({
     """.asList()
 
     "part 1: Distinct positions the guard visits before leaving the mapped area" {
-        forall(
+        forAll(
             row(smallInput, 5),
             row(mediumInput, 41),
         ) { input, result ->
@@ -37,7 +37,7 @@ class GuardGallivantTest : StringSpec({
     }
 
     "part 2: Different positions for the obstruction" {
-        forall(
+        forAll(
             row(smallInput, 1),
             row(mediumInput, 6),
         ) { input, result ->

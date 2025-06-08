@@ -1,17 +1,17 @@
 package de.ronny_h.aoc.extensions
 
 import de.ronny_h.aoc.extensions.Direction.*
-import io.kotlintest.data.forall
-import io.kotlintest.matchers.collections.shouldContainAll
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.tables.row
+import io.kotest.matchers.shouldBe
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.collections.shouldContainAll
 
 
 class CoordinatesTest : StringSpec({
 
     "Coordinates are added" {
-        forall(
+        forAll(
             row(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
             row(Coordinates(0, 0), Coordinates(1, 1), Coordinates(1, 1)),
             row(Coordinates(1, 2), Coordinates(3, 4), Coordinates(4, 6)),
@@ -21,7 +21,7 @@ class CoordinatesTest : StringSpec({
     }
 
     "Coordinates are subtracted" {
-        forall(
+        forAll(
             row(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
             row(Coordinates(0, 0), Coordinates(1, 1), Coordinates(-1, -1)),
             row(Coordinates(3, 5), Coordinates(2, 1), Coordinates(1, 4)),
@@ -31,7 +31,7 @@ class CoordinatesTest : StringSpec({
     }
 
     "Multiplication with a scalar" {
-        forall(
+        forAll(
             row(0, Coordinates(5, 7), Coordinates(0, 0)),
             row(7, Coordinates(0, 0), Coordinates(0, 0)),
             row(3, Coordinates(5, 7), Coordinates(15, 21)),
@@ -43,7 +43,7 @@ class CoordinatesTest : StringSpec({
     }
 
     "Add a direction" {
-        forall(
+        forAll(
             row(Coordinates(5, 5), NORTH, Coordinates(4, 5)),
             row(Coordinates(5, 5), SOUTH, Coordinates(6, 5)),
             row(Coordinates(5, 5), EAST, Coordinates(5, 6)),

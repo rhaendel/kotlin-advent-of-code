@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year24.day08
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.data.forall
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.shouldBe
 
 class ResonantCollinearityTest : StringSpec({
     val smallInput = """
@@ -30,7 +30,7 @@ class ResonantCollinearityTest : StringSpec({
     """.asList()
 
     "part 1: Unique antinode locations within the bounds of the map" {
-        forall(
+        forAll(
             row(smallInput, 4),
             row(mediumInput, 14),
         ) { input, result ->
@@ -39,7 +39,7 @@ class ResonantCollinearityTest : StringSpec({
     }
 
     "part 2: Unique antinode locations within the bounds of the map including resonant harmonics " {
-        forall(
+        forAll(
             row(smallInput, 11),
             row(mediumInput, 34),
         ) { input, result ->

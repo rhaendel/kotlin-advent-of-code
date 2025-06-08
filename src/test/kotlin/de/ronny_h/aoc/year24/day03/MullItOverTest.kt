@@ -1,8 +1,7 @@
 package de.ronny_h.aoc.year24.day03
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class MullItOverTest : StringSpec({
     val smallInput1 = listOf("blamul(2,3)*x_mul(2,2)+mul(32,64]t")

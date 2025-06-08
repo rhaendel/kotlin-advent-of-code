@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year24.day15
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.data.forall
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.shouldBe
 
 class WarehouseWoesTest : StringSpec({
     val smallInput1 = """
@@ -55,7 +55,7 @@ class WarehouseWoesTest : StringSpec({
     """.asList()
 
     "part 1: Total calibration result of possibly true equations" {
-        forall(
+        forAll(
             row(smallInput1, 2028),
             row(mediumInput, 10092),
         ) { input, result ->
@@ -64,7 +64,7 @@ class WarehouseWoesTest : StringSpec({
     }
 
     "part 2: Total calibration result of possibly true equations" {
-        forall(
+        forAll(
             row(smallInput2, 618),
             row(mediumInput, 9021),
         ) { input, result ->

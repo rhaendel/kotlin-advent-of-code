@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year24.day11
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class PlutonianPebblesTest : StringSpec({
     val smallInput = """

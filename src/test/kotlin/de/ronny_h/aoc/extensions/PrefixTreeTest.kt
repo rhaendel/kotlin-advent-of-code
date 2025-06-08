@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.extensions
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.shouldBe
 
 class PrefixTreeTest : StringSpec({
 
@@ -20,12 +20,12 @@ class PrefixTreeTest : StringSpec({
         tree.insert("abc", listOf("a", "b", "c")) shouldBe 1
     }
 
-    "a word consisting with a missing token can not be inserted" {
+    "a word with a missing token can not be inserted" {
         val tree = PrefixTree()
         tree.insert("abc", listOf("a", "c")) shouldBe 0
     }
 
-    "a word constructed from token of different lengths can be inserted once" {
+    "a word constructed from tokens of different lengths can be inserted once" {
         val tree = PrefixTree()
         tree.insert("abc", listOf("ab", "c")) shouldBe 1
     }

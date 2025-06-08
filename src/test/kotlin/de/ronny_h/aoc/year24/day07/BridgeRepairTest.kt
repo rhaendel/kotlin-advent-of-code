@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year24.day07
 
 import de.ronny_h.aoc.extensions.asList
-import io.kotlintest.data.forall
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.StringSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
+import io.kotest.matchers.shouldBe
 
 class BridgeRepairTest : StringSpec({
     val smallInput1 = """
@@ -30,7 +30,7 @@ class BridgeRepairTest : StringSpec({
     """.asList()
 
     "part 1: Total calibration result of possibly true equations" {
-        forall(
+        forAll(
             row(smallInput1, 3749),
             row(mediumInput, 3749),
         ) { input, result ->
@@ -39,7 +39,7 @@ class BridgeRepairTest : StringSpec({
     }
 
     "part 2: Total calibration result of possibly true equations including elephant hiding spots" {
-        forall(
+        forAll(
             row(smallInput2, 7638),
             row(mediumInput, 11387),
         ) { input, result ->
