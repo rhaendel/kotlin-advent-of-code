@@ -9,20 +9,19 @@ abstract class AdventOfCode<T>(val year: Int, val day: Int) {
     abstract fun part1(input: List<String>): T
     abstract fun part2(input: List<String>): T
 
-    private val input = readInput()
-
     fun run(expectedPart1: T, expectedPart2: T) {
+        val input = readInput()
         println("Day $day $year - ${this::class.simpleName} - part 1")
-        printAndCheck(::part1, expectedPart1)
+        printAndCheck(input, ::part1, expectedPart1)
         println("Day $day $year - ${this::class.simpleName} - part 2")
-        printAndCheck(::part2, expectedPart2)
+        printAndCheck(input, ::part2, expectedPart2)
     }
 
     private fun readInput() = Path("src/input/$year/Day${paddedDay()}.txt").readText().trim().lines()
 
     private fun paddedDay(): String = day.toString().padStart(2, '0')
 
-    private fun printAndCheck(block: (List<String>) -> T, expected: T) {
+    private fun printAndCheck(input: List<String>, block: (List<String>) -> T, expected: T) {
         printAndCheck(measureTimedValue { block(input) }, expected)
     }
 
