@@ -10,7 +10,17 @@ import readInput
 
 fun main() {
     val day = "Day20"
+    val input = readInput(day)
+    val raceCondition = RaceCondition()
 
+    println("$day part 1")
+    printAndCheck(input, raceCondition::part1Large, 1438)
+
+    println("$day part 2")
+    printAndCheck(input, raceCondition::part2Large, 1026446)
+}
+
+class RaceCondition {
     fun part1(input: List<String>, minPicosecondsSaved: Int, shortcutMaxLength: Int): Int {
         val track = RaceTrack(input)
         track.printGrid()
@@ -23,35 +33,6 @@ fun main() {
     fun part2Small(input: List<String>) = part1(input, 76, 20)
     fun part2Large(input: List<String>) = part1(input, 100, 20)
 
-    println("$day part 1")
-
-    val testInput = """
-        ###############
-        #...#...#.....#
-        #.#.#.#.#.###.#
-        #S#...#.#.#...#
-        #######.#.#.###
-        #######.#.#...#
-        #######.#.###.#
-        ###..E#...#...#
-        ###.#######.###
-        #...###...#...#
-        #.#####.#.###.#
-        #.#...#.#.#...#
-        #.#.#.#.#.#.###
-        #...#...#...###
-        ###############
-    """.trimIndent().split('\n')
-    printAndCheck(testInput, ::part1Small, 10)
-
-    val input = readInput(day)
-    printAndCheck(input, ::part1Large, 1438)
-
-
-    println("$day part 2")
-
-    printAndCheck(testInput, ::part2Small, 3)
-    printAndCheck(input, ::part2Large, 1026446)
 }
 
 private class RaceTrack(input: List<String>) : Grid<Char>(input, '#') {
