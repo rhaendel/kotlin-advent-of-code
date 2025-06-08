@@ -109,6 +109,11 @@ class CoordinatesTest : StringSpec({
         SOUTH.isOpposite(NORTH) shouldBe true
         EAST.isOpposite(WEST) shouldBe true
         WEST.isOpposite(EAST) shouldBe true
+
+        NORTH.isOpposite(EAST) shouldBe false
+        SOUTH.isOpposite(EAST) shouldBe false
+        EAST.isOpposite(SOUTH) shouldBe false
+        WEST.isOpposite(SOUTH) shouldBe false
     }
 
     "Difference between directions" {
@@ -116,5 +121,12 @@ class CoordinatesTest : StringSpec({
         NORTH - EAST shouldBe 1
         NORTH - SOUTH shouldBe 2
         NORTH - WEST shouldBe 1
+    }
+
+    "toString returns the abbreviation letter" {
+        NORTH.toString() shouldBe "N"
+        SOUTH.toString() shouldBe "S"
+        EAST.toString() shouldBe "E"
+        WEST.toString() shouldBe "W"
     }
 })
