@@ -12,9 +12,9 @@ abstract class AdventOfCode<T>(val year: Int, val day: Int) {
     private val input = readInput()
 
     fun run(expectedPart1: T, expectedPart2: T) {
-        println("Day $day $year, part 1")
+        println("Day $day $year - ${this::class.simpleName} - part 1")
         printAndCheck(::part1, expectedPart1)
-        println("Day $day $year, part 2")
+        println("Day $day $year - ${this::class.simpleName} - part 2")
         printAndCheck(::part2, expectedPart2)
     }
 

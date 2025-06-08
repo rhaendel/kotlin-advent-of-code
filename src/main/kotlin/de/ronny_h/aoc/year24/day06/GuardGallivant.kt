@@ -1,30 +1,19 @@
 package de.ronny_h.aoc.year24.day06
 
+import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Direction.NORTH
 import de.ronny_h.aoc.extensions.Grid
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.produce
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
 import java.lang.Runtime.getRuntime
 import java.util.concurrent.atomic.AtomicInteger
 
-suspend fun main() {
-    val day = "Day06"
-    val input = readInput(day)
-    val guard = GuardGallivant()
+fun main() = GuardGallivant().run(4580, 1480)
 
-    println("$day part 1")
-    printAndCheck(input, guard::part1, 4580)
-
-    println("$day part 2")
-    printAndCheck(input, guard::part2, 1480)
-}
-
-class GuardGallivant {
-    fun part1(input: List<String>): Int {
+class GuardGallivant : AdventOfCode<Int>(2024, 6) {
+    override fun part1(input: List<String>): Int {
         val visited = mutableSetOf<Coordinates>()
         Lab(input).doTheGuardWalk { position, _ ->
             visited.add(position)
@@ -33,7 +22,7 @@ class GuardGallivant {
         return visited.size
     }
 
-    suspend fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int = runBlocking {
         val lab = Lab(input)
         val loopCount = AtomicInteger(0)
 
@@ -57,7 +46,7 @@ class GuardGallivant {
             }.awaitAll()
         }
 
-        return loopCount.get()
+        return@runBlocking loopCount.get()
     }
 }
 

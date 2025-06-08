@@ -1,31 +1,20 @@
 package de.ronny_h.aoc.year24.day19
 
+import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.PrefixTree
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
 
-fun main() {
-    val day = "Day19"
-    val input = readInput(day)
-    val linenLayout = LinenLayout()
+fun main() = LinenLayout().run(251, 616957151871345)
 
-    println("$day part 1")
-    printAndCheck(input, linenLayout::part1, 251)
-
-    println("$day part 2")
-    printAndCheck(input, linenLayout::part2, 616957151871345)
-}
-
-class LinenLayout {
-    fun part1(input: List<String>): Int {
+class LinenLayout : AdventOfCode<Long>(2024, 19) {
+    override fun part1(input: List<String>): Long {
         val towels = input.parseTowels()
         val designs = input.parseDesigns()
         println("${towels.size} towels, ${designs.size} designs")
 
-        return designs.count { it.isPossibleWith(towels) }
+        return designs.count { it.isPossibleWith(towels) }.toLong()
     }
 
-    fun part2(input: List<String>): Long {
+    override fun part2(input: List<String>): Long {
         val towels = input.parseTowels()
         val designs = input.parseDesigns()
         println("${towels.size} towels, ${designs.size} designs")

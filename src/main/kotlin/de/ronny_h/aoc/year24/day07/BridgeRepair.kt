@@ -1,34 +1,23 @@
 package de.ronny_h.aoc.year24.day07
 
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
 import kotlin.math.pow
 
-fun main() {
-    val day = "Day07"
-    val input = readInput(day)
-    val repair = BridgeRepair()
+fun main() = BridgeRepair().run(1399219271639, 275791737999003)
 
-    println("$day part 1")
-    printAndCheck(input, repair::part1, 1399219271639)
-
-    println("$day part 2")
-    printAndCheck(input, repair::part2, 275791737999003)
-}
-
-class BridgeRepair {
+class BridgeRepair : AdventOfCode<Long>(2024, 7) {
     private fun parseEquations(input: List<String>) = input.map { line ->
         val (result, numbers) = line.split(": ")
         Equation(result.toLong(), numbers.split(" ").map(String::toLong))
     }
 
-    fun part1(input: List<String>) = parseEquations(input)
+    override fun part1(input: List<String>) = parseEquations(input)
         .map { it.checkSolvability(listOf(Long::plus, Long::times)) }
         .filter { it.solvable }
         .sumOf { it.result }
 
 
-    fun part2(input: List<String>) = parseEquations(input)
+    override fun part2(input: List<String>) = parseEquations(input)
         .map { it.checkSolvability(listOf(Long::plus, Long::times, ::concat)) }
         .filter { it.solvable }
         .sumOf { it.result }

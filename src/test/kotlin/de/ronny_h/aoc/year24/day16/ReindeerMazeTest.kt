@@ -49,7 +49,7 @@ class ReindeerMazeTest : StringSpec({
             row(smallInput1, 7036),
             row(smallInput2, 11048),
         ) { input, result ->
-            ReindeerMazeRunner().part1(input) shouldBe result
+            ReindeerMaze().part1(input) shouldBe result
         }
     }
 
@@ -58,7 +58,7 @@ class ReindeerMazeTest : StringSpec({
             row(smallInput1, 45),
             row(smallInput2, 64),
         ) { input, result ->
-            ReindeerMazeRunner().part2(input) shouldBe result
+            ReindeerMaze().part2(input) shouldBe result
         }
     }
 })

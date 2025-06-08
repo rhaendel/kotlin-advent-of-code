@@ -1,27 +1,16 @@
 package de.ronny_h.aoc.year24.day04
 
+import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.Grid
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
 
-fun main() {
-    val day = "Day04"
-    val input = readInput(day)
-    val search = CeresSearch()
+fun main() = CeresSearch().run(2500, 1933)
 
-    println("$day part 1")
-    printAndCheck(input, search::part1, 2500)
-
-    println("$day part 2")
-    printAndCheck(input, search::part2, 1933)
-}
-
-class CeresSearch {
-    fun part1(input: List<String>): Int {
+class CeresSearch : AdventOfCode<Int>(2024, 4) {
+    override fun part1(input: List<String>): Int {
         return XMasGrid(input).searchForXMAS()
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         return XMasGrid(input).searchForMASCross()
     }
 }

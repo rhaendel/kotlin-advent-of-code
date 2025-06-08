@@ -1,27 +1,16 @@
 package de.ronny_h.aoc.year24.day08
 
+import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Grid
 import de.ronny_h.aoc.extensions.combinations
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
 
-fun main() {
-    val day = "Day08"
-    val input = readInput(day)
-    val collinearity = ResonantCollinearity()
+fun main() = ResonantCollinearity().run(214, 809)
 
-    println("$day part 1")
-    printAndCheck(input, collinearity::part1, 214)
+class ResonantCollinearity : AdventOfCode<Int>(2024, 8) {
+    override fun part1(input: List<String>) = CityMap(input).collectAntinodes().size
 
-    println("$day part 2")
-    printAndCheck(input, collinearity::part2, 809)
-}
-
-class ResonantCollinearity {
-    fun part1(input: List<String>) = CityMap(input).collectAntinodes().size
-
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         val map = CityMap(input)
         // map.printGrid()
         val antinodes = map.collectAntinodes(withResonantHarmonics = true)

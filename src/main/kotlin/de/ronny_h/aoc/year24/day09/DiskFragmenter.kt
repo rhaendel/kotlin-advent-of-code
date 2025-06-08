@@ -1,22 +1,11 @@
 package de.ronny_h.aoc.year24.day09
 
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
 
-fun main() {
-    val day = "Day09"
-    val input = readInput(day)
-    val diskFragmenter = DiskFragmenter()
+fun main() = DiskFragmenter().run(6398608069280, 6427437134372)
 
-    println("$day part 1")
-    printAndCheck(input, diskFragmenter::part1, 6398608069280)
-
-    println("$day part 2")
-    printAndCheck(input, diskFragmenter::part2, 6427437134372)
-}
-
-class DiskFragmenter {
-    fun part1(input: List<String>): Long {
+class DiskFragmenter : AdventOfCode<Long>(2024, 9) {
+    override fun part1(input: List<String>): Long {
         val diskMap = DiskMap(input)
         diskMap.printInfo()
         val blocks = diskMap.compact()
@@ -24,7 +13,7 @@ class DiskFragmenter {
         return diskMap.calculateChecksum(blocks)
     }
 
-    fun part2(input: List<String>): Long {
+    override fun part2(input: List<String>): Long {
         val diskMap = DefragDiskMap(input)
         // diskMap.printBlocks()
         val blocks = diskMap.defrag()

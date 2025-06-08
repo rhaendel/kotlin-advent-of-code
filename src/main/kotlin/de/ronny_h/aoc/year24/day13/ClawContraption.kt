@@ -1,22 +1,11 @@
 package de.ronny_h.aoc.year24.day13
 
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
 import kotlin.math.floor
 
-fun main() {
-    val day = "Day13"
-    val input = readInput(day)
-    val clawContraption = ClawContraption()
+fun main() = ClawContraption().run(33427, 91649162972270)
 
-    println("$day part 1")
-    printAndCheck(input, clawContraption::part1, 33427)
-
-    println("$day part 2")
-    printAndCheck(input, clawContraption::part2, 91649162972270)
-}
-
-class ClawContraption {
+class ClawContraption : AdventOfCode<Long>(2024, 13) {
     private val buttonA = """Button A: X\+(\d+), Y\+(\d+)""".toRegex()
     private val buttonB = """Button B: X\+(\d+), Y\+(\d+)""".toRegex()
     private val prize = """Prize: X=(\d+), Y=(\d+)""".toRegex()
@@ -74,13 +63,13 @@ class ClawContraption {
         }
     }
 
-    fun part1(input: List<String>) = input
+    override fun part1(input: List<String>) = input
         .parseClawMachines()
         .map(::solveEquations)
         .sumOf { it }
 
 
-    fun part2(input: List<String>) = input
+    override fun part2(input: List<String>) = input
         .parseClawMachines()
         .map { solveEquations(it, 10000000000000) }
         .sumOf { it }

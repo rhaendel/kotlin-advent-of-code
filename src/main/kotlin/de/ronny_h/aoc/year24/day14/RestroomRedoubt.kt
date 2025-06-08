@@ -1,21 +1,10 @@
 package de.ronny_h.aoc.year24.day14
 
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
 
-fun main() {
-    val day = "Day14"
-    val input = readInput(day)
-    val restroomRedoubt = RestroomRedoubt()
+fun main() = RestroomRedoubt().run(218433348, 6512)
 
-    println("$day part 1")
-    printAndCheck(input, restroomRedoubt::part1, 218433348)
-
-    println("$day part 2")
-    printAndCheck(input, restroomRedoubt::part2, 6512)
-}
-
-class RestroomRedoubt {
+class RestroomRedoubt : AdventOfCode<Int>(2024, 14) {
     private val robotPattern = """p=(\d+),(\d+) v=(-?\d+),(-?\d+)""".toRegex()
 
     private fun List<String>.parseRobots() = map {
@@ -23,7 +12,7 @@ class RestroomRedoubt {
         Robot(px.toInt(), py.toInt(), vx.toInt(), vy.toInt())
     }
 
-    private fun List<Robot>.move(width: Int, height: Int, seconds: Long) = map {
+    private fun List<Robot>.move(width: Int, height: Int, seconds: Int) = map {
         it.copy(
             px = (it.px + seconds * it.vx).mod(width),
             py = (it.py + seconds * it.vy).mod(height),
@@ -81,7 +70,7 @@ class RestroomRedoubt {
         return q1 * q2 * q3 * q4
     }
 
-    fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): Int {
         val width = 101
         val height = 103
         val (q1, q2, q3, q4) = input.parseRobots()
@@ -101,8 +90,8 @@ class RestroomRedoubt {
         return !allUnique
     }
 
-    private fun iterateUntilUnique(robots: List<Robot>, width: Int, height: Int): Long {
-        var seconds = 0L
+    private fun iterateUntilUnique(robots: List<Robot>, width: Int, height: Int): Int {
+        var seconds = 0
         do {
             seconds++
             val result = robots.move(width, height, seconds)
@@ -110,7 +99,7 @@ class RestroomRedoubt {
         return seconds
     }
 
-    fun part2(input: List<String>) = iterateUntilUnique(input.parseRobots(), 101, 103)
+    override fun part2(input: List<String>) = iterateUntilUnique(input.parseRobots(), 101, 103)
 }
 
 data class Robot(val px: Int, val py: Int, val vx: Int, val vy: Int)

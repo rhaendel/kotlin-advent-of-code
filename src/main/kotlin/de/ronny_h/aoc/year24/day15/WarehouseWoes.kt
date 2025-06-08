@@ -1,30 +1,19 @@
 package de.ronny_h.aoc.year24.day15
 
+import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Grid
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
 
-fun main() {
-    val day = "Day15"
-    val input = readInput(day)
-    val warehouseWoes = WarehouseWoes()
+fun main() = WarehouseWoes().run(1463715, 1481392)
 
-    println("$day part 1")
-    printAndCheck(input, warehouseWoes::part1, 1463715)
-
-    println("$day part 2")
-    printAndCheck(input, warehouseWoes::part2, 1481392)
-}
-
-class WarehouseWoes {
-    fun part1(input: List<String>): Int {
+class WarehouseWoes : AdventOfCode<Int>(2024, 15) {
+    override fun part1(input: List<String>): Int {
         val warehouse = NormalWarehouse(input.warehouseInput())
         return moveRobotAndCalculateResult(warehouse, input)
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         val warehouse = WideWarehouse(input.widenedWarehouseInput())
         return moveRobotAndCalculateResult(warehouse, input)
     }

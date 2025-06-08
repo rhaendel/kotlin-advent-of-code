@@ -1,23 +1,17 @@
 package de.ronny_h.aoc.year24.day17
 
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
 import kotlin.math.pow
 import kotlin.properties.Delegates
 
-fun main() {
-    val day = "Day17"
-    val input = readInput(day)
-    val computer = ChronospatialComputer()
+fun main() = ChronospatialComputer().run("4,1,7,6,4,1,0,2,7", "TODO")
 
-    println("$day part 1")
-    printAndCheck(input, computer::part1, "4,1,7,6,4,1,0,2,7")
-}
-
-class ChronospatialComputer {
-    fun part1(input: List<String>): String {
+class ChronospatialComputer : AdventOfCode<String>(2024, 17) {
+    override fun part1(input: List<String>): String {
         return ThreeBitComputer().runProgram(input)
     }
+
+    override fun part2(input: List<String>): String = "TODO"
 }
 
 /**

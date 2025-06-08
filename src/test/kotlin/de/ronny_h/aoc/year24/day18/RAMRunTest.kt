@@ -10,7 +10,7 @@ class RAMRunTest : StringSpec({
     )
 
     "part 1: The minimum number of steps needed to reach the exit after the first 1024 bytes" {
-        RAMRun().part1Small(input.subList(0, 12)) shouldBe 22
+        RAMRun().part1Small(input.subList(0, 12)) shouldBe "22"
     }
 
     "part 2: The coordinates of the first byte that will prevent the exit from being reachable" {

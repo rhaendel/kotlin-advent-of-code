@@ -1,22 +1,10 @@
 package de.ronny_h.aoc.year24.day05
 
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
-import kotlin.collections.get
+import de.ronny_h.aoc.AdventOfCode
 
-fun main() {
-    val day = "Day05"
-    val input = readInput(day)
-    val queue = PrintQueue()
+fun main() = PrintQueue().run(6384, 5353)
 
-    println("$day part 1")
-    printAndCheck(input, queue::part1, 6384)
-
-    println("$day part 2")
-    printAndCheck(input, queue::part2, 5353)
-}
-
-class PrintQueue {
+class PrintQueue : AdventOfCode<Int>(2024, 5) {
     private fun parseRules(input: List<String>): List<Pair<Int, Int>> = input
         .takeWhile { it.contains("|") }
         .map {
@@ -31,7 +19,7 @@ class PrintQueue {
                 .map(String::toInt)
         }
 
-    fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): Int {
         val rules = parseRules(input)
         val updates = parseUpdates(input)
         val pageComparator = PageComparator(rules)
@@ -39,7 +27,7 @@ class PrintQueue {
         return orderedUpdates.sumOf { it[it.size / 2] }
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         val rules = parseRules(input)
         val updates = parseUpdates(input)
         val pageComparator = PageComparator(rules)

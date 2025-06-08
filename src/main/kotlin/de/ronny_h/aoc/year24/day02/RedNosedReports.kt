@@ -1,22 +1,11 @@
 package de.ronny_h.aoc.year24.day02
 
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
 import kotlin.math.abs
 
-fun main() {
-    val day = "Day02"
-    val input = readInput(day)
-    val reports = RedNosedReports()
+fun main() = RedNosedReports().run(670, 700)
 
-    println("$day part 1")
-    printAndCheck(input, reports::part1, 670)
-
-    println("$day part 2")
-    printAndCheck(input, reports::part2, 700)
-}
-
-class RedNosedReports {
+class RedNosedReports : AdventOfCode<Int>(2024, 2) {
     fun parseReports(input: List<String>) = input
         .filter { it.isNotBlank() }
         .map { line ->
@@ -42,7 +31,7 @@ class RedNosedReports {
         }.component1()
     }
 
-    fun part1(input: List<String>) = parseReports(input)
+    override fun part1(input: List<String>) = parseReports(input)
         .map(::isSafeReport)
         .count { it }
 
@@ -56,7 +45,7 @@ class RedNosedReports {
         return false
     }
 
-    fun part2(input: List<String>) = parseReports(input)
+    override fun part2(input: List<String>) = parseReports(input)
         .map { isSafeReport(it) || isSafeReportWithOneLevelRemoved(it) }
         .count { it }
 

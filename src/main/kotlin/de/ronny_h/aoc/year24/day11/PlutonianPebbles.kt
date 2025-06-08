@@ -1,23 +1,11 @@
 package de.ronny_h.aoc.year24.day11
 
+import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.memoize
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
-import kotlin.text.toLong
 
-fun main() {
-    val day = "Day11"
-    val input = readInput(day)
-    val plutonianPebbles = PlutonianPebbles()
+fun main() = PlutonianPebbles().run(193899, 229682160383225)
 
-    println("$day part 1")
-    printAndCheck(input, plutonianPebbles::part1, 193899)
-
-    println("$day part 2")
-    printAndCheck(input, plutonianPebbles::part2, 229682160383225)
-}
-
-class PlutonianPebbles {
+class PlutonianPebbles : AdventOfCode<Long>(2024, 11) {
     private fun parseStones(input: List<String>) = input
         .first()
         .split(" ")
@@ -77,9 +65,9 @@ class PlutonianPebbles {
         return blinkRec(State(times, this))
     }
 
-    fun part1(input: List<String>) = parseStones(input)
+    override fun part1(input: List<String>) = parseStones(input)
         .blink(25)
 
-    fun part2(input: List<String>) = parseStones(input)
+    override fun part2(input: List<String>) = parseStones(input)
         .blink(75)
 }

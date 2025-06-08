@@ -1,39 +1,24 @@
 package de.ronny_h.aoc.year24.day16
 
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Grid
-import de.ronny_h.aoc.extensions.ShortestPath
-import de.ronny_h.aoc.extensions.aStarAllPaths
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.*
 
-fun main() {
-    val day = "Day16"
-    val input = readInput(day)
-    val maze = ReindeerMazeRunner()
+fun main() = ReindeerMaze().run(89460, 504)
 
-    println("$day part 1")
-    printAndCheck(input, maze::part1, 89460)
-
-    println("$day part 2")
-    printAndCheck(input, maze::part2, 504)
-}
-
-class ReindeerMazeRunner {
-    fun part1(input: List<String>): Int {
-        val maze = ReindeerMaze(input)
+class ReindeerMaze : AdventOfCode<Int>(2024, 16) {
+    override fun part1(input: List<String>): Int {
+        val maze = ReindeerMazeGrid(input)
         maze.printGrid()
         return maze.calculateLowestScore()
     }
 
-    fun part2(input: List<String>): Int {
-        val maze = ReindeerMaze(input)
+    override fun part2(input: List<String>): Int {
+        val maze = ReindeerMazeGrid(input)
         return maze.collectAllShortestPathsTiles()
     }
 }
 
-private class ReindeerMaze(input: List<String>) : Grid<Char>(input, '#') {
+private class ReindeerMazeGrid(input: List<String>) : Grid<Char>(input, '#') {
     private val wall = nullElement
     override fun Char.toElementType() = this
 

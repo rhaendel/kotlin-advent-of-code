@@ -1,42 +1,27 @@
 package de.ronny_h.aoc.year24.day18
 
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Grid
-import de.ronny_h.aoc.extensions.ShortestPath
-import de.ronny_h.aoc.extensions.aStar
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.*
 
-fun main() {
-    val day = "Day18"
-    val input = readInput(day)
-    val ramRun = RAMRun()
+fun main() = RAMRun().run("416", "50,23")
 
-    println("$day part 1")
-    printAndCheck(input.subList(0, 1024), ramRun::part1Big, 416)
-
-    println("$day part 2")
-    printAndCheck(input, ramRun::part2Big, "50,23")
-}
-
-class RAMRun {
-    fun List<String>.toCoordinates(): List<Coordinates> = map {
+class RAMRun : AdventOfCode<String>(2024, 18) {
+    private fun List<String>.toCoordinates(): List<Coordinates> = map {
         val (x, y) = it.split(',')
         Coordinates(x.toInt(), y.toInt())
     }
 
-    fun part1(input: List<String>, width: Int): Int {
+    fun part1(input: List<String>, width: Int): String {
         val memorySpace = MemorySpace(width, input.toCoordinates())
         memorySpace.printGrid()
         println("-----------------")
-        val shortestPath = memorySpace.shortestPath(Coordinates(0,0), Coordinates(width-1, width-1))
+        val shortestPath = memorySpace.shortestPath(Coordinates(0, 0), Coordinates(width - 1, width - 1))
         memorySpace.printGrid(path = shortestPath.path.associateWith { 'O' })
-        return shortestPath.distance
+        return shortestPath.distance.toString()
     }
 
     fun part1Small(input: List<String>) = part1(input, 7) // 0..6
-    fun part1Big(input: List<String>) = part1(input, 71)  // 0..70
+    override fun part1(input: List<String>) = part1(input.subList(0, 1024), 71)  // 0..70
 
     fun part2(input: List<String>, width: Int, startIndex: Int): String {
         for (n in startIndex..input.lastIndex) {
@@ -44,14 +29,14 @@ class RAMRun {
             try {
                 memorySpace.shortestPath(Coordinates(0, 0), Coordinates(width - 1, width - 1))
             } catch (e: IllegalStateException) {
-                return input[n-1]
+                return input[n - 1]
             }
         }
         return ""
     }
 
     fun part2Small(input: List<String>) = part2(input, 7, 12) // 0..6
-    fun part2Big(input: List<String>) = part2(input, 71, 1024) // 0..70
+    override fun part2(input: List<String>) = part2(input, 71, 1024) // 0..70
 }
 
 private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>(width, width, '.', '#', corrupted) {
@@ -71,7 +56,7 @@ private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>
             1
         }
 
-        val h: (Coordinates) -> Int = { it taxiDistanceTo goal}
+        val h: (Coordinates) -> Int = { it taxiDistanceTo goal }
 
         return aStar(start, goal, neighbours, d, h)
     }

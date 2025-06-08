@@ -1,29 +1,18 @@
 package de.ronny_h.aoc.year24.day10
 
+import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Grid
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
 
-fun main() {
-    val day = "Day10"
-    val input = readInput(day)
-    val hoofIt = HoofIt()
+fun main() = HoofIt().run(816, 1960)
 
-    println("$day part 1")
-    printAndCheck(input, hoofIt::part1, 816)
-
-    println("$day part 2")
-    printAndCheck(input, hoofIt::part2, 1960)
-}
-
-class HoofIt {
-    fun part1(input: List<String>) = TopographicMap(input)
+class HoofIt : AdventOfCode<Int>(2024, 10) {
+    override fun part1(input: List<String>) = TopographicMap(input)
         .searchTrailheads()
         .sumOf { it.score }
 
-    fun part2(input: List<String>) = TopographicMap(input)
+    override fun part2(input: List<String>) = TopographicMap(input)
         .searchTrailheads()
         .sumOf { it.rating }
 }

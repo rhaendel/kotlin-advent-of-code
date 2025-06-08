@@ -1,22 +1,11 @@
 package de.ronny_h.aoc.year24.day03
 
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
 import kotlin.text.get
 
-fun main() {
-    val day = "Day03"
-    val input = readInput(day)
-    val mullItOver = MullItOver()
+fun main() = MullItOver().run(174960292, 56275602)
 
-    println("$day part 1")
-    printAndCheck(input, mullItOver::part1, 174960292)
-
-    println("$day part 2")
-    printAndCheck(input, mullItOver::part2, 56275602)
-}
-
-class MullItOver {
+class MullItOver : AdventOfCode<Int>(2024, 3) {
     private val mulRegex = """(?<mul>mul\((\d{1,3}),(\d{1,3})\))"""
     private val doRegex = """(?<do>do\(\))"""
     private val dontRegex = """(?<dont>don't\(\))"""
@@ -31,11 +20,11 @@ class MullItOver {
         .findAll(line)
         .sumOf(::multiply)
 
-    fun part1(input: List<String>): Int {
+    override fun part1(input: List<String>): Int {
         return input.sumOf(::findAndMultiply)
     }
 
-    fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int {
         var doIt = true
 
         return input

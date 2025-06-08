@@ -1,26 +1,11 @@
 package de.ronny_h.aoc.year24.day20
 
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Grid
-import de.ronny_h.aoc.extensions.ShortestPath
-import de.ronny_h.aoc.extensions.aStar
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
+import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.*
 
-fun main() {
-    val day = "Day20"
-    val input = readInput(day)
-    val raceCondition = RaceCondition()
+fun main() = RaceCondition().run(1438, 1026446)
 
-    println("$day part 1")
-    printAndCheck(input, raceCondition::part1Large, 1438)
-
-    println("$day part 2")
-    printAndCheck(input, raceCondition::part2Large, 1026446)
-}
-
-class RaceCondition {
+class RaceCondition : AdventOfCode<Int>(2024, 20) {
     fun part1(input: List<String>, minPicosecondsSaved: Int, shortcutMaxLength: Int): Int {
         val track = RaceTrack(input)
         track.printGrid()
@@ -28,10 +13,10 @@ class RaceCondition {
     }
 
     fun part1Small(input: List<String>) = part1(input, 10, 2)
-    fun part1Large(input: List<String>) = part1(input, 100, 2)
+    override fun part1(input: List<String>) = part1(input, 100, 2)
 
     fun part2Small(input: List<String>) = part1(input, 76, 20)
-    fun part2Large(input: List<String>) = part1(input, 100, 20)
+    override fun part2(input: List<String>) = part1(input, 100, 20)
 
 }
 

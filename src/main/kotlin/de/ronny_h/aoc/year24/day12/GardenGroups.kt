@@ -1,32 +1,21 @@
 package de.ronny_h.aoc.year24.day12
 
+import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Direction.*
+import de.ronny_h.aoc.extensions.Direction.NORTH
 import de.ronny_h.aoc.extensions.Grid
-import de.ronny_h.aoc.extensions.printAndCheck
-import de.ronny_h.aoc.extensions.readInput
 
 const val verbose = false
 
-fun main() {
-    val day = "Day12"
-    val input = readInput(day)
-    val gardenGroups = GardenGroups()
+fun main() = GardenGroups().run(1546338, 978590)
 
-    println("$day part 1")
-    printAndCheck(input, gardenGroups::part1, 1546338)
-
-    println("$day part 2")
-    printAndCheck(input, gardenGroups::part2, 978590)
-}
-
-class GardenGroups {
-    fun part1(input: List<String>) = Farm(input)
+class GardenGroups : AdventOfCode<Int>(2024, 12) {
+    override fun part1(input: List<String>) = Farm(input)
         .separateRegions()
         .sumOf { it.area * it.perimeter }
 
-    fun part2(input: List<String>) = Farm(input)
+    override fun part2(input: List<String>) = Farm(input)
         .separateRegions()
         .sumOf { it.area * it.numberOfSides }
 }
