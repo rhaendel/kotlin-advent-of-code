@@ -4,5 +4,6 @@
 build
 src/input/**/*.txt
 !src/input/2024/ForTests.txt
+!src/input/2024/Day99.txt
 local.properties
 /.kotlintest/
