@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year24.day13
 
 import de.ronny_h.aoc.AdventOfCode
-import kotlin.math.floor
+import de.ronny_h.aoc.extensions.isIntegral
 
 fun main() = ClawContraption().run(33427, 91649162972270)
 
@@ -76,5 +76,3 @@ class ClawContraption : AdventOfCode<Long>(2024, 13) {
 }
 
 data class ClawMachine(val ax: Int, val ay: Int, val bx: Int, val by: Int, val x: Int, val y: Int)
-
-private fun Double.isIntegral() = floor(this) == this
