@@ -2,6 +2,7 @@
 .idea
 .kotlin/
 build
-src/**/*.txt
+src/input/**/*.txt
+!src/input/2024/ForTests.txt
 local.properties
 /.kotlintest/

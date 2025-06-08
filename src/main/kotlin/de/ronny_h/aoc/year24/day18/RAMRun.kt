@@ -5,8 +5,8 @@ import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Grid
 import de.ronny_h.aoc.extensions.ShortestPath
 import de.ronny_h.aoc.extensions.aStar
-import printAndCheck
-import readInput
+import de.ronny_h.aoc.extensions.printAndCheck
+import de.ronny_h.aoc.extensions.readInput
 
 fun main() {
     val day = "Day18"

@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year24.day19
 
 import de.ronny_h.aoc.extensions.PrefixTree
-import printAndCheck
-import readInput
+import de.ronny_h.aoc.extensions.printAndCheck
+import de.ronny_h.aoc.extensions.readInput
 
 fun main() {
     val day = "Day19"

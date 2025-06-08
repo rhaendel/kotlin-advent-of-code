@@ -4,8 +4,8 @@ import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Direction.*
 import de.ronny_h.aoc.extensions.Grid
-import printAndCheck
-import readInput
+import de.ronny_h.aoc.extensions.printAndCheck
+import de.ronny_h.aoc.extensions.readInput
 
 const val verbose = false
 

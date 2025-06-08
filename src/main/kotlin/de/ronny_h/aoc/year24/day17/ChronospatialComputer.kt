@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year24.day17
 
-import printAndCheck
-import readInput
+import de.ronny_h.aoc.extensions.printAndCheck
+import de.ronny_h.aoc.extensions.readInput
 import kotlin.math.pow
 import kotlin.properties.Delegates
 

@@ -1,3 +1,5 @@
+package de.ronny_h.aoc.extensions
+
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.io.path.Path
@@ -9,7 +11,7 @@ import kotlin.time.measureTimedValue
 /**
  * Reads lines from the given input txt file.
  */
-fun readInput(name: String) = Path("src/main/kotlin/$name.txt").readText().trim().lines()
+fun readInput(name: String) = Path("src/input/2024/$name.txt").readText().trim().lines()
 
 /**
  * Converts string to md5 hash.
