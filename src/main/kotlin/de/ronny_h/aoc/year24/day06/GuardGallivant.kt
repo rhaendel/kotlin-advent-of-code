@@ -58,10 +58,6 @@ private class Lab(input: List<String>) : Grid<Char>(input, ' ') {
     private val offMap = nullElement
     override fun Char.toElementType() = this
 
-    private fun findTheGuard(): Coordinates = forEachElement { row, col, element ->
-        if (element == guard) Coordinates(row, col) else null
-    }.filterNotNull().first()
-
     @OptIn(ExperimentalCoroutinesApi::class)
     fun freePositions(scope: CoroutineScope, bufferSize: Int) = scope.produce(capacity = bufferSize) {
         forEachElement { row, col, char ->
@@ -78,7 +74,7 @@ private class Lab(input: List<String>) : Grid<Char>(input, ' ') {
         visit: (Coordinates, Direction) -> Boolean,
     ) {
         var direction = NORTH
-        var position = findTheGuard()
+        var position = find(guard)
         var doWalkFurther = true
 
         while (getAt(position) != offMap && doWalkFurther) {

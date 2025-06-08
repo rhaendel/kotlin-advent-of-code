@@ -1,7 +1,10 @@
 package de.ronny_h.aoc.extensions
 
 import com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
@@ -14,10 +17,19 @@ class GridTest : StringSpec() {
     private val newLine: String = System.lineSeparator()
 
     init {
-
         "a grid can be constructed from List of String" {
             val grid = simpleCharGridOf(listOf("12", "34"))
             grid shouldNotBe null
+        }
+
+        "a grid can be constructed with overrides" {
+            val grid = object : Grid<Char>(2, 2, ' ', 'x', listOf(Coordinates(1, 1))) {
+                override fun Char.toElementType() = this
+            }
+            grid[0, 0] shouldBe ' '
+            grid[0, 1] shouldBe ' '
+            grid[1, 0] shouldBe ' '
+            grid[1, 1] shouldBe 'x'
         }
 
         "width and height have the right values" {
@@ -99,6 +111,24 @@ class GridTest : StringSpec() {
                         "1,0:3",
                         "1,1:4",
                     )
+        }
+
+        "find() finds all Coordinates" {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            forAll(
+                row('1', Coordinates(0, 0)),
+                row('2', Coordinates(0, 1)),
+                row('3', Coordinates(1, 0)),
+                row('4', Coordinates(1, 1)),
+            ) { char, result ->
+                grid.find(char) shouldBe result
+            }
+        }
+
+        "find() throws a NoSuchElementException if the value cannot be found" {
+            shouldThrow<NoSuchElementException> {
+                simpleCharGridOf(listOf("12", "34")).find('5')
+            }
         }
 
         "printGrid prints the grid" {

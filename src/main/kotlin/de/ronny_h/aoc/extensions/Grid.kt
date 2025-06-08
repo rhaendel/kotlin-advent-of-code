@@ -65,6 +65,15 @@ abstract class Grid<T>(
         }
     }
 
+    /**
+     * Returns the first element matching the given `value`.
+     *
+     * @throws NoSuchElementException If no matching element can be found.
+     */
+    fun find(value: T): Coordinates = forEachElement { row, col, element ->
+        if (element == value) Coordinates(row, col) else null
+    }.filterNotNull().first()
+
     fun printGrid(
         overrides: Set<Coordinates> = setOf(),
         overrideChar: Char = '#',

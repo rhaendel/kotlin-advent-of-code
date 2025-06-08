@@ -56,7 +56,7 @@ abstract class Warehouse(input: List<String>) : Grid<Char>(input, '#') {
     protected abstract fun tryToMove(from: Coordinates, direction: Direction, thing: Char): Boolean
 
     fun moveRobot(movements: List<Direction>) {
-        movements.fold(findTheRobot()) { position, direction ->
+        movements.fold(find(robot)) { position, direction ->
             if (tryToMove(position, direction, robot)) {
                 position + direction
             } else {
@@ -64,10 +64,6 @@ abstract class Warehouse(input: List<String>) : Grid<Char>(input, '#') {
             }
         }
     }
-
-    private fun findTheRobot(): Coordinates = forEachElement { row, col, element ->
-        if (element == robot) Coordinates(row, col) else null
-    }.filterNotNull().first()
 
     // GPS = Goods Positioning System
     fun sumGPSCoordinates(): Int = forEachElement { row, col, element ->

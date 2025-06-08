@@ -27,13 +27,6 @@ private class RaceTrack(input: List<String>) : Grid<Char>(input, '#') {
     private val start = find('S')
     private val goal = find('E')
 
-    private fun find(symbol: Char): Coordinates = forEachElement { row, col, elem ->
-        when (elem) {
-            symbol -> Coordinates(row, col)
-            else -> null
-        }
-    }.filterNotNull().first()
-
     fun shortestPath(): ShortestPath<Coordinates> {
         val neighbours: (Coordinates) -> List<Coordinates> = { node ->
             Direction
