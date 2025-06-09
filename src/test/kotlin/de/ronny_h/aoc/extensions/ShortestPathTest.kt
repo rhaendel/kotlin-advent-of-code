@@ -60,7 +60,7 @@ class ShortestPathTest : StringSpec({
                 1
             )
         )
-        aStar(start, goal, neighbours, d, h) shouldBe ShortestPath(listOf(start, goal), 1)
+        aStar(start, goal::positionEquals, neighbours, d, h) shouldBe ShortestPath(listOf(start, goal), 1)
     }
 
     "With 2 different nodes between start and goal, the shorter path is taken" {
@@ -88,7 +88,7 @@ class ShortestPathTest : StringSpec({
 
         aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 listOf(ShortestPath(listOf(start, a, goal), 10))
-        aStar(start, goal, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 ShortestPath(listOf(start, a, goal), 10)
     }
 
@@ -114,7 +114,7 @@ class ShortestPathTest : StringSpec({
 
         aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 listOf(ShortestPath(listOf(start, a, goal), 9))
-        aStar(start, goal, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 ShortestPath(listOf(start, a, goal), 9)
     }
 
@@ -144,7 +144,7 @@ class ShortestPathTest : StringSpec({
 
         aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 listOf(ShortestPath(listOf(start, a, goal), 9))
-        aStar(start, goal, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 ShortestPath(listOf(start, a, goal), 9)
     }
 
@@ -173,7 +173,7 @@ class ShortestPathTest : StringSpec({
 
         aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 listOf(ShortestPath(listOf(start, a, b, goal), 9))
-        aStar(start, goal, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 ShortestPath(listOf(start, a, b, goal), 9)
     }
 })

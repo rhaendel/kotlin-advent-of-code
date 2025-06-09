@@ -23,12 +23,12 @@ private const val LARGE_VALUE = MAX_VALUE / 2
 /**
  * A* finds a path from `start` to `goal`.
  * @param start the start node
- * @param goal the goal node
+ * @param isGoal predicate deciding if a node is a goal
  * @param neighbors is a function that returns the list of neighbours for a given node.
  * @param d is the distance/cost function. d(m,n) provides the distance (or cost) to reach node n from node m.
  * @param h is the heuristic function. h(n) estimates the cost to reach goal from node n.
  */
-fun <N> aStar(start: N, goal: N, neighbors: (N) -> List<N>, d: (N, N) -> Int, h: (N) -> Int,
+fun <N> aStar(start: N, isGoal: N.() -> Boolean, neighbors: (N) -> List<N>, d: (N, N) -> Int, h: (N) -> Int,
               printIt: (visited: Set<N>, current: N, additionalInfo: () -> String) -> Unit = {_, _, _ -> }): ShortestPath<N> {
     // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
     // how cheap a path could be from start to finish if it goes through n.
@@ -53,7 +53,7 @@ fun <N> aStar(start: N, goal: N, neighbors: (N) -> List<N>, d: (N, N) -> Int, h:
     while (openSet.isNotEmpty()) {
         // This operation can occur in O(Log(N)) time if openSet is a min-heap or a priority queue
         val current = openSet.peek()
-        if (current == goal) {
+        if (isGoal(current)) {
             return ShortestPath(reconstructPath(cameFrom, current), gScore.getValue(current))
         }
 
@@ -78,5 +78,5 @@ fun <N> aStar(start: N, goal: N, neighbors: (N) -> List<N>, d: (N, N) -> Int, h:
     }
 
     // Open set is empty but goal was never reached
-    error("No path found from $start to $goal")
+    error("No path found from $start to goal")
 }

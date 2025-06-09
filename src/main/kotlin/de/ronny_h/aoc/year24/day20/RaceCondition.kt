@@ -42,7 +42,7 @@ private class RaceTrack(input: List<String>) : Grid<Char>(input, '#') {
 
         val h: (Coordinates) -> Int = { it taxiDistanceTo goal }
 
-        return aStar(start, goal, neighbours, d, h)
+        return aStar(start, { this == goal }, neighbours, d, h)
     }
 
     fun countAllShortcutsSavingAtLeast(minToSave: Int, shortcutMaxLength: Int): Int {

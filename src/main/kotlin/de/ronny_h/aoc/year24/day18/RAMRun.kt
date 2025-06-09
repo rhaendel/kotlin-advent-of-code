@@ -58,6 +58,6 @@ private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>
 
         val h: (Coordinates) -> Int = { it taxiDistanceTo goal }
 
-        return aStar(start, goal, neighbours, d, h)
+        return aStar(start, { this == goal }, neighbours, d, h)
     }
 }
