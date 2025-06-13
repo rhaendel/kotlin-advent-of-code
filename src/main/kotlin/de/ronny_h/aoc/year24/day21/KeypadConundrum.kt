@@ -7,38 +7,35 @@ import de.ronny_h.aoc.extensions.SimpleCharGrid
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.extensions.memoize
 
-fun main() = KeypadConundrum().run(94426, 0)
+fun main() = KeypadConundrum().run(94426, 118392478819140)
 
-class KeypadConundrum : AdventOfCode<Int>(2024, 21) {
-    fun input(code: String, keypad: Keypad, depth: Int): String {
+class KeypadConundrum : AdventOfCode<Long>(2024, 21) {
+    fun input(code: String, keypad: Keypad, depth: Int): Long {
         data class Parameters(val code: String, val depth: Int)
 
-        val keypads = buildList(depth) {
-            repeat(depth) { add(Keypad(directionalKeypadLayout)) }
-        } + keypad
-        lateinit var inputRec: (Parameters) -> String
+        val keypads = List(depth) { Keypad(directionalKeypadLayout) } + keypad
+        lateinit var inputRec: (Parameters) -> Long
 
         inputRec = { p: Parameters ->
             if (p.depth == 0) {
-                p.code
+                p.code.length.toLong()
             } else {
                 p.code.map { char ->
-                    keypads[p.depth].moveTo(char).map {
+                    keypads[p.depth].moveTo(char).minOf {
                         inputRec(Parameters(it, p.depth - 1))
-                    }.minBy { it.length }
-                }.joinToString("")
+                    }
+                }.sum()
             }
         }.memoize()
 
         return inputRec(Parameters(code, depth))
     }
 
-    override fun part1(input: List<String>): Int = input.sumOf {
-        input(it, Keypad(numericKeypadLayout), 3).length * it.dropLast(1).toInt()
-    }
+    override fun part1(input: List<String>): Long = sumOfComplexities(input, 3)
+    override fun part2(input: List<String>): Long = sumOfComplexities(input, 26)
 
-    override fun part2(input: List<String>): Int = input.sumOf {
-        input(it, Keypad(numericKeypadLayout), 26).length * it.dropLast(1).toInt()
+    private fun sumOfComplexities(input: List<String>, depth: Int): Long = input.sumOf { code ->
+        input(code, Keypad(numericKeypadLayout), depth) * code.dropLast(1).toLong()
     }
 }
 

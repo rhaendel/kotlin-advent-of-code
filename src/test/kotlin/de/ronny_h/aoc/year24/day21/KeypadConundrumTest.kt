@@ -2,7 +2,6 @@ package de.ronny_h.aoc.year24.day21
 
 import de.ronny_h.aoc.extensions.asList
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 
@@ -32,23 +31,15 @@ class KeypadConundrumTest : StringSpec({
     }
 
     "input v<<A>>^A, last robot" {
-        KeypadConundrum().input("v<<A>>^A", Keypad(directionalKeypadLayout), 1) shouldBeIn
-                listOf(
-                    "<vA<AA>>^AvAA<^A>A",
-                    "v<A<AA>^>AvAA^<A>A",
-                    )
+        KeypadConundrum().input("v<<A>>^A", Keypad(directionalKeypadLayout), 1) shouldBe 18L
     }
 
     "input 0, all robots" {
-        KeypadConundrum().input("0", Keypad(numericKeypadLayout), 3) shouldBeIn
-                listOf(
-                    "<vA<AA>>^AvAA<^A>A",
-                    "v<A<AA>^>AvAA^<A>A",
-                )
+        KeypadConundrum().input("0", Keypad(numericKeypadLayout), 3) shouldBe 18L
     }
 
     "input with depth 1" {
-        KeypadConundrum().input("v", Keypad(directionalKeypadLayout), 1) shouldBe "v<A"
+        KeypadConundrum().input("v", Keypad(directionalKeypadLayout), 1) shouldBe 3
     }
 
     "part 1: The sum of the complexities of the five codes" {
