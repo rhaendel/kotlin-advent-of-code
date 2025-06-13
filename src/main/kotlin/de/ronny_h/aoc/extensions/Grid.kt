@@ -1,5 +1,8 @@
 package de.ronny_h.aoc.extensions
 
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
+import java.nio.charset.StandardCharsets
 import kotlin.collections.MutableList
 
 /**
@@ -74,7 +77,31 @@ abstract class Grid<T>(
         if (element == value) Coordinates(row, col) else null
     }.filterNotNull().first()
 
+    override fun toString(): String = toString(setOf())
+
+    fun toString(
+        overrides: Set<Coordinates> = setOf(),
+        overrideChar: Char = '#',
+    ): String {
+        val out = ByteArrayOutputStream()
+        PrintStream(out, true, StandardCharsets.UTF_8).use {
+            printGrid(it, overrides = overrides, overrideChar = overrideChar)
+        }
+        return out.toString().trim()
+    }
+
     fun printGrid(
+        overrides: Set<Coordinates> = setOf(),
+        overrideChar: Char = '#',
+        highlightPosition: Coordinates? = null,
+        highlightDirection: Direction? = null,
+        path: Map<Coordinates, Char> = mapOf(),
+    ) {
+        printGrid(System.out, overrides, overrideChar, highlightPosition, highlightDirection, path)
+    }
+
+    fun printGrid(
+        writer: PrintStream,
         overrides: Set<Coordinates> = setOf(),
         overrideChar: Char = '#',
         highlightPosition: Coordinates? = null,
@@ -83,15 +110,15 @@ abstract class Grid<T>(
     ) {
         forEachCoordinates { position, element ->
             if (highlightPosition == position && highlightDirection != null) {
-                print(highlightDirection.asChar())
+                writer.print(highlightDirection.asChar())
             } else if (path.contains(position)) {
-                print(path[position])
+                writer.print(path[position])
             } else if (overrides.contains(position)) {
-                print(overrideChar)
+                writer.print(overrideChar)
             } else {
-                print(element)
+                writer.print(element)
             }
-            if (position.col == width - 1) println()
+            if (position.col == width - 1) writer.println()
         }.last()
     }
 }

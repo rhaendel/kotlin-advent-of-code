@@ -194,5 +194,14 @@ class GridTest : StringSpec() {
             output shouldBe "1#${newLine}34$newLine"
         }
 
+        "toString returns a string representation without any overrides" {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.toString() shouldBe "12${newLine}34"
+        }
+
+        "toString with overrides returns a string representation with the given overrides" {
+            val grid = simpleCharGridOf(listOf("12", "34"))
+            grid.toString(setOf(Coordinates(1, 1)), 'o') shouldBe "12${newLine}3o"
+        }
     }
 }
