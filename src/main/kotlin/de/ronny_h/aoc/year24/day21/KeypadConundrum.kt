@@ -1,40 +1,46 @@
 package de.ronny_h.aoc.year24.day21
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Coordinates
 import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Grid
-import de.ronny_h.aoc.extensions.ShortestPath
-import de.ronny_h.aoc.extensions.aStar
+import de.ronny_h.aoc.extensions.Direction.*
+import de.ronny_h.aoc.extensions.SimpleCharGrid
 import de.ronny_h.aoc.extensions.asList
 
-fun main() = KeypadConundrum().run(0, 0)
+fun main() = KeypadConundrum().run(94426, 0)
 
 class KeypadConundrum : AdventOfCode<Int>(2024, 21) {
-    override fun part1(input: List<String>): Int {
-        println("directionalKeypad: $directionalKeypadLayout")
 
-        val numericKeypad = Keypad(numericKeypadLayout)
-        val sequence = input.map { code ->
-            val sequence1 = code.map { position ->
-                numericKeypad.moveTo(position)
-            }.joinToString("")
-            println("robot1: $sequence1")
-
-            val directionalKeypad1 = Keypad(directionalKeypadLayout)
-            val sequence2 = sequence1.map { direction ->
-                directionalKeypad1.moveTo(direction)
-            }.joinToString("")
-            println("robot2: $sequence2")
-
-            val directionalKeypad2 = Keypad(directionalKeypadLayout)
-            val sequence3 = sequence2.map { direction ->
-                directionalKeypad2.moveTo(direction)
-            }.joinToString("")
-            println("$code: $sequence3")
+    data class Node(val code: String, val children: List<Node>) {
+        fun collectSequences(level: Int = 0): String {
+            if (children.isEmpty()) {
+                check(level % 2 == 0)
+                return code
+            }
+            return if (level % 2 == 0) {
+                // direct children = sequence
+                children.joinToString("") { it.collectSequences(level + 1) }
+            } else {
+                // direct children = different options (branches in the tree)
+                children
+                    .map { it.collectSequences(level + 1) }
+                    .minBy { it.length }
+            }
         }
+    }
 
-        return 0
+    fun input(code: String, keypad: Keypad, depth: Int): Node {
+        if (depth == 0) {
+            return Node(code, emptyList())
+        }
+        return Node(code, code.map { char ->
+            Node("$char", keypad.moveTo(char).map {
+                input(it, Keypad(directionalKeypadLayout), depth - 1)
+            })
+        })
+    }
+
+    override fun part1(input: List<String>): Int = input.sumOf {
+        input(it, Keypad(numericKeypadLayout), 3).collectSequences().length * it.dropLast(1).toInt()
     }
 
     override fun part2(input: List<String>): Int {
@@ -72,46 +78,28 @@ val directionalKeypadLayout = """
     <v>
 """.asList()
 
-class Keypad(layout: List<String>) : Grid<Char>(layout, ' ') {
-    override fun Char.toElementType(): Char = this
-
-    data class Node(val direction: Direction, val position: Coordinates) {
-        override fun toString() = "$position$direction"
-    }
+class Keypad(layout: List<String>) : SimpleCharGrid(layout, ' ') {
+    override fun toString(): String = toString(setOf(currentPosition), 'X')
 
     private var currentPosition = find('A')
 
-    fun moveTo(target: Char): String {
+    fun moveTo(target: Char): List<String> {
         val targetPosition = find(target)
-        val path = shortestPath(currentPosition, targetPosition)
+        val paths = shortestPaths(currentPosition, targetPosition)
         currentPosition = targetPosition
-        val directions = path.path.drop(1).joinToString("") {
-            when (it.direction) {
-                Direction.NORTH -> "^"
-                Direction.EAST -> ">"
-                Direction.SOUTH -> "v"
-                Direction.WEST -> "<"
-            }
+        val directions = paths.map { shortestPath ->
+            shortestPath.path
+                .windowed(2)
+                .map { (from, to) -> Direction.entries.first { from + it == to } }
+                .joinToString("") {
+                    when (it) {
+                        NORTH -> "^"
+                        EAST -> ">"
+                        SOUTH -> "v"
+                        WEST -> "<"
+                    }
+                }
         }
-        return "${directions}A"
-    }
-
-    fun shortestPath(start: Coordinates, goal: Coordinates): ShortestPath<Node> {
-
-        val neighbours: (Node) -> List<Node> = { node ->
-            Direction
-                .entries
-                .map { Node(it, node.position + it) }
-                .filter { getAt(it.position) != nullElement }
-        }
-
-        val d: (Node, Node) -> Int = { a, b ->
-            // pre-condition: a and b are neighbours
-            1
-        }
-
-        val h: (Node) -> Int = { it.position taxiDistanceTo goal }
-
-        return aStar(Node(Direction.EAST, start), { this.position == goal }, neighbours, d, h)
+        return directions.map { "${it}A" }
     }
 }

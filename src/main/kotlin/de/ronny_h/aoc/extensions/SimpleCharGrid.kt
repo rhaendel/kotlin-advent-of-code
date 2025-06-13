@@ -1,6 +1,6 @@
 package de.ronny_h.aoc.extensions
 
-class SimpleCharGrid(input: List<String>, nullElement: Char = '#') : Grid<Char>(input, nullElement) {
+open class SimpleCharGrid(input: List<String>, nullElement: Char = '#') : Grid<Char>(input, nullElement) {
     override fun Char.toElementType() = this
 
     fun shortestPaths(start: Coordinates, goal: Coordinates): List<ShortestPath<Coordinates>> {
