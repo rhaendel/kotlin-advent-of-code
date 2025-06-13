@@ -1,7 +1,6 @@
 package de.ronny_h.aoc.year24.day21
 
 import de.ronny_h.aoc.extensions.asList
-import de.ronny_h.aoc.year24.day21.KeypadConundrum.Node
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -33,7 +32,7 @@ class KeypadConundrumTest : StringSpec({
     }
 
     "input v<<A>>^A, last robot" {
-        KeypadConundrum().input("v<<A>>^A", Keypad(directionalKeypadLayout), 1).collectSequences() shouldBeIn
+        KeypadConundrum().input("v<<A>>^A", Keypad(directionalKeypadLayout), 1) shouldBeIn
                 listOf(
                     "<vA<AA>>^AvAA<^A>A",
                     "v<A<AA>^>AvAA^<A>A",
@@ -41,7 +40,7 @@ class KeypadConundrumTest : StringSpec({
     }
 
     "input 0, all robots" {
-        KeypadConundrum().input("0", Keypad(numericKeypadLayout), 3).collectSequences() shouldBeIn
+        KeypadConundrum().input("0", Keypad(numericKeypadLayout), 3) shouldBeIn
                 listOf(
                     "<vA<AA>>^AvAA<^A>A",
                     "v<A<AA>^>AvAA^<A>A",
@@ -49,8 +48,7 @@ class KeypadConundrumTest : StringSpec({
     }
 
     "input with depth 1" {
-        KeypadConundrum().input("v", Keypad(directionalKeypadLayout), 1) shouldBe
-                Node("v", listOf(Node("v", listOf(Node("v<A", emptyList()), Node("<vA", emptyList())))))
+        KeypadConundrum().input("v", Keypad(directionalKeypadLayout), 1) shouldBe "v<A"
     }
 
     "part 1: The sum of the complexities of the five codes" {

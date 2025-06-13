@@ -9,38 +9,20 @@ import de.ronny_h.aoc.extensions.asList
 fun main() = KeypadConundrum().run(94426, 0)
 
 class KeypadConundrum : AdventOfCode<Int>(2024, 21) {
-
-    data class Node(val code: String, val children: List<Node>) {
-        fun collectSequences(level: Int = 0): String {
-            if (children.isEmpty()) {
-                check(level % 2 == 0)
-                return code
-            }
-            return if (level % 2 == 0) {
-                // direct children = sequence
-                children.joinToString("") { it.collectSequences(level + 1) }
-            } else {
-                // direct children = different options (branches in the tree)
-                children
-                    .map { it.collectSequences(level + 1) }
-                    .minBy { it.length }
-            }
-        }
-    }
-
-    fun input(code: String, keypad: Keypad, depth: Int): Node {
+    fun input(code: String, keypad: Keypad, depth: Int): String {
         if (depth == 0) {
-            return Node(code, emptyList())
+            return code
         }
-        return Node(code, code.map { char ->
-            Node("$char", keypad.moveTo(char).map {
+
+        return code.map { char ->
+            keypad.moveTo(char).map {
                 input(it, Keypad(directionalKeypadLayout), depth - 1)
-            })
-        })
+            }.minBy { it.length }
+        }.joinToString("")
     }
 
     override fun part1(input: List<String>): Int = input.sumOf {
-        input(it, Keypad(numericKeypadLayout), 3).collectSequences().length * it.dropLast(1).toInt()
+        input(it, Keypad(numericKeypadLayout), 3).length * it.dropLast(1).toInt()
     }
 
     override fun part2(input: List<String>): Int {
