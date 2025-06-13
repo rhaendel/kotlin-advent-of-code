@@ -5,28 +5,40 @@ import de.ronny_h.aoc.extensions.Direction
 import de.ronny_h.aoc.extensions.Direction.*
 import de.ronny_h.aoc.extensions.SimpleCharGrid
 import de.ronny_h.aoc.extensions.asList
+import de.ronny_h.aoc.extensions.memoize
 
 fun main() = KeypadConundrum().run(94426, 0)
 
 class KeypadConundrum : AdventOfCode<Int>(2024, 21) {
     fun input(code: String, keypad: Keypad, depth: Int): String {
-        if (depth == 0) {
-            return code
-        }
+        data class Parameters(val code: String, val depth: Int)
 
-        return code.map { char ->
-            keypad.moveTo(char).map {
-                input(it, Keypad(directionalKeypadLayout), depth - 1)
-            }.minBy { it.length }
-        }.joinToString("")
+        val keypads = buildList(depth) {
+            repeat(depth) { add(Keypad(directionalKeypadLayout)) }
+        } + keypad
+        lateinit var inputRec: (Parameters) -> String
+
+        inputRec = { p: Parameters ->
+            if (p.depth == 0) {
+                p.code
+            } else {
+                p.code.map { char ->
+                    keypads[p.depth].moveTo(char).map {
+                        inputRec(Parameters(it, p.depth - 1))
+                    }.minBy { it.length }
+                }.joinToString("")
+            }
+        }.memoize()
+
+        return inputRec(Parameters(code, depth))
     }
 
     override fun part1(input: List<String>): Int = input.sumOf {
         input(it, Keypad(numericKeypadLayout), 3).length * it.dropLast(1).toInt()
     }
 
-    override fun part2(input: List<String>): Int {
-        TODO("Not yet implemented")
+    override fun part2(input: List<String>): Int = input.sumOf {
+        input(it, Keypad(numericKeypadLayout), 26).length * it.dropLast(1).toInt()
     }
 }
 
