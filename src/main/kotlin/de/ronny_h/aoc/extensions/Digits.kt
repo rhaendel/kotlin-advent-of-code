@@ -1,5 +1,7 @@
 package de.ronny_h.aoc.extensions
 
+import kotlin.math.abs
+
 /**
  * Counts the number of digits of the given Long number.
  */
@@ -14,3 +16,8 @@ fun Long.digitCount(): Int {
     }
     return count
 }
+
+/**
+ * Returns the ones digit (the rightmost digit) of the given Long number.
+ */
+fun Long.onesDigit(): Int = abs(this % 10).toInt()

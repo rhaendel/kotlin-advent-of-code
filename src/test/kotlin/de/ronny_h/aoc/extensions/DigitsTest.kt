@@ -13,4 +13,20 @@ class DigitsTest : StringSpec({
             number.digitCount() shouldBe digits
         }
     }
+
+    "The ones digit is returned" {
+        forAll(
+            row(0, 0),
+            row(123L, 3),
+            row(15887950, 0),
+            row(16495136, 6),
+            row(527345, 5),
+            row(-123L, 3),
+            row(-15887950, 0),
+            row(-16495136, 6),
+            row(-527345, 5),
+        ) { number, ones ->
+            number.onesDigit() shouldBe ones
+        }
+    }
 })
