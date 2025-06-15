@@ -2,21 +2,25 @@ package de.ronny_h.aoc.year24.day23
 
 import de.ronny_h.aoc.AdventOfCode
 
-fun main() = LANParty().run(1240, 0)
+fun main() = LANParty().run("1240", "am,aq,by,ge,gf,ie,mr,mt,rw,sn,te,yi,zb")
 
-class LANParty : AdventOfCode<Int>(2024, 23) {
+class LANParty : AdventOfCode<String>(2024, 23) {
 
-    override fun part1(input: List<String>): Int = Network(input)
+    override fun part1(input: List<String>): String = Network(input)
         .searchForLANPartiesWithThreeComputers()
-        .filter { set -> set.any { it.startsWith("t") } }.size
+        .filter { set -> set.any { it.startsWith("t") } }
+        .size
+        .toString()
 
-    override fun part2(input: List<String>): Int {
-        TODO("Not yet implemented")
-    }
+    override fun part2(input: List<String>): String = Network(input)
+        .sortedConnectionSets()
+        .findLargestIntersection()
+        .sorted()
+        .joinToString(",")
 }
 
 class Network(input: List<String>) {
-    // from one computer to all others it is directly connected to
+    // a map entry for computer `c` contains all other computers that `c` is directly connected to
     private val connections: Map<String, Set<String>>
 
     init {
@@ -33,9 +37,9 @@ class Network(input: List<String>) {
         val triples = mutableSetOf<Set<String>>()
         connections.forEach { (computer, neighbors) ->
             neighbors.forEach { neighbor ->
-                val otherNeighborsNeighbors = connections.getValue(neighbor).filterNot { it == computer }
+                val neighborsOtherNeighbors = connections.getValue(neighbor).filterNot { it == computer }
                 val neighborsWithBacklinkToComputer =
-                    otherNeighborsNeighbors.filter { connections.getValue(it).contains(computer) }
+                    neighborsOtherNeighbors.filter { connections.getValue(it).contains(computer) }
                 neighborsWithBacklinkToComputer.forEach {
                     triples.add(setOf(computer, neighbor, it))
                 }
@@ -43,4 +47,28 @@ class Network(input: List<String>) {
         }
         return triples
     }
+
+    fun sortedConnectionSets() = connections
+        .map { (computer, neighbors) -> neighbors + computer }
+        .sortedBy { -it.size }
+}
+
+fun List<Set<String>>.findLargestIntersection(): Set<String> {
+    // precondition: `this` is sorted in decreasing order by size
+    var largestIntersection = emptySet<String>()
+    for ((i, s1) in this.withIndex()) {
+        for ((j, s2) in this.withIndex()) {
+            if (i == j) continue
+            if (s2.size < largestIntersection.size) {
+                return largestIntersection
+            }
+            val intersection = s1 intersect s2
+            if (intersection.size > largestIntersection.size) {
+                if (this.count { it.containsAll(intersection) } == intersection.size) {
+                    largestIntersection = intersection
+                }
+            }
+        }
+    }
+    return largestIntersection
 }
