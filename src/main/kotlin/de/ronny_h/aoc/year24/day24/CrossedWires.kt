@@ -6,10 +6,23 @@ fun main() = CrossedWires().run(66055249060558, 0)
 
 class CrossedWires: AdventOfCode<Long>(2024, 24) {
 
-    companion object {
-        val and = { a: Boolean, b: Boolean -> a && b }
-        val or = { a: Boolean, b: Boolean -> a || b }
-        val xor = { a: Boolean, b: Boolean -> a xor b }
+    class And: (Boolean, Boolean) -> Boolean {
+        override fun invoke(a: Boolean, b: Boolean) = a && b
+        override fun toString() = "AND"
+        override fun equals(other: Any?) = other is And
+        override fun hashCode(): Int = javaClass.hashCode()
+    }
+    class Or: (Boolean, Boolean) -> Boolean {
+        override fun invoke(a: Boolean, b: Boolean) = a || b
+        override fun toString() = "OR"
+        override fun equals(other: Any?) = other is Or
+        override fun hashCode(): Int = javaClass.hashCode()
+    }
+    class Xor: (Boolean, Boolean) -> Boolean {
+        override fun invoke(a: Boolean, b: Boolean) = a xor b
+        override fun toString() = "XOR"
+        override fun equals(other: Any?) = other is Xor
+        override fun hashCode(): Int = javaClass.hashCode()
     }
 
     fun parseWires(input: List<String>) = input
@@ -26,9 +39,9 @@ class CrossedWires: AdventOfCode<Long>(2024, 24) {
             val (term, result) = it.split(" -> ")
             val (in1, op, in2) = term.split(" ")
             val operation = when(op) {
-                "AND" -> and
-                "OR" -> or
-                "XOR" -> xor
+                "AND" -> And()
+                "OR" -> Or()
+                "XOR" -> Xor()
                 else -> error("Operation not supported: $op")
             }
             Gate(in1.trim(), in2.trim(), operation, result.trim())
@@ -76,12 +89,17 @@ class CrossedWires: AdventOfCode<Long>(2024, 24) {
     }
 }
 
-data class Wire(val name: String, val value: Boolean)
+data class Wire(val name: String, val value: Boolean) {
+    override fun toString() = "$name: $value"
+}
+
 data class Gate(val in1: String, val in2: String, val operation: (Boolean, Boolean) -> (Boolean), val out: String) {
     fun simulateWith(inWires: Map<String, Wire>): Wire = Wire(
         out,
         operation(inWires.valueOf(in1), inWires.valueOf(in2))
     )
+
+    override fun toString() = "$in1 $operation $in2 = $out"
 }
 
 private fun Map<String, Wire>.valueOf(inWire: String): Boolean = getValue(inWire).value

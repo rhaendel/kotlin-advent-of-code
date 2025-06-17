@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year24.day24
 
 import de.ronny_h.aoc.extensions.asList
-import de.ronny_h.aoc.year24.day24.CrossedWires.Companion.and
-import de.ronny_h.aoc.year24.day24.CrossedWires.Companion.or
-import de.ronny_h.aoc.year24.day24.CrossedWires.Companion.xor
+import de.ronny_h.aoc.year24.day24.CrossedWires.And
+import de.ronny_h.aoc.year24.day24.CrossedWires.Or
+import de.ronny_h.aoc.year24.day24.CrossedWires.Xor
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
@@ -86,8 +86,8 @@ class CrossedWiresTest : StringSpec({
 
     "gates can be parsed" {
         CrossedWires().parseGates(verySmallInput) shouldBe listOf(
-                Gate("x00", "y00", and, "z00"),
-                Gate("x01", "y01", xor, "z01"),
+                Gate("x00", "y00", And(), "z00"),
+                Gate("x01", "y01", Xor(), "z01"),
             )
     }
 
@@ -95,9 +95,9 @@ class CrossedWiresTest : StringSpec({
         val inWires = mapOf("x00" to Wire("x00", true), "y00" to Wire("y00", false))
 
         forAll(
-            row(and, false),
-            row(or, true),
-            row(xor, true),
+            row(And(), false),
+            row(Or(), true),
+            row(Xor(), true),
         ) { operation, result ->
             Gate("x00", "y00", operation, "z00").simulateWith(inWires) shouldBe Wire("z00", result)
         }
