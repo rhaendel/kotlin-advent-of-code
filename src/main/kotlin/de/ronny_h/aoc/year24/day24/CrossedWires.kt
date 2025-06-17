@@ -35,30 +35,40 @@ class CrossedWires: AdventOfCode<Long>(2024, 24) {
         }
 
     override fun part1(input: List<String>): Long {
-        val wires = parseWires(input)
-            .associateBy(Wire::name)
-            .toMutableMap()
         val gates = parseGates(input)
-        val zWiresToCalculate = gates.count { it.out.startsWith("z") }
+        return parseWires(input)
+            .associateBy(Wire::name)
+            .simulateGates(gates)
+            .withPrefixAsDecimal("z")
+    }
 
-        do {
-            val simulatableGates = gates.filter { it.in1 in wires && it.in2 in wires }
-            val outWires = simulatableGates
-                .map { it.simulateWith(wires) }
-                .associateBy(Wire::name)
-            wires.putAll(outWires)
-        } while (zWiresToCalculate != wires.count { it.key.startsWith("z") })
+    private fun Map<String, Wire>.withPrefixAsDecimal(prefix: String): Long = withPrefixAsBinary(prefix)
+        .toLong(2)
 
-        return wires.values
-            .filter { it.name.startsWith("z") }
-            .sortedByDescending(Wire::name)
+    private fun Map<String, Wire>.withPrefixAsBinary(prefix: String): String = withPrefixSortedByLSBFirst(prefix)
             .joinToString("") {
                 when (it.value) {
                     true -> "1"
                     false -> "0"
                 }
             }
-            .toLong(2)
+
+    private fun Map<String, Wire>.withPrefixSortedByLSBFirst(prefix: String): List<Wire> = values
+        .filter { it.name.startsWith(prefix) }
+        .sortedByDescending(Wire::name)
+
+    private fun Map<String, Wire>.simulateGates(gates: List<Gate>): Map<String, Wire> {
+        val wires = toMutableMap()
+        var simulatedGates: Int
+        do {
+            val simulatableGates = gates.filter { it.in1 in wires && it.in2 in wires }
+            simulatedGates = simulatableGates.size
+            val outWires = simulatableGates
+                .map { it.simulateWith(wires) }
+                .associateBy(Wire::name)
+            wires.putAll(outWires)
+        } while (simulatedGates != gates.size)
+        return wires
     }
 
     override fun part2(input: List<String>): Long {
