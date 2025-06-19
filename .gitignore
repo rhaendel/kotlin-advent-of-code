@@ -2,7 +2,7 @@
 .idea
 .kotlin/
 build
-src/input/**/*.txt
-!src/input/2024/Day99.txt
+src/main/resources/**/*.txt
+!src/main/resources/2024/Day99.txt
 local.properties
 /.kotlintest/

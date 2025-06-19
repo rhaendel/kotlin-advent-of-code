@@ -17,7 +17,7 @@ abstract class AdventOfCode<T>(val year: Int, val day: Int) {
         printAndCheck(input, ::part2, expectedPart2)
     }
 
-    private fun readInput() = Path("src/input/$year/Day${paddedDay()}.txt").readText().trim().lines()
+    fun readInput() = AdventOfCode::class.java.getResource("/$year/Day${paddedDay()}.txt")!!.readText().trim().lines()
 
     private fun paddedDay(): String = day.toString().padStart(2, '0')
 
