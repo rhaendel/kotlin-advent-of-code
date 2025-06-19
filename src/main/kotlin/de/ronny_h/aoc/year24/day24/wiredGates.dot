@@ -1,4 +1,6 @@
 digraph {
+  edge [arrowhead=vee arrowsize=0.6]
+  node [fontname=Arial shape=plain]
   222 [label=x00 fontcolor="#4A88D4" color="#4A88D4"]
   223 [label=x01 fontcolor="#4A88D4" color="#4A88D4"]
   224 [label=x02 fontcolor="#4A88D4" color="#4A88D4"]
