@@ -1,5 +1,6 @@
 package de.ronny_h.aoc.extensions
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
@@ -28,5 +29,21 @@ class DigitsTest : StringSpec({
         ) { number, ones ->
             number.onesDigit() shouldBe ones
         }
+    }
+
+    "toBoolean converts a char digit to Boolean" {
+        '0'.toBoolean() shouldBe false
+        '1'.toBoolean() shouldBe true
+    }
+
+    "toBoolean throws an Exception for illegal digits" {
+        shouldThrow<IllegalStateException> {
+            '2'.toBoolean()
+        }
+    }
+
+    "toDigit converts a Boolean to a digit String" {
+        true.toDigit() shouldBe "1"
+        false.toDigit() shouldBe "0"
     }
 })

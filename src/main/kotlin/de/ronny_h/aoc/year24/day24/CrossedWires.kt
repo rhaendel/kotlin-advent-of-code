@@ -1,6 +1,7 @@
 package de.ronny_h.aoc.year24.day24
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.toDigit
 
 fun main() = CrossedWires().run(66055249060558, 0)
 
@@ -59,12 +60,7 @@ class CrossedWires: AdventOfCode<Long>(2024, 24) {
         .toLong(2)
 
     private fun Map<String, Wire>.withPrefixAsBinary(prefix: String): String = withPrefixSortedByLSBFirst(prefix)
-            .joinToString("") {
-                when (it.value) {
-                    true -> "1"
-                    false -> "0"
-                }
-            }
+        .joinToString("") { it.value.toDigit() }
 
     private fun Map<String, Wire>.withPrefixSortedByLSBFirst(prefix: String): List<Wire> = values
         .filter { it.name.startsWith(prefix) }
