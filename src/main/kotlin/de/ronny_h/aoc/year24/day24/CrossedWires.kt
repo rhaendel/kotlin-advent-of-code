@@ -1,25 +1,28 @@
 package de.ronny_h.aoc.year24.day24
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.toBoolean
 import de.ronny_h.aoc.extensions.toDigit
 
 fun main() = CrossedWires().run(66055249060558, 0)
 
-class CrossedWires: AdventOfCode<Long>(2024, 24) {
+class CrossedWires : AdventOfCode<Long>(2024, 24) {
 
-    class And: (Boolean, Boolean) -> Boolean {
+    class And : (Boolean, Boolean) -> Boolean {
         override fun invoke(a: Boolean, b: Boolean) = a && b
         override fun toString() = "AND"
         override fun equals(other: Any?) = other is And
         override fun hashCode(): Int = javaClass.hashCode()
     }
-    class Or: (Boolean, Boolean) -> Boolean {
+
+    class Or : (Boolean, Boolean) -> Boolean {
         override fun invoke(a: Boolean, b: Boolean) = a || b
         override fun toString() = "OR"
         override fun equals(other: Any?) = other is Or
         override fun hashCode(): Int = javaClass.hashCode()
     }
-    class Xor: (Boolean, Boolean) -> Boolean {
+
+    class Xor : (Boolean, Boolean) -> Boolean {
         override fun invoke(a: Boolean, b: Boolean) = a xor b
         override fun toString() = "XOR"
         override fun equals(other: Any?) = other is Xor
@@ -39,7 +42,7 @@ class CrossedWires: AdventOfCode<Long>(2024, 24) {
         .map {
             val (term, result) = it.split(" -> ")
             val (in1, op, in2) = term.split(" ")
-            val operation = when(op) {
+            val operation = when (op) {
                 "AND" -> And()
                 "OR" -> Or()
                 "XOR" -> Xor()
@@ -81,7 +84,86 @@ class CrossedWires: AdventOfCode<Long>(2024, 24) {
     }
 
     override fun part2(input: List<String>): Long {
-        TODO("Not yet implemented")
+        // inputs: x00..x44, y00..y44
+        // outputs: z00..z45
+        val gates = parseGates(input)
+        val wires = parseWires(input).associateBy(Wire::name)
+
+        simulateGates(wires, gates)
+        add(0, 0, wires, gates)
+        add("1".repeat(45).toLong(2), 0, wires, gates)
+        add(0, "1".repeat(45).toLong(2), wires, gates)
+        add("1".repeat(45).toLong(2), "1".repeat(45).toLong(2), wires, gates)
+
+        return 0
+    }
+
+    private fun add(
+        x: Long,
+        y: Long,
+        wires: Map<String, Wire>,
+        gates: List<Gate>
+    ) {
+        val modifiedWires = wires.toMutableMap()
+        modifiedWires.putAll(x.toWires("x"))
+        modifiedWires.putAll(y.toWires("y"))
+        simulateGates(modifiedWires, gates)
+    }
+
+    private fun Long.toWires(prefix: String): Map<String, Wire> = toString(2)
+        .reversed()
+        .padEnd(45, '0')
+        .mapIndexed { i, digit ->
+            Wire(prefix + i.toString().padStart(2, '0'), digit.toBoolean())
+        }
+        .associateBy(Wire::name)
+
+    private fun simulateGates(
+        wires: Map<String, Wire>,
+        gates: List<Gate>
+    ) {
+        println("--- simulating gates ---")
+        val x0 = wires.withPrefixAsDecimal("x")
+        val y0 = wires.withPrefixAsDecimal("y")
+
+        val simulatedWires = wires.simulateGates(gates)
+
+        val x1 = simulatedWires.withPrefixAsDecimal("x")
+        val y1 = simulatedWires.withPrefixAsDecimal("y")
+
+        val sumSimulatedBinary = simulatedWires.withPrefixAsBinary("z")
+        val zWires = simulatedWires.withPrefixSortedByLSBFirst("z")
+        val sumSimulated = sumSimulatedBinary.toLong(2)
+        val sumExpectedBinary = (x1 + y1).toString(2).padStart(46, '0')
+
+        // check that the input wires aren't modified
+        check(x0 == x1)
+        check(y0 == y1)
+
+        println("inputs:")
+        println("x=$x0")
+        println("y=$y0")
+        println()
+        println("expected : x+y=${x1 + y1}")
+        println("simulated: z  =$sumSimulated")
+        println()
+        println("as binary:")
+        println("expected : x+y=$sumExpectedBinary")
+        println("simulated: z  =$sumSimulatedBinary")
+
+        val differentIndices = mutableListOf<Int>()
+        for (i in sumSimulatedBinary.indices) {
+            if (sumSimulatedBinary[i] != sumExpectedBinary[i]) {
+                differentIndices.add(i)
+            }
+        }
+        println("different indices: $differentIndices (${differentIndices.size})")
+
+        val wrongWires = differentIndices.map { zWires[it].name }
+        println("zWires at these indices: $wrongWires")
+
+        val gatesToChange = gates.filter { it.out in wrongWires }
+        println("gates to change: $gatesToChange")
     }
 }
 
