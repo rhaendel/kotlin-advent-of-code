@@ -104,10 +104,10 @@ class CrossedWiresTest : StringSpec({
     }
 
     "part1 small: The decimal number output on the wires starting with z" {
-        CrossedWires().part1(smallInput) shouldBe 4
+        CrossedWires().part1(smallInput) shouldBe "4"
     }
 
     "part1: The decimal number output on the wires starting with z" {
-        CrossedWires().part1(input) shouldBe 2024
+        CrossedWires().part1(input) shouldBe "2024"
     }
 })
