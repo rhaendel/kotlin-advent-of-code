@@ -41,4 +41,21 @@ class CombinationsTest : StringSpec({
                 )
     }
 
+    "combinationsOf() with the first list empty yields an empty sequence" {
+        combinationsOf(listOf<Int>(), listOf("a", "b")).toList() shouldBe emptyList()
+    }
+
+    "combinationsOf() with the second list empty yields an empty sequence" {
+        combinationsOf(listOf(1, 2), listOf<String>()).toList() shouldBe emptyList()
+    }
+
+    "combinationsOf() two non-empty lists yields all combinations of their elements" {
+        combinationsOf(listOf(1, 2), listOf("a", "b")).toList() shouldBe
+                listOf(
+                    1 to "a",
+                    1 to "b",
+                    2 to "a",
+                    2 to "b",
+                )
+    }
 })
