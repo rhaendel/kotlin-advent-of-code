@@ -1,8 +1,27 @@
-# kotlin-advent-of-code-2024
+# kotlin-advent-of-code
 
-Welcome to the Advent of Code[^aoc] Kotlin project created by [rhaendel][github] using the [Advent of Code Kotlin Template][template] delivered by JetBrains.
+Welcome to the Advent of Code[^aoc] Kotlin project created by [rhaendel][github].
 
 In this repository, rhaendel is about to provide solutions for the puzzles using [Kotlin][kotlin] language.
+
+## It's all about Learning
+
+I started this repository in december 2024 using the [Advent of Code Kotlin Template][template] delivered by JetBrains.
+Since I solved all the puzzles of year 2024, I continued with the first ones, the year 2015, and restructured the
+project iteratively.
+
+I'm solving the challenges for fun, but not only. It's a good possibility to learn - about the programming language of my
+choice, about algorithms in general, about when it's time to throw code away and start over again with a totally
+different approach.
+
+Over the time, a small library of helping functions, classes and algorithms keeps growing in the
+[extensions](src/main/kotlin/de/ronny_h/aoc/extensions) package. I try keeping a good test coverage especially there.
+
+While I'm trying to learn and improve my [idiomatic Kotlin](https://kotlinlang.org/docs/idioms.html), I don't stick to
+that. I try to us a programming style matching to the problem. Sometimes that's more functional, sometimes it's object
+oriented or even procedural if that's more expressive in a situation.
+
+## Kotlin Resources
 
 If you're stuck with Kotlin-specific questions or anything related to this template, check out the following resources:
 
