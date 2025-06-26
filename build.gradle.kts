@@ -1,7 +1,7 @@
 plugins {
     kotlin("jvm") version "2.2.0"
     java
-//    id("org.barfuin.gradle.jacocolog") version "3.1.0"
+    id("org.jetbrains.kotlinx.kover") version "0.9.1"
 }
 
 repositories {
@@ -25,6 +25,5 @@ tasks {
     }
     named<Test>("test") {
         useJUnitPlatform()
-//        finalizedBy(jacocoLogTestCoverage)
     }
 }
