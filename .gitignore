@@ -4,6 +4,7 @@
 !.idea/fileTemplates
 .kotlin/
 build
+out
 src/main/resources/**/*.txt
 !src/main/resources/2024/Day99.txt
 local.properties

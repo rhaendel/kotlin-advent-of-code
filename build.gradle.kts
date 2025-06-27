@@ -19,6 +19,12 @@ dependencies {
     testImplementation("com.github.stefanbirkner:system-lambda:1.2.1")
 }
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 tasks {
     wrapper {
         gradleVersion = "8.11.1"
