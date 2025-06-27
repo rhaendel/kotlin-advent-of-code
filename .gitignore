@@ -1,5 +1,7 @@
 .gradle
 .idea
+!.idea/file.template.settings.xml
+!.idea/fileTemplates
 .kotlin/
 build
 src/main/resources/**/*.txt

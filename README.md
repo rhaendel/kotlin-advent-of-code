@@ -21,6 +21,20 @@ While I'm trying to learn and improve my [idiomatic Kotlin](https://kotlinlang.o
 that. I try to us a programming style matching to the problem. Sometimes that's more functional, sometimes it's object
 oriented or even procedural if that's more expressive in a situation.
 
+## File Template
+
+There is a file template for IntelliJ IDEA that creates...
+
+* A new source file containing a main function and an initial implementation of [`AdventOfCode`](src/main/kotlin/de/ronny_h/aoc/AdventOfCode.kt)
+* An empty text file in [resources](src/main/resources) for the day's puzzle input
+* A test class in the test source set containing assertions for part one and two
+
+**Using the template**
+
+In IntelliJ IDEA, in the the [source directory](src)'s context menu, choose:
+
+`New > Advent of Code`
+
 ## Kotlin Resources
 
 If you're stuck with Kotlin-specific questions or anything related to this template, check out the following resources:

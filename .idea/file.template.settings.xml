@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ExportableFileTemplateSettings">
     <default_templates>
-      <template name="Advent of Code.kt" file-name="Day${Day}" reformat="true" live-template-enabled="true">
-        <template name="Advent of Code.kt.child.0.txt" file-name="Day${Day}" reformat="true" live-template-enabled="false" />
+      <template name="Advent of Code.kt" file-name="main/kotlin/de/ronny_h/aoc/year$Year/day$Day/Day${Day}" reformat="true" live-template-enabled="true">
+        <template name="Advent of Code.kt.child.0.kt" file-name="test/kotlin/de/ronny_h/aoc/year$Year/day$Day/Day${Day}Test" reformat="true" live-template-enabled="true" />
+        <template name="Advent of Code.kt.child.1.txt" file-name="main/resources/$Year/Day${Day}" reformat="false" live-template-enabled="false" />
       </template>
-      <template name="Advent of Code.kt.child.0.txt" file-name="Day${Day}" reformat="true" live-template-enabled="false" />
+      <template name="Advent of Code.kt.child.0.kt" file-name="test/kotlin/de/ronny_h/aoc/year$Year/day$Day/Day${Day}Test" reformat="true" live-template-enabled="true" />
+      <template name="Advent of Code.kt.child.1.txt" file-name="main/resources/$Year/Day${Day}" reformat="false" live-template-enabled="false" />
     </default_templates>
   </component>
 </project>
