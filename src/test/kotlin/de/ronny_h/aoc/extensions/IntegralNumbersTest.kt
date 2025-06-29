@@ -28,4 +28,15 @@ class IntegralNumbersTest : StringSpec({
             value.isIntegral() shouldBe false
         }
     }
+
+    "for an Int, isInt returns true" {
+        "0".isInt() shouldBe true
+        "42".isInt() shouldBe true
+        "-42".isInt() shouldBe true
+    }
+
+    "for something that is not an Int, isInt returns false" {
+        "true".isInt() shouldBe false
+        "some random stuff".isInt() shouldBe false
+    }
 })
