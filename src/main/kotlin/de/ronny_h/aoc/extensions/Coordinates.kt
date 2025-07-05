@@ -3,6 +3,10 @@ package de.ronny_h.aoc.extensions
 import kotlin.math.abs
 
 data class Coordinates(val row: Int, val col: Int) {
+
+    companion object {
+        val ZERO = Coordinates(0, 0)
+    }
     operator fun plus(other: Coordinates) = Coordinates(row + other.row, col + other.col)
     operator fun minus(other: Coordinates) = Coordinates(row - other.row, col - other.col)
 

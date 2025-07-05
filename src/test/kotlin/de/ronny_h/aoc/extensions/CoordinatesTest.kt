@@ -42,6 +42,10 @@ class CoordinatesTest : StringSpec({
         }
     }
 
+    "Coordinates of ZERO" {
+        Coordinates.ZERO shouldBe Coordinates(0, 0)
+    }
+
     "Add a direction" {
         forAll(
             row(Coordinates(5, 5), NORTH, Coordinates(4, 5)),
