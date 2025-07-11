@@ -1,4 +1,4 @@
-package de.ronny_h.aoc.extensions
+package de.ronny_h.aoc.extensions.graphs
 
 import java.util.PriorityQueue
 import kotlin.Int.Companion.MAX_VALUE

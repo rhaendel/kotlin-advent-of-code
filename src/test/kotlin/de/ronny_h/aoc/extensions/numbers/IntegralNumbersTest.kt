@@ -1,4 +1,4 @@
-package de.ronny_h.aoc.extensions
+package de.ronny_h.aoc.extensions.numbers
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll

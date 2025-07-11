@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2024.day04
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Grid
+import de.ronny_h.aoc.extensions.grids.Grid
 
 fun main() = CeresSearch().run(2500, 1933)
 

@@ -1,4 +1,4 @@
-package de.ronny_h.aoc.extensions
+package de.ronny_h.aoc.extensions.grids
 
 import com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut
 import io.kotest.assertions.throwables.shouldThrow

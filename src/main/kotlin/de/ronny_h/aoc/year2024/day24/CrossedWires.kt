@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year2024.day24
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.toBoolean
-import de.ronny_h.aoc.extensions.toDigit
+import de.ronny_h.aoc.extensions.numbers.toBoolean
+import de.ronny_h.aoc.extensions.numbers.toDigit
 
 fun main() = CrossedWires().run("66055249060558", "fcd,fhp,hmk,rvf,tpc,z16,z20,z33")
 

@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year2015.day03
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction
+import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Direction
 
 fun main() = PerfectlySphericalHouses().run(2592, 2360)
 

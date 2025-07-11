@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year2024.day15
 
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Direction.EAST
-import de.ronny_h.aoc.extensions.Direction.WEST
+import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Direction
+import de.ronny_h.aoc.extensions.grids.Direction.EAST
+import de.ronny_h.aoc.extensions.grids.Direction.WEST
 import kotlin.collections.iterator
 
 fun List<String>.widenedWarehouseInput(): List<String> = takeWhile { it.isNotBlank() }

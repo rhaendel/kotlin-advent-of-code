@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2024.day11
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.digitCount
+import de.ronny_h.aoc.extensions.numbers.digitCount
 import de.ronny_h.aoc.extensions.memoize
 
 fun main() = PlutonianPebbles().run(193899, 229682160383225)

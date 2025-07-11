@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year2024.day10
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Grid
+import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Direction
+import de.ronny_h.aoc.extensions.grids.Grid
 
 fun main() = HoofIt().run(816, 1960)
 

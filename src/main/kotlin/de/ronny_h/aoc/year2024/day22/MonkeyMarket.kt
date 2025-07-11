@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2024.day22
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.onesDigit
+import de.ronny_h.aoc.extensions.numbers.onesDigit
 
 fun main() = MonkeyMarket().run(17965282217, 2152)
 

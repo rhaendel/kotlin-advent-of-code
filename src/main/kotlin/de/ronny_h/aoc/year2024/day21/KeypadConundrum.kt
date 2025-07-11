@@ -1,9 +1,8 @@
 package de.ronny_h.aoc.year2024.day21
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Direction.*
-import de.ronny_h.aoc.extensions.SimpleCharGrid
+import de.ronny_h.aoc.extensions.grids.Direction.*
+import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.extensions.memoize
 
@@ -81,7 +80,7 @@ class Keypad(layout: List<String>) : SimpleCharGrid(layout, ' ') {
         val directions = paths.map { shortestPath ->
             shortestPath.path
                 .windowed(2)
-                .map { (from, to) -> Direction.entries.first { from + it == to } }
+                .map { (from, to) -> entries.first { from + it == to } }
                 .joinToString("") {
                     when (it) {
                         NORTH -> "^"

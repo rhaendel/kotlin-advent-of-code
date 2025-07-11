@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2024.day13
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.isIntegral
+import de.ronny_h.aoc.extensions.numbers.isIntegral
 
 fun main() = ClawContraption().run(33427, 91649162972270)
 

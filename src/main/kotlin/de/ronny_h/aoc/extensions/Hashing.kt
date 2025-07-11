@@ -1,6 +1,5 @@
 package de.ronny_h.aoc.extensions
 
-import java.math.BigInteger
 import java.security.MessageDigest
 
 private val messageDigest = MessageDigest.getInstance("MD5")

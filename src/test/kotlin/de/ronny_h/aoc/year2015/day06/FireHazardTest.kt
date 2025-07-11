@@ -1,6 +1,6 @@
 package de.ronny_h.aoc.year2015.day06
 
-import de.ronny_h.aoc.extensions.Coordinates
+import de.ronny_h.aoc.extensions.grids.Coordinates
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 

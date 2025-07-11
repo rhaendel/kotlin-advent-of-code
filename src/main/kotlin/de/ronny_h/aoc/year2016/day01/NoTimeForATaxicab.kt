@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year2016.day01
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Coordinates.Companion.ZERO
-import de.ronny_h.aoc.extensions.Direction.NORTH
+import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Coordinates.Companion.ZERO
+import de.ronny_h.aoc.extensions.grids.Direction.NORTH
 
 fun main() = NoTimeForATaxicab().run(239, 141)
 

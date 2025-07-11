@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year2024.day08
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Grid
+import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Grid
 import de.ronny_h.aoc.extensions.combinations
 
 fun main() = ResonantCollinearity().run(214, 809)

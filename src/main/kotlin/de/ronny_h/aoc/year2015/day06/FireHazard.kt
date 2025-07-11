@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2015.day06
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Coordinates
+import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.year2015.day06.Action.OFF
 import de.ronny_h.aoc.year2015.day06.Action.ON
 import de.ronny_h.aoc.year2015.day06.Action.TOGGLE

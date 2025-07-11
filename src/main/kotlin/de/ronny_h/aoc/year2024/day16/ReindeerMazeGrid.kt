@@ -1,7 +1,11 @@
 package de.ronny_h.aoc.year2024.day16
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.*
+import de.ronny_h.aoc.extensions.graphs.ShortestPath
+import de.ronny_h.aoc.extensions.graphs.aStarAllPaths
+import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Direction
+import de.ronny_h.aoc.extensions.grids.Grid
 
 fun main() = ReindeerMaze().run(89460, 504)
 

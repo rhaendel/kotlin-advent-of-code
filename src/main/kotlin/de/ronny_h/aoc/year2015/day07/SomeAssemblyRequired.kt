@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2015.day07
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.isInt
+import de.ronny_h.aoc.extensions.numbers.isInt
 import de.ronny_h.aoc.year2015.day07.Operator.BinaryOperator
 import de.ronny_h.aoc.year2015.day07.Operator.UnaryOperator
 import de.ronny_h.aoc.year2015.day07.OperatorOutput.NoSignal

@@ -1,4 +1,7 @@
-package de.ronny_h.aoc.extensions
+package de.ronny_h.aoc.extensions.grids
+
+import de.ronny_h.aoc.extensions.graphs.ShortestPath
+import de.ronny_h.aoc.extensions.graphs.aStarAllPaths
 
 open class SimpleCharGrid(input: List<String>, nullElement: Char = '#') : Grid<Char>(input, nullElement) {
     override fun Char.toElementType() = this

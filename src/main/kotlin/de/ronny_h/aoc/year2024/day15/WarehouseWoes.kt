@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year2024.day15
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Grid
+import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Direction
+import de.ronny_h.aoc.extensions.grids.Grid
 
 fun main() = WarehouseWoes().run(1463715, 1481392)
 

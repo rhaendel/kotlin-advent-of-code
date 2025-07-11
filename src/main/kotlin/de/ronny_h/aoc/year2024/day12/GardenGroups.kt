@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2024.day12
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.Coordinates
-import de.ronny_h.aoc.extensions.Direction
-import de.ronny_h.aoc.extensions.Direction.NORTH
-import de.ronny_h.aoc.extensions.Grid
+import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Direction
+import de.ronny_h.aoc.extensions.grids.Direction.NORTH
+import de.ronny_h.aoc.extensions.grids.Grid
 
 const val verbose = false
 

@@ -1,9 +1,8 @@
-package de.ronny_h.aoc.extensions
+package de.ronny_h.aoc.extensions.grids
 
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.StandardCharsets
-import kotlin.collections.MutableList
 
 /**
  * @param nullElement The initial element within the grid
