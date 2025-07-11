@@ -2,7 +2,10 @@ package de.ronny_h.aoc.extensions
 
 class PrefixTree {
 
-    fun insert(word: String, tokens: List<String>): Long {
+    /**
+     * Calculates the number of possibilities the [word] can be produced by concatenating the provided [tokens].
+     */
+    fun insert(word: String, tokens: Set<String>): Long {
 
         lateinit var insertRec: (String) -> Long
 

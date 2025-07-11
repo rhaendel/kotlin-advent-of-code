@@ -22,9 +22,9 @@ class LinenLayout : AdventOfCode<Long>(2024, 19) {
         return designs.sumOf { it.countPossibilitiesWith(towels) }
     }
 
-    private fun List<String>.parseTowels(): List<String> = this.first().split(", ")
+    private fun List<String>.parseTowels(): Set<String> = this.first().split(", ").toSet()
     private fun List<String>.parseDesigns(): List<String> = drop(2)
 
-    private fun String.isPossibleWith(towels: List<String>): Boolean = (this.countPossibilitiesWith(towels) > 0)
-    private fun String.countPossibilitiesWith(towels: List<String>): Long = PrefixTree().insert(this, towels)
+    private fun String.isPossibleWith(towels: Set<String>): Boolean = (this.countPossibilitiesWith(towels) > 0)
+    private fun String.countPossibilitiesWith(towels: Set<String>): Long = PrefixTree().insert(this, towels)
 }
