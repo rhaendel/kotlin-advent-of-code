@@ -75,6 +75,7 @@ private class ReindeerMazeGrid(input: List<String>) : Grid<Char>(input, '#') {
 
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
+        @Suppress("unused")
         val printIt: (Set<Node>, Node, () -> String) -> Unit = { visited, current, info ->
             printGrid(visited.map { it.position }.toSet(), 'o', current.position, current.direction)
             println(info.invoke())

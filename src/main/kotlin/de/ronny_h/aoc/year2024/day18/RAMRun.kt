@@ -32,7 +32,7 @@ class RAMRun : AdventOfCode<String>(2024, 18) {
             val memorySpace = MemorySpace(width, input.subList(0, n).toCoordinates())
             try {
                 memorySpace.shortestPath(Coordinates(0, 0), Coordinates(width - 1, width - 1))
-            } catch (e: IllegalStateException) {
+            } catch (_: IllegalStateException) {
                 return input[n - 1]
             }
         }
