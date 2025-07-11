@@ -22,7 +22,7 @@ abstract class AdventOfCode<T>(val year: Int, val day: Int) {
             ?: error("The input file for day $day, year $year could not be found. Expected at '$inputFile' in the resources folder.")
     }
 
-    private fun paddedDay(): String = day.toString().padStart(2, '0')
+    fun paddedDay(): String = day.toString().padStart(2, '0')
 
     private fun printAndCheck(input: List<String>, block: (List<String>) -> T, expected: T) {
         printAndCheck(measureTimedValue { block(input) }, expected)
