@@ -1,6 +1,5 @@
 package de.ronny_h.aoc.extensions.graphs
 
-import javax.annotation.processing.Generated
 import kotlin.math.ceil
 
 
@@ -15,7 +14,7 @@ private const val UNSET = -1
  *
  * @param adj An adjacency matrix containing all edge weights.
  */
-class TravelingSalesman(private val adj: Array<IntArray>) {
+class TravelingSalesman(private val adj: List<List<Int>>) {
     private val N: Int = adj.size
 
     // finalPath[] stores the final solution ie, the path of the salesman.
@@ -154,30 +153,11 @@ class TravelingSalesman(private val adj: Array<IntArray>) {
 }
 
 data class Edge<N>(val from: N, val to: N, val weight: Int)
-data class AdjacencyMatrix<N>(val headers: List<N>, val content: Array<IntArray>) {
+
+data class AdjacencyMatrix<N>(val headers: List<N>, val content: List<List<Int>>) {
     init {
         require(headers.size == content.size) { "adjacency matrix's headers (${headers.size}) do not match its content (${content.size})" }
         require(content.all { it.size == headers.size }) { "adjacency matrix is not quadratical" }
-    }
-
-    @Generated
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as AdjacencyMatrix<*>
-
-        if (headers != other.headers) return false
-        if (!content.contentDeepEquals(other.content)) return false
-
-        return true
-    }
-
-    @Generated
-    override fun hashCode(): Int {
-        var result = headers.hashCode()
-        result = 31 * result + content.contentDeepHashCode()
-        return result
     }
 }
 
@@ -202,8 +182,8 @@ fun <N> List<Edge<N>>.toAdjacencyMatrix(
 
     val nodes = nullNodes + originalNodes
     val indices = nodes.mapIndexed { i, node -> node to i }.toMap()
-    val adj = Array(nodes.size) { i ->
-        IntArray(nodes.size) { j -> if (i == j) 0 else MAX_WEIGHT }
+    val adj = List(nodes.size) { i ->
+        MutableList(nodes.size) { j -> if (i == j) 0 else MAX_WEIGHT }
     }
 
     val allEdges = nullEdges + this
