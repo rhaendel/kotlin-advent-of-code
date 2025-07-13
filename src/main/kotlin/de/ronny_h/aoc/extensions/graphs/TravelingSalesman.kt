@@ -17,22 +17,14 @@ private const val UNSET = -1
 class TravelingSalesman(private val adj: List<List<Int>>) {
     private val N: Int = adj.size
 
-    // finalPath[] stores the final solution ie, the path of the salesman.
-    private val finalPath: IntArray = IntArray(N + 1)
+    // finalPath stores the final solution, i.e. the path of the salesman.
+    private var finalPath = listOf<Int>()
 
     // visited keeps track of the already visited nodes in a particular path
     private val visited = mutableListOf<Int>()
 
     // Stores the final minimum weight of shortest tour.
     private var finalLength: Int = Int.MAX_VALUE
-
-    // Function to copy temporary solution to the final solution
-    private fun copyToFinal(currentPath: IntArray) {
-        for (i in 0..<N) {
-            finalPath[i] = currentPath[i]
-        }
-        finalPath[N] = currentPath[0]
-    }
 
     // Function to find the minimum edge cost having an end at the vertex i
     private fun firstMin(i: Int): Int {
@@ -68,7 +60,7 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
      * @param level current level while moving in the search space tree
      * @param currentPath where the solution is being stored which would later be copied to [finalPath]
      */
-    private fun tspRecursive(boundSoFar: Int, weightSoFar: Int, level: Int, currentPath: IntArray) {
+    private fun tspRecursive(boundSoFar: Int, weightSoFar: Int, level: Int, currentPath: List<Int>) {
         var currentBound = boundSoFar
         var currentWeight = weightSoFar
 
@@ -82,7 +74,7 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
 
                 // Update final result and final path if current result is better.
                 if (currentLength < finalLength) {
-                    copyToFinal(currentPath)
+                    finalPath = currentPath
                     finalLength = currentLength
                 }
             }
@@ -107,11 +99,8 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
                 // currentBound + currentWeight is the actual lower bound for the node that we have arrived on
                 // If current lower bound < finalLength, we need to explore the node further
                 if (currentBound + currentWeight < finalLength) {
-                    currentPath[level] = i
                     visited.add(i)
-
-                    // call for the next level
-                    tspRecursive(currentBound, currentWeight, level + 1, currentPath)
+                    tspRecursive(currentBound, currentWeight, level + 1, currentPath + i)
                 }
 
                 // Else we have to prune the node by resetting
@@ -132,21 +121,17 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
 
     fun calculateShortestRoundTrip(): TravelingSalesmanProblemSolution {
         tsp()
-        return TravelingSalesmanProblemSolution(finalLength, finalPath.toList())
+        return TravelingSalesmanProblemSolution(finalLength, finalPath + finalPath[0])
     }
 
     private fun tsp() {
-        // Calculate initial lower bound for the root node
-        // using the formula 1/2 * (sum of first min + second min) for all edges.
-        // Also initialize the currentPath and visited list
-        val currentPath = IntArray(N + 1) { UNSET }
-
-        // Compute initial bound, rounding it off to an integer
+        // Calculate initial lower bound for the root node using the formula
+        // 1/2 * (sum of first min + second min) for all edges, rounded off to an integer
         val currentBound = ((0..<N).sumOf { firstMin(it) + secondMin(it) } / 2.0).toInt()
 
-        // We start at vertex 1 so the first vertex in currentPath[] is 0
+        // We start at vertex 1 so the first vertex in currentPath is 0
         visited.add(0)
-        currentPath[0] = 0
+        val currentPath = listOf(0)
 
         tspRecursive(currentBound, 0, 1, currentPath)
     }
