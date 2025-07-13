@@ -1,6 +1,5 @@
 package de.ronny_h.aoc.extensions.graphs
 
-import java.util.*
 import javax.annotation.processing.Generated
 import kotlin.math.ceil
 
@@ -22,8 +21,8 @@ class TravelingSalesman(private val adj: Array<IntArray>) {
     // finalPath[] stores the final solution ie, the path of the salesman.
     private val finalPath: IntArray = IntArray(N + 1)
 
-    // visited[] keeps track of the already visited nodes in a particular path
-    private val visited: BooleanArray = BooleanArray(N)
+    // visited keeps track of the already visited nodes in a particular path
+    private val visited = mutableListOf<Int>()
 
     // Stores the final minimum weight of shortest tour.
     private var finalLength: Int = Int.MAX_VALUE
@@ -95,7 +94,7 @@ class TravelingSalesman(private val adj: Array<IntArray>) {
         for (i in 0..<N) {
             // Consider next vertex if it is not same (diagonal
             // entry in adjacency matrix) and not visited already
-            if (i != currentPath[level - 1] && !visited[i]) {
+            if (i != currentPath[level - 1] && !visited.contains(i)) {
                 val temp = currentBound
                 currentWeight += adj[currentPath[level - 1]][i]
 
@@ -110,7 +109,7 @@ class TravelingSalesman(private val adj: Array<IntArray>) {
                 // If current lower bound < finalLength, we need to explore the node further
                 if (currentBound + currentWeight < finalLength) {
                     currentPath[level] = i
-                    visited[i] = true
+                    visited.add(i)
 
                     // call for the next level
                     tspRecursive(currentBound, currentWeight, level + 1, currentPath)
@@ -122,10 +121,10 @@ class TravelingSalesman(private val adj: Array<IntArray>) {
                 currentBound = temp
 
                 // Also reset the visited array
-                Arrays.fill(visited, false)
+                visited.clear()
                 for (j in 0..<level) {
                     if (currentPath[j] != UNSET) {
-                        visited[currentPath[j]] = true
+                        visited.add(currentPath[j])
                     }
                 }
             }
@@ -140,21 +139,14 @@ class TravelingSalesman(private val adj: Array<IntArray>) {
     private fun tsp() {
         // Calculate initial lower bound for the root node
         // using the formula 1/2 * (sum of first min + second min) for all edges.
-        // Also initialize the currentPath and visited array
-        var currentBound = 0
+        // Also initialize the currentPath and visited list
         val currentPath = IntArray(N + 1) { UNSET }
-        Arrays.fill(visited, false)
 
-        // Compute initial bound
-        for (i in 0..<N) {
-            currentBound += (firstMin(i) + secondMin(i))
-        }
-
-        // Rounding off the lower bound to an integer
-        currentBound = ceil(currentBound / 2.0).toInt()
+        // Compute initial bound, rounding it off to an integer
+        val currentBound = ((0..<N).sumOf { firstMin(it) + secondMin(it) } / 2.0).toInt()
 
         // We start at vertex 1 so the first vertex in currentPath[] is 0
-        visited[0] = true
+        visited.add(0)
         currentPath[0] = 0
 
         tspRecursive(currentBound, 0, 1, currentPath)
