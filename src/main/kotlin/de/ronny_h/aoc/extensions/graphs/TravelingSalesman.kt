@@ -7,7 +7,6 @@ data class TravelingSalesmanProblemSolution(val length: Int, val path: List<Int>
 
 // should be larger than any other single weight in the graph
 const val MAX_WEIGHT = 10_000_000
-private const val UNSET = -1
 
 /**
  * A TSP implementation inspired from https://www.geeksforgeeks.org/dsa/traveling-salesman-problem-using-branch-and-bound-2/
@@ -21,7 +20,7 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
     private var finalPath = listOf<Int>()
 
     // visited keeps track of the already visited nodes in a particular path
-    private val visited = mutableListOf<Int>()
+    private var visited = listOf<Int>()
 
     // Stores the final minimum weight of shortest tour.
     private var finalLength: Int = Int.MAX_VALUE
@@ -99,7 +98,7 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
                 // currentBound + currentWeight is the actual lower bound for the node that we have arrived on
                 // If current lower bound < finalLength, we need to explore the node further
                 if (currentBound + currentWeight < finalLength) {
-                    visited.add(i)
+                    visited += i
                     tspRecursive(currentBound, currentWeight, level + 1, currentPath + i)
                 }
 
@@ -108,13 +107,8 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
                 currentWeight -= adj[currentPath[level - 1]][i]
                 currentBound = temp
 
-                // Also reset the visited array
-                visited.clear()
-                for (j in 0..<level) {
-                    if (currentPath[j] != UNSET) {
-                        visited.add(currentPath[j])
-                    }
-                }
+                // Also reset the visited list
+                visited = currentPath
             }
         }
     }
@@ -130,10 +124,8 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
         val currentBound = ((0..<N).sumOf { firstMin(it) + secondMin(it) } / 2.0).toInt()
 
         // We start at vertex 1 so the first vertex in currentPath is 0
-        visited.add(0)
-        val currentPath = listOf(0)
-
-        tspRecursive(currentBound, 0, 1, currentPath)
+        visited = listOf(0)
+        tspRecursive(currentBound, 0, 1, listOf(0))
     }
 }
 
