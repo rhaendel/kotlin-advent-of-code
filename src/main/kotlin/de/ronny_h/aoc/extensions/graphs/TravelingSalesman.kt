@@ -25,27 +25,33 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
     // Stores the final minimum weight of shortest tour.
     private var finalLength: Int = Int.MAX_VALUE
 
-    // Function to find the minimum edge cost having an end at the vertex i
-    private fun firstMin(i: Int): Int {
+    /**
+     * Find the minimum edge cost having an end at the vertex [node]
+     */
+    private fun firstMin(node: Int): Int {
         var min = MAX_WEIGHT
-        for (k in 0..<N) {
-            if (adj[i][k] < min && i != k) min = adj[i][k]
+        for (otherNode in 0..<N) {
+            if (adj[node][otherNode] < min && node != otherNode) {
+                min = adj[node][otherNode]
+            }
         }
         return min
     }
 
-    // function to find the second minimum edge cost having an end at the vertex i
-    private fun secondMin(i: Int): Int {
+    /**
+     * Find the second minimum edge cost having an end at the vertex [node]
+     */
+    private fun secondMin(node: Int): Int {
         var first = MAX_WEIGHT
         var second = MAX_WEIGHT
-        for (j in 0..<N) {
-            if (i == j) continue
+        for (otherNode in 0..<N) {
+            if (node == otherNode) continue
 
-            if (adj[i][j] <= first) {
+            if (adj[node][otherNode] <= first) {
                 second = first
-                first = adj[i][j]
-            } else if (adj[i][j] <= second && adj[i][j] != first) {
-                second = adj[i][j]
+                first = adj[node][otherNode]
+            } else if (adj[node][otherNode] <= second && adj[node][otherNode] != first) {
+                second = adj[node][otherNode]
             }
         }
         return second
@@ -81,31 +87,31 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
         }
 
         // for any other level iterate for all vertices to build the search space tree recursively
-        for (i in 0..<N) {
+        for (node in 0..<N) {
             // Consider next vertex if it is not same (diagonal
             // entry in adjacency matrix) and not visited already
-            if (i != currentPath[level - 1] && !visited.contains(i)) {
-                val temp = currentBound
-                currentWeight += adj[currentPath[level - 1]][i]
+            if (node != currentPath[level - 1] && !visited.contains(node)) {
+                val tempBound = currentBound
+                currentWeight += adj[currentPath[level - 1]][node]
 
                 // different computation of currentBound for level 2 from the other levels
                 currentBound -= if (level == 1) {
-                    ceil((firstMin(currentPath[0]) + firstMin(i)) / 2.0).toInt()
+                    ceil((firstMin(currentPath[0]) + firstMin(node)) / 2.0).toInt()
                 } else {
-                    ceil((secondMin(currentPath[level - 1]) + firstMin(i)) / 2.0).toInt()
+                    ceil((secondMin(currentPath[level - 1]) + firstMin(node)) / 2.0).toInt()
                 }
 
                 // currentBound + currentWeight is the actual lower bound for the node that we have arrived on
                 // If current lower bound < finalLength, we need to explore the node further
                 if (currentBound + currentWeight < finalLength) {
-                    visited += i
-                    tspRecursive(currentBound, currentWeight, level + 1, currentPath + i)
+                    visited += node
+                    tspRecursive(currentBound, currentWeight, level + 1, currentPath + node)
                 }
 
                 // Else we have to prune the node by resetting
                 // all changes to currentWeight and currentBound
-                currentWeight -= adj[currentPath[level - 1]][i]
-                currentBound = temp
+                currentWeight -= adj[currentPath[level - 1]][node]
+                currentBound = tempBound
 
                 // Also reset the visited list
                 visited = currentPath
@@ -114,18 +120,15 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
     }
 
     fun calculateShortestRoundTrip(): TravelingSalesmanProblemSolution {
-        tsp()
-        return TravelingSalesmanProblemSolution(finalLength, finalPath + finalPath[0])
-    }
-
-    private fun tsp() {
         // Calculate initial lower bound for the root node using the formula
         // 1/2 * (sum of first min + second min) for all edges, rounded off to an integer
         val currentBound = ((0..<N).sumOf { firstMin(it) + secondMin(it) } / 2.0).toInt()
 
         // We start at vertex 1 so the first vertex in currentPath is 0
         visited = listOf(0)
+
         tspRecursive(currentBound, 0, 1, listOf(0))
+        return TravelingSalesmanProblemSolution(finalLength, finalPath + finalPath[0])
     }
 }
 
