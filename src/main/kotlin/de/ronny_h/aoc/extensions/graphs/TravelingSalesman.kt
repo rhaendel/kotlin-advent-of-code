@@ -16,11 +16,11 @@ const val MAX_WEIGHT = 10_000_000
 class TravelingSalesman(private val adj: List<List<Int>>) {
     private val N: Int = adj.size
 
-    // finalPath stores the final solution, i.e. the path of the salesman.
-    private var finalPath = listOf<Int>()
-
     // visited keeps track of the already visited nodes in a particular path
     private var visited = listOf<Int>()
+
+    // finalPath stores the final solution, i.e. the path of the salesman.
+    private var finalPath = listOf<Int>()
 
     // Stores the final minimum weight of shortest tour.
     private var finalLength: Int = Int.MAX_VALUE
@@ -72,12 +72,9 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
         // base case is when we have reached level N which
         // means we have covered all the nodes once
         if (level == N) {
-            // check if there is an edge from last vertex in path back to the first vertex
-            if (adj[currentPath[level - 1]][currentPath[0]] != MAX_WEIGHT) {
-                // currentLength has the total weight of the solution we got
-                val currentLength = currentWeight + adj[currentPath[level - 1]][currentPath[0]]
+            if (adj[currentPath.last()][currentPath.first()] != MAX_WEIGHT) {
+                val currentLength = currentWeight + adj[currentPath.last()][currentPath.first()]
 
-                // Update final result and final path if current result is better.
                 if (currentLength < finalLength) {
                     finalPath = currentPath
                     finalLength = currentLength
@@ -90,15 +87,14 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
         for (node in 0..<N) {
             // Consider next vertex if it is not same (diagonal
             // entry in adjacency matrix) and not visited already
-            if (node != currentPath[level - 1] && !visited.contains(node)) {
+            if (node != currentPath.last() && !visited.contains(node)) {
                 val tempBound = currentBound
-                currentWeight += adj[currentPath[level - 1]][node]
+                currentWeight += adj[currentPath.last()][node]
 
-                // different computation of currentBound for level 2 from the other levels
                 currentBound -= if (level == 1) {
-                    ceil((firstMin(currentPath[0]) + firstMin(node)) / 2.0).toInt()
+                    ceil((firstMin(currentPath.last()) + firstMin(node)) / 2.0).toInt()
                 } else {
-                    ceil((secondMin(currentPath[level - 1]) + firstMin(node)) / 2.0).toInt()
+                    ceil((secondMin(currentPath.last()) + firstMin(node)) / 2.0).toInt()
                 }
 
                 // currentBound + currentWeight is the actual lower bound for the node that we have arrived on
@@ -110,10 +106,8 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
 
                 // Else we have to prune the node by resetting
                 // all changes to currentWeight and currentBound
-                currentWeight -= adj[currentPath[level - 1]][node]
+                currentWeight -= adj[currentPath.last()][node]
                 currentBound = tempBound
-
-                // Also reset the visited list
                 visited = currentPath
             }
         }
