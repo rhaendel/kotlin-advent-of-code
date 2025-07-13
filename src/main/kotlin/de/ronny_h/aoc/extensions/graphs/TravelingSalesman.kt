@@ -28,15 +28,7 @@ class TravelingSalesman(private val adj: List<List<Int>>) {
     /**
      * Find the minimum edge cost having an end at the vertex [node]
      */
-    private fun firstMin(node: Int): Int {
-        var min = MAX_WEIGHT
-        for (otherNode in 0..<N) {
-            if (adj[node][otherNode] < min && node != otherNode) {
-                min = adj[node][otherNode]
-            }
-        }
-        return min
-    }
+    private fun firstMin(node: Int) = adj[node].filterIndexed { i, _ -> i != node }.min()
 
     /**
      * Find the second minimum edge cost having an end at the vertex [node]
