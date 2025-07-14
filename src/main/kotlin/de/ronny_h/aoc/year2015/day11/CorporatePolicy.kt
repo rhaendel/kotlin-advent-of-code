@@ -13,13 +13,12 @@ class CorporatePolicy : AdventOfCode<String>(2015, 11) {
 
     // must include one increasing straight of at least three letters
     fun rule1Applies(password: String): Boolean {
-        var applies = false
-        password.windowed(3) {
-            if (it[2] == it[1].inc() && it[1] == it[0].inc()) {
-                applies = true
+        for (i in 0..password.length - 3) {
+            if (password[i].inc() == password[i + 1] && password[i + 1].inc() == password[i + 2]) {
+                return true
             }
         }
-        return applies
+        return false
     }
 
     private val lettersToSkip = listOf('i', 'o', 'l')
@@ -30,20 +29,23 @@ class CorporatePolicy : AdventOfCode<String>(2015, 11) {
 
     // must contain at least two different, non-overlapping pairs of letters
     fun rule3Applies(password: String): Boolean {
-        var pairs = 0
+        var foundOnePair = false
         var lastWasAPair = false
-        password.windowed(2) {
+        for (i in 0..password.length - 2) {
             if (lastWasAPair) {
                 // no overlappings
                 lastWasAPair = false
             } else {
-                if (it[0] == it[1]) {
-                    pairs++
+                if (password[i] == password[i + 1]) {
+                    if (foundOnePair) {
+                        return true
+                    }
+                    foundOnePair = true
                     lastWasAPair = true
                 }
             }
         }
-        return pairs >= 2
+        return false
     }
 
     private fun String.rotate(): String {
