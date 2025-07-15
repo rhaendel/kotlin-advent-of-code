@@ -49,14 +49,14 @@ class CorporatePolicy : AdventOfCode<String>(2015, 11) {
     }
 
     private fun String.rotate(): String {
-        require(rule0AppliesTo(this)) { "a password has to be exactly 8 lowercase letters: '${this}" }
+        require(rule0AppliesTo(this)) { "a password has to be exactly 8 lowercase letters: '$this'" }
 
         var newPassword = this
         do {
             newPassword = newPassword.inc(lettersToSkip)
         } while (newPassword.notAllRulesApply())
 
-        check(rule0AppliesTo(newPassword)) { "a password has to be exactly 8 lowercase letters: '$newPassword" }
+        check(rule0AppliesTo(newPassword)) { "a password has to be exactly 8 lowercase letters: '$newPassword'" }
         return newPassword
     }
 
@@ -67,19 +67,22 @@ fun String.inc(toSkip: List<Char> = emptyList()): String {
     val highestChar = 'z'
     require(highestChar !in toSkip) { "incrementation only works correct if the highest char is not to skip" }
 
-    var suffix = ""
-    var incIndex = lastIndex
-    while (incIndex >= 0) {
-        val prefix = substring(0..<incIndex)
-        if (get(incIndex) == highestChar) {
-            suffix = "a$suffix"
-            incIndex--
-        } else {
-            var incChar = get(incIndex).inc()
+    if (toSkip.isNotEmpty()) {
+        for (i in 0..lastIndex) {
+            if (get(i) in toSkip) {
+                // when a to-skip-char occurs early, skip counting up the suffix
+                return substring(0..<i) + get(i).inc() + "a".repeat(lastIndex - i)
+            }
+        }
+    }
+
+    for (i in lastIndex downTo 0) {
+        if (get(i) != highestChar) {
+            var incChar = get(i).inc()
             while (incChar in toSkip) {
                 incChar = incChar.inc()
             }
-            return prefix + incChar + suffix
+            return substring(0..<i) + incChar + "a".repeat(lastIndex - i)
         }
     }
     throw StringOverflowException("String '$this' cannot be incremented without making it longer.")
