@@ -1,6 +1,9 @@
 package de.ronny_h.aoc.extensions
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.blocking.forAll
+import io.kotest.data.row
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 
 class CombinationsTest : StringSpec({
@@ -57,5 +60,26 @@ class CombinationsTest : StringSpec({
                     2 to "a",
                     2 to "b",
                 )
+    }
+
+    "permutationsOf() yields all possible permutations of the given list elements" {
+        forAll(
+            row(emptyList(), listOf(emptyList())),
+            row(listOf(1), listOf(listOf(1))),
+            row(listOf(1, 2), listOf(listOf(1, 2), listOf(2, 1))),
+            row(
+                listOf(1, 2, 3),
+                listOf(
+                    listOf(1, 2, 3),
+                    listOf(1, 3, 2),
+                    listOf(2, 1, 3),
+                    listOf(2, 3, 1),
+                    listOf(3, 1, 2),
+                    listOf(3, 2, 1)
+                )
+            ),
+        ) { input, permutations ->
+            permutationsOf(input).toList() shouldContainExactlyInAnyOrder permutations
+        }
     }
 })

@@ -24,3 +24,18 @@ fun <A, B> combinationsOf(first: List<A>, second: List<B>) = sequence {
         }
     }
 }
+
+/**
+ * @return A sequence of lists containing all permutations of the original one.
+ */
+fun <E> permutationsOf(list: List<E>): Sequence<List<E>> = sequence {
+    if (list.isEmpty()) {
+        yield(emptyList())
+    }
+
+    for (i in list.indices) {
+        permutationsOf(list - list[i]).forEach { smallerPermutation ->
+            yield(smallerPermutation + list[i])
+        }
+    }
+}
