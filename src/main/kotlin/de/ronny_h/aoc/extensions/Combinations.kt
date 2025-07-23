@@ -31,11 +31,29 @@ fun <A, B> combinationsOf(first: List<A>, second: List<B>) = sequence {
 fun <E> permutationsOf(list: List<E>): Sequence<List<E>> = sequence {
     if (list.isEmpty()) {
         yield(emptyList())
+        return@sequence
     }
 
     for (i in list.indices) {
         permutationsOf(list - list[i]).forEach { smallerPermutation ->
             yield(smallerPermutation + list[i])
+        }
+    }
+}
+
+/**
+ * @return A sequence of `List<Int>` where each list is of length [n] and its elements count from `0` to [sum] in such a way
+ * that `sum(list[0], list[1], ... list[n-1]) == [sum]`.
+ */
+fun sequenceNumbersOfEqualSum(n: Int, sum: Int): Sequence<List<Int>> = sequence {
+    if (n == 1) {
+        yield(listOf(sum))
+        return@sequence
+    }
+
+    for (i in 0..sum) {
+        sequenceNumbersOfEqualSum(n - 1, sum - i).forEach { shorterList ->
+            yield(shorterList + i)
         }
     }
 }

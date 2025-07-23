@@ -82,4 +82,23 @@ class CombinationsTest : StringSpec({
             permutationsOf(input).toList() shouldContainExactlyInAnyOrder permutations
         }
     }
+
+    "sequenceNumbersOfEqualSum(n, sum) yields all lists of 'n' elements with a sum of 'sum'" {
+        forAll(
+            row(1, 100, listOf(listOf(100))),
+            row(2, 1, listOf(listOf(1, 0), listOf(0, 1))),
+            row(2, 2, listOf(listOf(2, 0), listOf(1, 1), listOf(0, 2))),
+            row(2, 3, listOf(listOf(3, 0), listOf(2, 1), listOf(1, 2), listOf(0, 3))),
+            row(
+                3, 3, listOf(
+                    listOf(3, 0, 0), listOf(2, 1, 0), listOf(1, 2, 0), listOf(0, 3, 0),
+                    listOf(2, 0, 1), listOf(1, 1, 1), listOf(0, 2, 1),
+                    listOf(1, 0, 2), listOf(0, 1, 2),
+                    listOf(0, 0, 3),
+                )
+            ),
+        ) { n, sum, expected ->
+            sequenceNumbersOfEqualSum(n, sum).toList() shouldBe expected
+        }
+    }
 })
