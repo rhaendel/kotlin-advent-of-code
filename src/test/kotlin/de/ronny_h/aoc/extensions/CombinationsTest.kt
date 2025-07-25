@@ -83,6 +83,22 @@ class CombinationsTest : StringSpec({
         }
     }
 
+    "allSublistsOf for lists with up to three elements" {
+        forAll(
+            row(emptyList(), listOf(emptyList())),
+            row(listOf(1), listOf(emptyList(), listOf(1))),
+            row(listOf(1, 2), listOf(emptyList(), listOf(1), listOf(2), listOf(1, 2))),
+            row(
+                listOf(1, 2, 3), listOf(
+                    emptyList(), listOf(1), listOf(2), listOf(1, 2),
+                    listOf(3), listOf(1, 3), listOf(2, 3), listOf(1, 2, 3)
+                )
+            ),
+        ) { list, expected ->
+            allSublistsOf(list).toList() shouldBe expected
+        }
+    }
+
     "sequenceNumbersOfEqualSum(n, sum) yields all lists of 'n' elements with a sum of 'sum'" {
         forAll(
             row(1, 100, listOf(listOf(100))),

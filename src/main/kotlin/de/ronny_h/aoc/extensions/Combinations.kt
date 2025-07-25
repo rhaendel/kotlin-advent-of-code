@@ -1,5 +1,7 @@
 package de.ronny_h.aoc.extensions
 
+import java.lang.Math.pow
+
 
 /**
  * @return All pairwise combinations of list elements without the reflexive ones.
@@ -38,6 +40,23 @@ fun <E> permutationsOf(list: List<E>): Sequence<List<E>> = sequence {
         permutationsOf(list - list[i]).forEach { smallerPermutation ->
             yield(smallerPermutation + list[i])
         }
+    }
+}
+
+fun <E> allSublistsOf(list: List<E>): Sequence<List<E>> = sequence {
+    // count a binary number with list.size digits from 0...0 to 1...1
+    var number = 0
+    while (number < pow(2.0, list.size.toDouble())) {
+        val sublist = ArrayList<E>(list.size)
+        val binary = number.toString(2).reversed()
+        // take the list elements at indices of the 1 bits
+        binary.forEachIndexed { i, bit ->
+            if (bit == '1') {
+                sublist.add(list[i])
+            }
+        }
+        yield(sublist)
+        number++
     }
 }
 
