@@ -36,13 +36,7 @@ class ScienceForHungryPeople : AdventOfCode<Int>(2015, 15) {
         teaspoons: List<Int>
     ): Int {
         val sums = ingredients.foldIndexed(Ingredient(0, 0, 0, 0, 0)) { i, acc, ingredient ->
-            Ingredient(
-                capacity = acc.capacity + teaspoons[i] * ingredient.capacity,
-                durability = acc.durability + teaspoons[i] * ingredient.durability,
-                flavor = acc.flavor + teaspoons[i] * ingredient.flavor,
-                texture = acc.texture + teaspoons[i] * ingredient.texture,
-                calories = acc.calories + teaspoons[i] + ingredient.calories,
-            )
+            acc + ingredient * teaspoons[i]
         }.let {
             Ingredient(
                 capacity = max(it.capacity, 0),
@@ -69,4 +63,20 @@ fun List<String>.parseIngredients() = this.map {
 
 private fun String.secondAsInt(): Int = split(" ")[1].toInt()
 
-data class Ingredient(val capacity: Int, val durability: Int, val flavor: Int, val texture: Int, val calories: Int)
+data class Ingredient(val capacity: Int, val durability: Int, val flavor: Int, val texture: Int, val calories: Int) {
+    operator fun plus(other: Ingredient) = Ingredient(
+        capacity + other.capacity,
+        durability + other.durability,
+        flavor + other.flavor,
+        texture + other.texture,
+        calories + other.calories,
+    )
+
+    operator fun times(factor: Int) = Ingredient(
+        capacity * factor,
+        durability * factor,
+        flavor * factor,
+        texture * factor,
+        calories * factor,
+    )
+}
