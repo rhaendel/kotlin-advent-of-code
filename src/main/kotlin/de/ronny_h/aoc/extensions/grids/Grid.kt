@@ -19,16 +19,30 @@ abstract class Grid<T>(
 
     abstract fun Char.toElementType(): T
 
-    constructor(height: Int, width: Int, nullElement: T, overrideElement: T = nullElement, overrides: List<Coordinates> = emptyList()) : this(height, width, nullElement, overrideElement) {
+    constructor(
+        height: Int,
+        width: Int,
+        nullElement: T,
+        overrideElement: T = nullElement,
+        overrides: List<Coordinates> = emptyList()
+    ) : this(height, width, nullElement, overrideElement) {
         overrides.forEach {
             grid[it.row][it.col] = overrideElement
         }
     }
 
-    constructor(input: List<String>, nullElement: T, overrideElement: T = nullElement) : this(input.size, input[0].length, nullElement, overrideElement, emptyList()){
-        input.forEachIndexed { row, line ->
-            line.forEachIndexed { col, char -> grid[row][col] = char.toElementType() }
-        }
+    constructor(input: List<String>, nullElement: T, overrideElement: T = nullElement) : this(
+        input.size,
+        input[0].length,
+        nullElement,
+        overrideElement,
+        emptyList()
+    ) {
+        initGrid(input)
+    }
+
+    fun initGrid(input: List<String>) = input.forEachIndexed { row, line ->
+        line.forEachIndexed { col, char -> grid[row][col] = char.toElementType() }
     }
 
     operator fun get(row: Int, col: Int): T {

@@ -1,5 +1,6 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.ronny_h.aoc.extensions.grids.Direction.*
 import kotlin.math.abs
 
 data class Coordinates(val row: Int, val col: Int) {
@@ -7,6 +8,7 @@ data class Coordinates(val row: Int, val col: Int) {
     companion object {
         val ZERO = Coordinates(0, 0)
     }
+
     operator fun plus(other: Coordinates) = Coordinates(row + other.row, col + other.col)
     operator fun minus(other: Coordinates) = Coordinates(row - other.row, col - other.col)
 
@@ -14,12 +16,16 @@ data class Coordinates(val row: Int, val col: Int) {
 
     operator fun plus(direction: Direction) = Coordinates(row + direction.row, col + direction.col)
 
-    fun neighbours() = listOf(this + Direction.EAST, this + Direction.SOUTH, this + Direction.WEST, this + Direction.NORTH)
+    fun neighbours() = listOf(this + EAST, this + SOUTH, this + WEST, this + NORTH)
+
+    fun neighboursIncludingDiagonals() = neighbours() +
+            listOf(this + EAST + NORTH, this + SOUTH + EAST, this + WEST + SOUTH, this + NORTH + WEST)
+
     fun directedNeighbours() = listOf(
-        Direction.EAST to this + Direction.EAST,
-        Direction.SOUTH to this + Direction.SOUTH,
-        Direction.WEST to this + Direction.WEST,
-        Direction.NORTH to this + Direction.NORTH,
+        EAST to this + EAST,
+        SOUTH to this + SOUTH,
+        WEST to this + WEST,
+        NORTH to this + NORTH,
     )
 
     /**

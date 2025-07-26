@@ -64,6 +64,19 @@ class CoordinatesTest : StringSpec({
         )
     }
 
+    "Neighbours including diagonals" {
+        Coordinates(5, 5).neighboursIncludingDiagonals() shouldContainAll listOf(
+            Coordinates(4, 5),
+            Coordinates(6, 5),
+            Coordinates(5, 4),
+            Coordinates(5, 6),
+            Coordinates(4, 6),
+            Coordinates(6, 6),
+            Coordinates(6, 4),
+            Coordinates(4, 4),
+        )
+    }
+
     "Directed neighbours" {
         Coordinates(5, 5).directedNeighbours() shouldContainAll listOf(
             Direction.NORTH to Coordinates(4, 5),
