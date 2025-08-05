@@ -100,10 +100,10 @@ fun List<String>.parseBossStats() = Stats(
 
 fun playerWins(player: Stats, boss: Stats): Boolean {
     var playerHitPoints = player.hitPoints
-    var bossHitPoins = boss.hitPoints
-    while (playerHitPoints > 0 && bossHitPoins > 0) {
-        bossHitPoins -= max(player.damage - boss.armor, 1)
+    var bossHitPoints = boss.hitPoints
+    while (playerHitPoints > 0 && bossHitPoints > 0) {
+        bossHitPoints -= max(player.damage - boss.armor, 1)
         playerHitPoints -= max(boss.damage - player.armor, 1)
     }
-    return bossHitPoins <= 0
+    return bossHitPoints <= 0
 }
