@@ -39,4 +39,18 @@ class IntegralNumbersTest : StringSpec({
         "true".isInt() shouldBe false
         "some random stuff".isInt() shouldBe false
     }
+
+    "the sum of the first n natural numbers" {
+        forAll(
+            row(0, 0),
+            row(1, 1),
+            row(2, 3),
+            row(3, 6),
+            row(4, 10),
+            row(5, 15),
+            row(6, 21),
+        ) { n, sum ->
+            sumOfFirstNaturalNumbers(n) shouldBe sum
+        }
+    }
 })

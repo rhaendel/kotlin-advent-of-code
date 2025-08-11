@@ -16,3 +16,5 @@ fun String.isInt(): Boolean = try {
 } catch (_: NumberFormatException) {
     false
 }
+
+fun sumOfFirstNaturalNumbers(n: Int): Long = (n * (n + 1).toLong()) / 2
