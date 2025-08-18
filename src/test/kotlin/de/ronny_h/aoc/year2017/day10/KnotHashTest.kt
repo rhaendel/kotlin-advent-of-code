@@ -8,7 +8,7 @@ import io.kotest.matchers.shouldBe
 class KnotHashTest : StringSpec({
 
     "the knot hash of a small example" {
-        knotHash(5, listOf(3, 4, 1, 5)) shouldBe 12
+        sparseHashProduct(5, listOf(3, 4, 1, 5)) shouldBe 12
     }
 
     "part 1: the knot hash of a small example" {
@@ -32,6 +32,17 @@ class KnotHashTest : StringSpec({
             row(listOf("1,2,4"), "63960835bcdc130f0b66d7ff4f6a5a8e"),
         ) { input, hash ->
             KnotHash().part2(input) shouldBe hash
+        }
+    }
+
+    "the extracted knot hash function" {
+        forAll(
+            row("", "a2582a3a0e66e6e86e3812dcb672a272"),
+            row("AoC 2017", "33efeb34ea91902bb2f59c9920caa6cd"),
+            row("1,2,3", "3efbe78a8d82f29979031a4aa0b16a9d"),
+            row("1,2,4", "63960835bcdc130f0b66d7ff4f6a5a8e"),
+        ) { input, hash ->
+            input.knotHash() shouldBe hash
         }
     }
 })
