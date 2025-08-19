@@ -188,4 +188,41 @@ abstract class Grid<T>(
 
         return aStarAllPaths(start, { this == goal }, neighbours, d, h)
     }
+
+    /**
+     * Clusters all cells into regions of adjacent cells having the same value.
+     *
+     * @param value If specified, only cells with that value are taken into account. Else, all cells get clustered.
+     *
+     * @return A list containing one list of [Coordinates] per cluster.
+     */
+    fun clusterRegions(value: T? = null): List<List<Coordinates>> {
+        val assigned = mutableSetOf<Coordinates>()
+        return forEachCoordinates { position, element ->
+            if ((value == null || element == value) && position !in assigned) {
+                val region = collectRegionAt(position, element)
+                assigned.addAll(region)
+                region
+            } else {
+                null
+            }
+        }
+            .filterNotNull()
+            .toList()
+    }
+
+    private fun collectRegionAt(
+        position: Coordinates,
+        value: T,
+        visited: MutableSet<Coordinates> = mutableSetOf(position),
+        regionsCoordinates: MutableList<Coordinates> = mutableListOf(position),
+    ): List<Coordinates> {
+        position.neighbours().forEach { coordinates ->
+            if (getAt(coordinates) == value && visited.add(coordinates)) {
+                regionsCoordinates.add(coordinates)
+                collectRegionAt(coordinates, value, visited, regionsCoordinates)
+            }
+        }
+        return regionsCoordinates
+    }
 }
