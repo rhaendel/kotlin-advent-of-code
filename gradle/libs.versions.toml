@@ -1,0 +1,18 @@
+[versions]
+kotest = "6.0.0"
+kotlin = "2.2.10"
+kotlinx-coroutines = "1.10.2"
+kover = "0.9.1"
+logback = "1.5.18"
+system-lambda = "1.2.1"
+
+[libraries]
+kotest-assertions-table = { module = "io.kotest:kotest-assertions-table", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+system-lambda = { module = "com.github.stefanbirkner:system-lambda", version.ref = "system-lambda" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
