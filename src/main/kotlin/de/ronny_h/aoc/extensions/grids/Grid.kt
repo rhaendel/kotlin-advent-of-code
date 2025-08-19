@@ -1,24 +1,37 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.ronny_h.aoc.extensions.graphs.ShortestPath
+import de.ronny_h.aoc.extensions.graphs.aStarAllPaths
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.StandardCharsets
 
 /**
+ * A 2-dimensional, rectangular Grid where each cell is identified by its [Coordinates] and represented by a value of type [T].
+ *
+ * @param height The number of rows in the Grid.
+ * @param width The number of columns in the Grid.
  * @param nullElement The initial element within the grid
- * @param overrideElement Used for out of bound positions. Defaults to `nullElement`
+ * @param fallbackElement Used for out of bound positions. Defaults to [nullElement].
  */
 abstract class Grid<T>(
     val height: Int,
     val width: Int,
     protected val nullElement: T,
-    private val overrideElement: T = nullElement,
+    private val fallbackElement: T = nullElement,
 ) {
 
     private val grid: MutableList<MutableList<T>> = MutableList(height) { MutableList(width) { nullElement } }
 
+    /**
+     * A function that maps each `Char` that may occur in the `input: List<String>` to a value of type [T].
+     */
     abstract fun Char.toElementType(): T
 
+    /**
+     * Constructs a Grid with the specified dimensions filled with the [nullElement] as default value and all
+     * coordinates in [overrides] set to [overrideElement].
+     */
     constructor(
         height: Int,
         width: Int,
@@ -31,6 +44,12 @@ abstract class Grid<T>(
         }
     }
 
+    /**
+     * Constructs a Grid from the [input] list. Uses function [toElementType] for converting the [String]s' [Char]s
+     * to values of type [T].
+     *
+     * @param input A list of `String`s of the same length that determines the Grid's width. Its size determines the Grid's height.
+     */
     constructor(input: List<String>, nullElement: T, overrideElement: T = nullElement) : this(
         input.size,
         input[0].length,
@@ -41,15 +60,18 @@ abstract class Grid<T>(
         initGrid(input)
     }
 
-    fun initGrid(input: List<String>) = input.forEachIndexed { row, line ->
+    protected fun initGrid(input: List<String>) = input.forEachIndexed { row, line ->
         line.forEachIndexed { col, char -> grid[row][col] = char.toElementType() }
     }
 
+    /**
+     * @return The value at the specified cell.
+     */
     operator fun get(row: Int, col: Int): T {
         return grid
             .getOrNull(row)
             ?.getOrNull(col)
-            ?: overrideElement
+            ?: fallbackElement
     }
 
     fun getAt(position: Coordinates) = get(position.row, position.col)
@@ -82,7 +104,7 @@ abstract class Grid<T>(
     }
 
     /**
-     * Returns the first element matching the given `value`.
+     * Returns the first element matching the given [value].
      *
      * @throws NoSuchElementException If no matching element can be found.
      */
@@ -92,6 +114,10 @@ abstract class Grid<T>(
 
     override fun toString(): String = toString(setOf())
 
+    /**
+     * @return A String representation of this [Grid] with all coordinates in [overrides] overridden
+     * by the Char specified as [overrideChar].
+     */
     fun toString(
         overrides: Set<Coordinates> = setOf(),
         overrideChar: Char = '#',
@@ -103,6 +129,12 @@ abstract class Grid<T>(
         return out.toString().trim()
     }
 
+    /**
+     * Prints this [Grid] to [System.out] with (the first matching rule applies):
+     * - if not `null`, the [highlightPosition] overridden by the `Char` representation of [highlightDirection]
+     * - each coordinate in [path] overridden by the `Char` that is mapped to it
+     * - all coordinates in [overrides] overridden by the `Char` specified as [overrideChar]
+     */
     fun printGrid(
         overrides: Set<Coordinates> = setOf(),
         overrideChar: Char = '#',
@@ -113,7 +145,7 @@ abstract class Grid<T>(
         printGrid(System.out, overrides, overrideChar, highlightPosition, highlightDirection, path)
     }
 
-    fun printGrid(
+    private fun printGrid(
         writer: PrintStream,
         overrides: Set<Coordinates> = setOf(),
         overrideChar: Char = '#',
@@ -133,5 +165,27 @@ abstract class Grid<T>(
             }
             if (position.col == width - 1) writer.println()
         }.last()
+    }
+
+    /**
+     * Determines all shortest paths possible from [start] to [goal] with the following conditions:
+     * - The Grid's [nullElement] is the obstacle.
+     * - No path outside the Grid is possible.
+     * - Only direct neighbours (no diagonal ones) are considered.
+     * - The cost of moving to a neighbour equals 1.
+     */
+    fun shortestPaths(start: Coordinates, goal: Coordinates): List<ShortestPath<Coordinates>> {
+        val neighbours: (Coordinates) -> List<Coordinates> = { position ->
+            position.neighbours().filter { getAt(it) != nullElement }
+        }
+
+        val d: (Coordinates, Coordinates) -> Int = { a, b ->
+            require(a taxiDistanceTo b == 1) { "a and b have to be neighbours" }
+            1
+        }
+
+        val h: (Coordinates) -> Int = { it taxiDistanceTo goal }
+
+        return aStarAllPaths(start, { this == goal }, neighbours, d, h)
     }
 }

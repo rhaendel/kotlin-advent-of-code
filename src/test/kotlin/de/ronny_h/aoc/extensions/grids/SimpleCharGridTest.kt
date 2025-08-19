@@ -93,4 +93,18 @@ class SimpleCharGridTest : StringSpec({
                     ShortestPath(listOf(Coordinates(0, 1), Coordinates(1, 1), Coordinates(1, 2)), 2),
                 )
     }
+
+    "obstacles are not part of the shortest path" {
+        SimpleCharGrid(listOf("0#2", "3#5", "678"), '#').shortestPaths(
+            Coordinates(0, 0),
+            Coordinates(0, 2)
+        ) shouldBe listOf(
+            ShortestPath(
+                listOf(
+                    Coordinates(0, 0), Coordinates(1, 0), Coordinates(2, 0),
+                    Coordinates(2, 1), Coordinates(2, 2), Coordinates(1, 2), Coordinates(0, 2)
+                ), 6
+            ),
+        )
+    }
 })
