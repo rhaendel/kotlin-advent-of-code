@@ -1,7 +1,6 @@
 package de.ronny_h.aoc.year2017.day14
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
 import de.ronny_h.aoc.year2017.day10.knotHash
 import java.math.BigInteger
@@ -24,39 +23,9 @@ class DiskDefragmentation : AdventOfCode<Int>(2017, 14) {
             .single()
             .toBinaryKnotHashes()
 
-        return Disk(binaryKnotHashes)
-            .clusterRegions()
+        return SimpleCharGrid(binaryKnotHashes, '0')
+            .clusterRegions('1')
             .size
-    }
-}
-
-class Disk(input: List<String>) : SimpleCharGrid(input, '0') {
-
-    fun clusterRegions(): List<List<Coordinates>> {
-        val assigned = mutableSetOf<Coordinates>()
-        return forEachCoordinates { position, element ->
-            if (element == '1' && position !in assigned) {
-                collectRegionAt(position, assigned)
-            } else {
-                null
-            }
-        }
-            .filterNotNull()
-            .toList()
-    }
-
-    private fun collectRegionAt(
-        position: Coordinates,
-        visited: MutableSet<Coordinates> = mutableSetOf(position),
-        regionsCoordinates: MutableList<Coordinates> = mutableListOf(position),
-    ): List<Coordinates> {
-        position.neighbours().forEach { coordinates ->
-            if (getAt(coordinates) == '1' && visited.add(coordinates)) {
-                regionsCoordinates.add(coordinates)
-                collectRegionAt(coordinates, visited, regionsCoordinates)
-            }
-        }
-        return regionsCoordinates
     }
 }
 

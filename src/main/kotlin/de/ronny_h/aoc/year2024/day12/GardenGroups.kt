@@ -4,7 +4,7 @@ import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Direction
 import de.ronny_h.aoc.extensions.grids.Direction.NORTH
-import de.ronny_h.aoc.extensions.grids.Grid
+import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
 
 const val verbose = false
 
@@ -22,17 +22,13 @@ class GardenGroups : AdventOfCode<Int>(2024, 12) {
 
 private data class Region(val area: Int, val perimeter: Int, val numberOfSides: Int)
 
-private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
-    override fun Char.toElementType() = this
+private class Farm(input: List<String>) : SimpleCharGrid(input, ' ') {
 
-    private val assigned = mutableSetOf<Coordinates>()
-
-    fun separateRegions(): List<Region> = forEachCoordinates { position, plant ->
-        if (position !in assigned) {
-            val region = collectRegionPlotsAt(position, plant)
+    fun separateRegions(): List<Region> = clusterRegions()
+        .map { region ->
+            val plant = getAt(region.first())
             val perimeter = perimeterOf(region, plant)
             val numberOfSides = numberOfSidesOf(region, plant)
-            assigned.addAll(region)
             if (verbose) {
                 val regionAsSet = region.toSet()
                 check(region.size == regionAsSet.size)
@@ -40,30 +36,10 @@ private class Farm(input: List<String>) : Grid<Char>(input, ' ') {
                 println("---------- area: ${region.size} perimeter: $perimeter")
             }
             Region(region.size, perimeter, numberOfSides)
-        } else {
-            null
         }
-    }
-        .filterNotNull()
-        .toList()
 
     private fun perimeterOf(region: List<Coordinates>, plant: Char) = region.sumOf {
         it.neighbours().filter { n -> getAt(n) != plant }.size
-    }
-
-    private fun collectRegionPlotsAt(
-        position: Coordinates,
-        plant: Char,
-        regionsCoordinates: MutableList<Coordinates> = mutableListOf(position),
-        visited: MutableSet<Coordinates> = mutableSetOf(position)
-    ): List<Coordinates> {
-        position.neighbours().forEach { coordinates ->
-            if (getAt(coordinates) == plant && visited.add(coordinates)) {
-                regionsCoordinates.add(coordinates)
-                collectRegionPlotsAt(coordinates, plant, regionsCoordinates, visited)
-            }
-        }
-        return regionsCoordinates
     }
 
     private fun numberOfSidesOf(region: List<Coordinates>, plant: Char): Int {

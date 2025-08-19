@@ -1,5 +1,6 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.extensions.graphs.ShortestPath
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -106,5 +107,61 @@ class SimpleCharGridTest : StringSpec({
                 ), 6
             ),
         )
+    }
+
+    "cluster regions of same char with a single region" {
+        val input = """
+            xx
+        """.asList()
+        SimpleCharGrid(input).clusterRegions() shouldBe listOf(
+            listOf(Coordinates(0, 0), Coordinates(0, 1)),
+        )
+    }
+
+    "cluster regions of same char with two regions" {
+        val input = """
+            ..xx
+            ..xx
+        """.asList()
+        SimpleCharGrid(input).clusterRegions() shouldBe listOf(
+            listOf(Coordinates(0, 0), Coordinates(0, 1), Coordinates(1, 1), Coordinates(1, 0)),
+            listOf(Coordinates(0, 2), Coordinates(0, 3), Coordinates(1, 3), Coordinates(1, 2)),
+        )
+    }
+
+    "cluster regions of same char with four regions" {
+        val input = """
+            ..xx
+            oo__
+        """.asList()
+        SimpleCharGrid(input).clusterRegions() shouldBe listOf(
+            listOf(Coordinates(0, 0), Coordinates(0, 1)),
+            listOf(Coordinates(0, 2), Coordinates(0, 3)),
+            listOf(Coordinates(1, 0), Coordinates(1, 1)),
+            listOf(Coordinates(1, 2), Coordinates(1, 3)),
+        )
+    }
+
+    "cluster one region of a single, specified char" {
+        val input = """
+            ..x..
+            .xxx.
+            ..x..
+        """.asList()
+        SimpleCharGrid(input).clusterRegions('x') shouldBe listOf(
+            listOf(
+                Coordinates(0, 2), Coordinates(1, 2), Coordinates(1, 3),
+                Coordinates(2, 2), Coordinates(1, 1)
+            ),
+        )
+    }
+
+    "cluster regions with no region matching the specified char" {
+        val input = """
+            ..x..
+            .xxx.
+            ..x..
+        """.asList()
+        SimpleCharGrid(input).clusterRegions('o') shouldBe emptyList()
     }
 })
