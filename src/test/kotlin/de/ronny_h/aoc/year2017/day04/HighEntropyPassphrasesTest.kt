@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2017.day04
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.blocking.forAll
+import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
