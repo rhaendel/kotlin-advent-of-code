@@ -1,6 +1,7 @@
 package de.ronny_h.aoc.year2017.day10
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.collections.MutableRingList
 
 fun main() = KnotHash().run("3770", "a9d0e68649d0174c8756a59ba21d4dc6")
 
@@ -31,30 +32,18 @@ private fun sparseHash(
     lengths: List<Int>,
     rounds: Int = 1,
 ): List<Int> {
-    val circularList = MutableList(size) { it }
+    val circularList = MutableRingList(size) { it }
     var position = 0
     var skipSize = 0
 
-    fun reverseSubList(start: Int, length: Int) {
-        if (start + length < size) {
-            circularList.subList(start, start + length).toList()
-        } else {
-            circularList.subList(start, size) + circularList.subList(0, length - size + start)
-        }
-            .reversed()
-            .forEachIndexed { i, item ->
-                circularList[(start + i) % size] = item
-            }
-    }
-
     repeat(rounds) {
         lengths.forEach { length ->
-            reverseSubList(position, length)
+            circularList.reverseSubList(position, length)
             position = (position + length + skipSize) % size
             skipSize++
         }
     }
-    return circularList
+    return circularList.toList()
 }
 
 fun List<Int>.reduceToDenseHash() = chunked(16) {

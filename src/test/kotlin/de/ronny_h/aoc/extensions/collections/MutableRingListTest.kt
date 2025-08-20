@@ -6,12 +6,16 @@ import io.kotest.matchers.shouldBe
 
 class MutableRingListTest : StringSpec({
 
-    "a MutableRingList<Char> can be created from a variable amounts of Chars and toString() generates a nice representation" {
+    "a MutableRingList<Char> can be created from a variable amount of Chars and toString() generates a nice representation" {
         mutableRingListOf('a', 'b', 'c', 'd', 'e').toString() shouldBe "[a, b, c, d, e]"
     }
 
     "a MutableRingList<Char> can be created from a String and toJoinedString() recreates that String" {
         mutableRingListOf("abcde").toJoinedString() shouldBe "abcde"
+    }
+
+    "a MutableRingList can be created with an initializer function" {
+        MutableRingList(6) { it }.toJoinedString() shouldBe "012345"
     }
 
     "get(index) returns the element at index" {
@@ -71,5 +75,17 @@ class MutableRingListTest : StringSpec({
         mutableRingListOf("abcde").swap('d', 'e').toJoinedString() shouldBe "abced"
         mutableRingListOf("abcde").swap('a', 'e').toJoinedString() shouldBe "ebcda"
         mutableRingListOf("abcde").swap('c', 'c').toJoinedString() shouldBe "abcde"
+    }
+
+    "reversSubList on an unmodified ringList" {
+        mutableRingListOf(1, 2, 3, 4, 5, 6).reverseSubList(1, 4).toList() shouldBe listOf(1, 5, 4, 3, 2, 6)
+        mutableRingListOf(1, 2, 3, 4, 5, 6).reverseSubList(4, 4).toList() shouldBe listOf(6, 5, 3, 4, 2, 1)
+    }
+
+    "reversSubList on a shifted ringList" {
+        mutableRingListOf(1, 2, 3, 4, 5, 6).shiftRight(2)
+            .reverseSubList(1, 4).toList() shouldBe listOf(5, 3, 2, 1, 6, 4)
+        mutableRingListOf(1, 2, 3, 4, 5, 6).shiftRight(2)
+            .reverseSubList(4, 4).toList() shouldBe listOf(4, 3, 1, 2, 6, 5)
     }
 })

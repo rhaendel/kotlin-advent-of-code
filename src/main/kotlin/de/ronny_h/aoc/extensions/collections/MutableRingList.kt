@@ -1,8 +1,16 @@
 package de.ronny_h.aoc.extensions.collections
 
-class MutableRingList<T>(initialList: List<T>) {
-    private val list: MutableList<T> = initialList.toMutableList()
+class MutableRingList<T>(initialCapacity: Int) {
+    private val list: MutableList<T> = ArrayList<T>(initialCapacity)
     private var offset = 0
+
+    constructor(initialList: List<T>) : this(initialList.size) {
+        list.addAll(initialList)
+    }
+
+    constructor(size: Int, init: (index: Int) -> T) : this(size) {
+        repeat(size) { index -> list.add(init(index)) }
+    }
 
     companion object {
         fun <T> mutableRingListOf(vararg elements: T): MutableRingList<T> = MutableRingList(elements.toList())
@@ -45,6 +53,20 @@ class MutableRingList<T>(initialList: List<T>) {
         require(indexB >= 0) { "$elemB is not in the list" }
         list[indexA] = elemB
         list[indexB] = elemA
+        return this
+    }
+
+    fun reverseSubList(s: Int, length: Int): MutableRingList<T> {
+        val start = (offset + s) % list.size
+        if (start + length < list.size) {
+            list.subList(start, start + length).toList()
+        } else {
+            list.subList(start, list.size) + list.subList(0, length - list.size + start)
+        }
+            .reversed()
+            .forEachIndexed { i, item ->
+                list[(start + i) % list.size] = item
+            }
         return this
     }
 
