@@ -1,4 +1,4 @@
-package de.ronny_h.aoc.extensions
+package de.ronny_h.aoc.extensions.collections
 
 /**
  * Splits the list into multiple sub-lists on lines that match the specified delimiter.

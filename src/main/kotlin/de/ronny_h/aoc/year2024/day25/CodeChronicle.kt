@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year2024.day25
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.collections.split
 import de.ronny_h.aoc.extensions.combinationsOf
-import de.ronny_h.aoc.extensions.split
 
 fun main() = CodeChronicle().run(2993, 0)
 

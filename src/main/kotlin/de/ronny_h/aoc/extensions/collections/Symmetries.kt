@@ -1,4 +1,4 @@
-package de.ronny_h.aoc.extensions
+package de.ronny_h.aoc.extensions.collections
 
 fun <T> List<T>.isSymmetrical(): Boolean {
     for (i in 0..<size / 2) {

@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year2015.day19
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.collections.split
 import de.ronny_h.aoc.extensions.memoize
-import de.ronny_h.aoc.extensions.split
 
 fun main() = MedicineForRudolph().run(518, 200)
 
