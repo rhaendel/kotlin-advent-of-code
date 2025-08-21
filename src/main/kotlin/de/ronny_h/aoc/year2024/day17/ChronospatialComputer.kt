@@ -2,6 +2,7 @@ package de.ronny_h.aoc.year2024.day17
 
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.memoize
+import de.ronny_h.aoc.extensions.numbers.toIntChecked
 
 fun main() = ChronospatialComputer().run("4,1,7,6,4,1,0,2,7", "164279024971453")
 
@@ -262,11 +263,4 @@ class ThreeBitComputer(input: List<String>) {
         val registerC: Long,
         val instructionPointer: Int,
     )
-}
-
-private fun Long.toIntChecked(): Int {
-    if (this > Int.MAX_VALUE) {
-        throw IllegalArgumentException("$this exceeds Int range")
-    }
-    return this.toInt()
 }

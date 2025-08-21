@@ -1,5 +1,6 @@
 package de.ronny_h.aoc.extensions.numbers
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
@@ -51,6 +52,28 @@ class IntegralNumbersTest : StringSpec({
             row(6, 21),
         ) { n, sum ->
             sumOfFirstNaturalNumbers(n) shouldBe sum
+        }
+    }
+
+    "Long values that are small enough can be converted to Int" {
+        forAll(
+            row(0L, 0),
+            row(42L, 42),
+            row(Int.MAX_VALUE.toLong(), Int.MAX_VALUE),
+            row(Int.MIN_VALUE.toLong(), Int.MIN_VALUE),
+        ) { longValue, intValue ->
+            longValue.toIntChecked() shouldBe intValue
+        }
+    }
+
+    "Long values that are too big cannot be converted to Int" {
+        forAll(
+            row(Int.MAX_VALUE.toLong() + 1),
+            row(Int.MIN_VALUE.toLong() - 1),
+        ) { longValue ->
+            shouldThrow<IllegalArgumentException> {
+                longValue.toIntChecked()
+            }
         }
     }
 })

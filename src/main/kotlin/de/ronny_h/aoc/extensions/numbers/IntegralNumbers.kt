@@ -18,3 +18,10 @@ fun String.isInt(): Boolean = try {
 }
 
 fun sumOfFirstNaturalNumbers(n: Int): Long = (n * (n + 1).toLong()) / 2
+
+fun Long.toIntChecked(): Int {
+    if (this > Int.MAX_VALUE || this < Int.MIN_VALUE) {
+        throw IllegalArgumentException("$this exceeds Int range")
+    }
+    return this.toInt()
+}
