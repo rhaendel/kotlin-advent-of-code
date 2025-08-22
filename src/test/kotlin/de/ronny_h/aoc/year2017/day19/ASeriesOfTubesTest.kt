@@ -5,7 +5,7 @@ import de.ronny_h.aoc.extensions.grids.Coordinates
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class ParticleSwarmTest : StringSpec({
+class ASeriesOfTubesTest : StringSpec({
 
     val input = """
         #     |          
@@ -21,10 +21,10 @@ class ParticleSwarmTest : StringSpec({
     }
 
     "part 1: the letters on the path from the beginning to the end" {
-        ParticleSwarm().part1(input) shouldBe "ABCDEF"
+        ASeriesOfTubes().part1(input) shouldBe "ABCDEF"
     }
 
     "part 2: the package takes a total of 38 steps" {
-        ParticleSwarm().part2(input) shouldBe "38"
+        ASeriesOfTubes().part2(input) shouldBe "38"
     }
 })

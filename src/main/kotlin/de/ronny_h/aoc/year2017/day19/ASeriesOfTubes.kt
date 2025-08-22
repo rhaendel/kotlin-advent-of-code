@@ -6,9 +6,9 @@ import de.ronny_h.aoc.extensions.grids.Direction
 import de.ronny_h.aoc.extensions.grids.Direction.*
 import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
 
-fun main() = ParticleSwarm().run("EOCZQMURF", "16312")
+fun main() = ASeriesOfTubes().run("EOCZQMURF", "16312")
 
-class ParticleSwarm : AdventOfCode<String>(2017, 19) {
+class ASeriesOfTubes : AdventOfCode<String>(2017, 19) {
     override fun part1(input: List<String>): String = RoutingDiagram(input).followThePath().letters
 
     override fun part2(input: List<String>): String = RoutingDiagram(input).followThePath().length.toString()
