@@ -61,7 +61,9 @@ abstract class Grid<T>(
     }
 
     protected fun initGrid(input: List<String>) = input.forEachIndexed { row, line ->
-        line.forEachIndexed { col, char -> grid[row][col] = char.toElementType() }
+        line.forEachIndexed { col, char ->
+            grid[row][col] = char.toElementType()
+        }
     }
 
     /**

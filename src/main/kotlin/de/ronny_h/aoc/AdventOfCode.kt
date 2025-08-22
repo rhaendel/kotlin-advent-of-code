@@ -18,7 +18,7 @@ abstract class AdventOfCode<T>(val year: Int, val day: Int) {
 
     fun readInput(): List<String> {
         val inputFile = "/$year/Day${paddedDay()}.txt"
-        return AdventOfCode::class.java.getResource(inputFile)?.readText()?.trim()?.lines()
+        return AdventOfCode::class.java.getResource(inputFile)?.readText()?.trimEnd('\n')?.lines()
             ?: error("The input file for day $day, year $year could not be found. Expected at '$inputFile' in the resources folder.")
     }
 
