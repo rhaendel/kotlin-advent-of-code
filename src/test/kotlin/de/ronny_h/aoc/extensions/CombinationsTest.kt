@@ -32,6 +32,18 @@ class CombinationsTest : StringSpec({
                 )
     }
 
+    "a range with three elements yields all six combinations" {
+        (1..3).combinations().toList() shouldBe
+                listOf(
+                    1 to 2,
+                    1 to 3,
+                    2 to 1,
+                    2 to 3,
+                    3 to 1,
+                    3 to 2
+                )
+    }
+
     "a list with non-unique elements yields non-unique combinations but still skips the identical ones" {
         listOf(1, 1, 2).combinations().toList() shouldBe
                 listOf(
