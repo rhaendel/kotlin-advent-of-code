@@ -81,6 +81,20 @@ abstract class Grid<T>(
         grid[position.row][position.col] = element
     }
 
+    /**
+     * @return a view of the portion of this Grid between the specified [row], [col] (inclusive) and [row] + [height], [col] + [width] (exclusive).
+     * The returned list of lists is backed by this Grid, so non-structural changes in the returned list are reflected
+     * in this Grid, and vice-versa.
+     * Structural changes in the base Grid make the behavior of the view undefined.
+     */
+    fun subGridAt(row: Int, col: Int, height: Int, width: Int = height): List<List<T>> {
+        return buildList {
+            for (r in row..<row + height) {
+                add(grid[r].subList(col, col + width))
+            }
+        }
+    }
+
     fun <R> forEachIndex(action: (row: Int, col: Int) -> R): Sequence<R> = sequence {
         for (row in grid.indices) {
             for (col in grid[0].indices) {
