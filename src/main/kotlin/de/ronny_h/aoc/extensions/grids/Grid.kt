@@ -76,9 +76,13 @@ abstract class Grid<T>(
             ?: fallbackElement
     }
 
+    operator fun set(row: Int, col: Int, value: T) {
+        grid[row][col] = value
+    }
+
     fun getAt(position: Coordinates) = get(position.row, position.col)
     fun setAt(position: Coordinates, element: T) {
-        grid[position.row][position.col] = element
+        this[position.row, position.col] = element
     }
 
     /**

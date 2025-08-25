@@ -88,6 +88,15 @@ class GridTest : StringSpec() {
             grid[1, 1] shouldBe '4'
         }
 
+        "set with array access sets the element at the given coordinates" {
+            val grid = SimpleCharGrid(listOf("12", "34"))
+            grid[1, 0] = '5'
+            grid[0, 0] shouldBe '1'
+            grid[0, 1] shouldBe '2'
+            grid[1, 0] shouldBe '5'
+            grid[1, 1] shouldBe '4'
+        }
+
         "subGridAt returns a sub grid at the given coordinates" {
             val input = """
                 1234
