@@ -21,8 +21,8 @@ class Duet : AdventOfCode<Long>(2017, 18) {
     override fun part2(input: List<String>): Long = runBlocking {
         val channel0 = Channel<Long>(UNLIMITED)
         val channel1 = Channel<Long>(UNLIMITED)
-        val program0 = Program(input, 0, channel0, channel1)
-        val program1 = Program(input, 1, channel1, channel0)
+        val program0 = Program(input, channel0, channel1, mapOf(P_REGISTER to 0, PROGRAM_NUMBER_REGISTER to 0))
+        val program1 = Program(input, channel1, channel0, mapOf(P_REGISTER to 1, PROGRAM_NUMBER_REGISTER to 1))
 
         val job0 = launch { program0.run() }
         val job1 = launch { program1.run() }
@@ -75,6 +75,11 @@ fun List<String>.parseInstructions(
             Add(register, value.toValue())
         }
 
+        "sub" -> {
+            val (register, value) = parameters.split(" ")
+            Sub(register, value.toValue())
+        }
+
         "mul" -> {
             val (register, value) = parameters.split(" ")
             Multiply(register, value.toValue())
@@ -90,6 +95,11 @@ fun List<String>.parseInstructions(
         "jgz" -> {
             val (value, offset) = parameters.split(" ")
             JumpIfGreaterZero(value.toValue(), offset.toValue())
+        }
+
+        "jnz" -> {
+            val (value, offset) = parameters.split(" ")
+            JumpIfNotZero(value.toValue(), offset.toValue())
         }
 
         else -> error("unknown instruction: $it")
@@ -114,9 +124,11 @@ sealed interface Value {
     }
 }
 
+private const val P_REGISTER = "p"
 private const val PROGRAM_NUMBER_REGISTER = "programNumber"
 private const val LAST_PLAYED_SOUND_REGISTER = "lastPlayedSound"
 private const val NUMBER_OF_SENDS_REGISTER = "numberOfSends"
+private const val NUMBER_OF_MULTIPLY_REGISTER = "numberOfMultiply"
 
 sealed interface Instruction {
     suspend fun executeOn(registers: MutableMap<String, Long>): Long
@@ -154,9 +166,18 @@ sealed interface Instruction {
         }
     }
 
+    data class Sub(private val register: String, val value: Value) : Instruction {
+        override suspend fun executeOn(registers: MutableMap<String, Long>): Long {
+            registers[register] = registers.getValue(register) - value.toNumber(registers)
+            return registers.getValue(register)
+        }
+    }
+
     data class Multiply(private val register: String, val value: Value) : Instruction {
         override suspend fun executeOn(registers: MutableMap<String, Long>): Long {
             registers[register] = registers.getValue(register) * value.toNumber(registers)
+            val numberOfMultiplies = registers.getValue(NUMBER_OF_MULTIPLY_REGISTER) + 1
+            registers[NUMBER_OF_MULTIPLY_REGISTER] = numberOfMultiplies
             return registers.getValue(register)
         }
     }
@@ -186,9 +207,20 @@ sealed interface Instruction {
         }
     }
 
-    data class JumpIfGreaterZero(private val value: Value, private val offset: Value) : Instruction {
+    sealed interface Jump : Instruction
+
+    data class JumpIfGreaterZero(private val value: Value, private val offset: Value) : Jump {
         override suspend fun executeOn(registers: MutableMap<String, Long>): Long {
             if (value.toNumber(registers) > 0) {
+                return offset.toNumber(registers)
+            }
+            return 1
+        }
+    }
+
+    data class JumpIfNotZero(private val value: Value, private val offset: Value) : Jump {
+        override suspend fun executeOn(registers: MutableMap<String, Long>): Long {
+            if (value.toNumber(registers) != 0L) {
                 return offset.toNumber(registers)
             }
             return 1
@@ -198,21 +230,19 @@ sealed interface Instruction {
 
 class Program(
     input: List<String>,
-    programNumber: Long = 0,
     sendChannel: Channel<Long>? = null,
     receiveChannel: Channel<Long>? = null,
+    presetRegisters: Map<String, Long> = emptyMap()
 ) {
     var isReceiving = false
+        private set
 
     private val instructions = input.parseInstructions(sendChannel, receiveChannel)
-    private val registers = mutableMapOf(
-        "p" to programNumber,
-        PROGRAM_NUMBER_REGISTER to programNumber,
-    ).withDefault { 0 }
+    private val registers = presetRegisters.toMutableMap().withDefault { 0 }
     private var instructionPointer = 0L
 
     suspend fun run(): Long {
-        println("program ${registers[PROGRAM_NUMBER_REGISTER]} started")
+        println("program ${registers.getValue(PROGRAM_NUMBER_REGISTER)} started")
         while (instructionPointer in instructions.indices) {
             val instruction = instructions[instructionPointer.toIntChecked()]
             if (instruction is Receive) {
@@ -224,15 +254,17 @@ class Program(
                 println("program ${registers[PROGRAM_NUMBER_REGISTER]}: instruction \"Recover\" with register not zero -> terminating")
                 return result
             }
-            instructionPointer += if (instruction is JumpIfGreaterZero) {
+            instructionPointer += if (instruction is Jump) {
                 result
             } else {
                 1L
             }
         }
-        println("program ${registers[PROGRAM_NUMBER_REGISTER]}: instruction pointer ran out of bounds: $instructionPointer -> terminating")
+        println("program ${registers.getValue(PROGRAM_NUMBER_REGISTER)}: instruction pointer ran out of bounds: $instructionPointer -> terminating")
         return -1L
     }
 
     fun getNumberOfSends(): Long = registers.getValue(NUMBER_OF_SENDS_REGISTER)
+    fun getNumberOfMultiplies(): Long = registers.getValue(NUMBER_OF_MULTIPLY_REGISTER)
+    fun getRegisterValue(register: String): Long = registers.getValue(register)
 }
