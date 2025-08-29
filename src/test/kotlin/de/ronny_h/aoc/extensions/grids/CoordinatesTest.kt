@@ -100,6 +100,13 @@ class CoordinatesTest : StringSpec({
         Direction.WEST.turnLeft() shouldBe Direction.SOUTH
     }
 
+    "Direction reverse() does a u-turn" {
+        Direction.NORTH.reverse() shouldBe Direction.SOUTH
+        Direction.EAST.reverse() shouldBe Direction.WEST
+        Direction.SOUTH.reverse() shouldBe Direction.NORTH
+        Direction.WEST.reverse() shouldBe Direction.EAST
+    }
+
     "asChar gives a graphical representation" {
         Direction.NORTH.asChar() shouldBe '↑'
         Direction.EAST.asChar() shouldBe '→'

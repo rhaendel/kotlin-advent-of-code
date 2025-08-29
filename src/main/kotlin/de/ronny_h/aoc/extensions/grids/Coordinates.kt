@@ -59,6 +59,13 @@ enum class Direction(val row: Int, val col: Int) {
         WEST -> SOUTH
     }
 
+    fun reverse() = when (this) {
+        NORTH -> SOUTH
+        EAST -> WEST
+        SOUTH -> NORTH
+        WEST -> EAST
+    }
+
     fun asChar() = when (this) {
         NORTH -> '↑'
         EAST -> '→'
