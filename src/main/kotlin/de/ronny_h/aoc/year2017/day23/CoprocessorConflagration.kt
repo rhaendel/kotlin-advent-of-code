@@ -4,7 +4,7 @@ import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.year2017.day18.Program
 import kotlinx.coroutines.runBlocking
 
-fun main() = CoprocessorConflagration().run(4225, 0)
+fun main() = CoprocessorConflagration().run(4225, 905)
 
 class CoprocessorConflagration : AdventOfCode<Long>(2017, 23) {
     override fun part1(input: List<String>): Long = runBlocking {
@@ -13,57 +13,45 @@ class CoprocessorConflagration : AdventOfCode<Long>(2017, 23) {
         return@runBlocking program.getNumberOfMultiplies()
     }
 
-    override fun part2(input: List<String>): Long = runBlocking {
-        val program = Program(input, presetRegisters = mapOf("a" to 1))
-        program.run()
-        return@runBlocking program.getRegisterValue("h")
-    }
+    override fun part2(input: List<String>): Long = partTwoAsKotlinOptimized().toLong()
 }
 
+// This is an intermediate step of simplifying the program given in my puzzle input.
+// It keeps the original variable names but uses a higher level of language features
+// that make it easier to see what the program actually does.
+// It does not terminate in reasonable time and is not tested. The optimized function
+// below is my final solution.
 private fun partTwoAsKotlin(): Int {
-    val a = 1
-    var d = 0
-    var e = 0
-    var f = 0
-    var g = 0
+    var f: Int
     var h = 0
 
-    var b = 67
-    var c = b
-    if (a != 0) {
-        b *= 100
-        b += 100000
-        c = b
-        c += 17000
-    }
-    while (true) {
+    for (b in 106700..106700 + 17000 step 17) { // 1000 iterations
         f = 1
-        d = 2
-        do {
-            e = 2
-            do {
-                g = d
-                g *= e
-                g -= b
-                if (g == 0) {
+        for (d in 2..b) {
+            for (e in 2..b) {
+                if (b == d * e) {
                     f = 0
                 }
-                e++
-                g = e
-                g -= b
-            } while (g != 0)
-            d++
-            g = d
-            g -= b
-        } while (g != 0)
+            }
+        }
         if (f == 0) {
+            // f is 0 if b can be written as d * e (with d,e in {2..b})
+            // -> h counts non-prime numbers between 106700 and 123700 in steps of 17
             h++
         }
-        g = b
-        g -= c
-        if (g == 0) {
-            return h
-        }
-        b += 17
     }
+    return h
+}
+
+private fun partTwoAsKotlinOptimized(): Int {
+    var nonPrimesCount = 0
+    for (number in 106700..106700 + 17000 step 17) {
+        for (divisor in 2..number / 2) {
+            if (number % divisor == 0) {
+                nonPrimesCount++
+                break
+            }
+        }
+    }
+    return nonPrimesCount
 }

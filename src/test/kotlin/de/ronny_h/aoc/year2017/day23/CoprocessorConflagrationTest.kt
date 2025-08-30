@@ -32,7 +32,7 @@ class CoprocessorConflagrationTest : StringSpec({
         CoprocessorConflagration().part1(input) shouldBe 1
     }
 
-    "part 2: at the end of the test program h should be 7" {
-        CoprocessorConflagration().part2(input) shouldBe 7
+    "part 2: the number of non-prime numbers between 106700 and 123700 in steps of 17" {
+        CoprocessorConflagration().part2(input) shouldBe 905
     }
 })
