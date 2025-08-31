@@ -26,3 +26,12 @@ fun List<String>.split(delimiter: String = ""): List<List<String>> {
     }
     return result
 }
+
+/**
+ * @return The [Iterable] of elements that maximize the given [selector].
+ */
+inline fun <T, R : Comparable<R>> Iterable<T>.filterMaxBy(selector: (T) -> R): Iterable<T> {
+    if (none()) return this
+    val max = maxOf(selector)
+    return filter { selector(it) == max }
+}

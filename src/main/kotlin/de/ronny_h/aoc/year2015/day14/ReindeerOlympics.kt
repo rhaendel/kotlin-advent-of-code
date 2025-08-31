@@ -1,6 +1,7 @@
 package de.ronny_h.aoc.year2015.day14
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.collections.filterMaxBy
 import kotlin.math.min
 
 fun main() = ReindeerOlympics().run(2660, 1256)
@@ -15,12 +16,10 @@ fun List<Reindeer>.maxReindeerDistanceIn(secondsTotal: Int) = map { it.reindeerD
 fun List<Reindeer>.pointsOfWinnerIn(secondsTotal: Int): Int {
     val reindeerPoints = MutableList(size) { 0 }
     for (seconds in 1..secondsTotal) {
-        val distances = map { it.reindeerDistanceIn(seconds) }.withIndex()
-        val leaderDistance = distances.maxOf { it.value }
-        val leaders = distances.filter { it.value == leaderDistance }
-        leaders.forEach {
-            reindeerPoints[it.index]++
-        }
+        map { it.reindeerDistanceIn(seconds) }
+            .withIndex()
+            .filterMaxBy(IndexedValue<Int>::value)
+            .forEach { reindeerPoints[it.index]++ }
     }
     return reindeerPoints.max()
 }

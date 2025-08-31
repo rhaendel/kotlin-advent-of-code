@@ -31,4 +31,16 @@ class ListsTest : StringSpec({
     "split a list with multiple blocks ending with the delimiter line" {
         listOf("a", "b", "", "c", "d", "").split("") shouldBe listOf(listOf("a", "b"), listOf("c", "d"))
     }
+
+    "filterMaxBy an empty list returns an empty list" {
+        emptyList<String>().filterMaxBy(String::length) shouldBe emptyList()
+    }
+
+    "filterMaxBy with a unique max returns exactly that" {
+        listOf("1", "123", "12").filterMaxBy(String::length) shouldBe listOf("123")
+    }
+
+    "filterMaxBy with more than one max element returns all max elements" {
+        listOf("1", "123", "321").filterMaxBy(String::length) shouldBe listOf("123", "321")
+    }
 })
