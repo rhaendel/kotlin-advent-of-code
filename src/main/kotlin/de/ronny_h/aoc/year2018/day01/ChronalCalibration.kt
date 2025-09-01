@@ -12,14 +12,10 @@ class ChronalCalibration : AdventOfCode<Int>(2018, 1) {
     }
 
     override fun part2(input: List<String>): Int {
-        var frequency = 0
-        val seenFrequencies = mutableSetOf(frequency)
-        generateSequence { input.toListOfInt() }
+        val seenFrequencies = mutableSetOf<Int>()
+        return generateSequence { input.toListOfInt() }
             .flatten()
-            .takeWhile {
-                frequency += it
-                seenFrequencies.add(frequency)
-            }.last()
-        return frequency
+            .runningFold(0) { frequency, change -> frequency + change }
+            .find { !seenFrequencies.add(it) }!!
     }
 }
