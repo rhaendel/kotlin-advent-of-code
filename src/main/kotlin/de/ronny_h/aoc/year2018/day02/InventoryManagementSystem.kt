@@ -21,7 +21,7 @@ class InventoryManagementSystem : AdventOfCode<String>(2018, 2) {
     override fun part2(input: List<String>): String {
         val minPair = input
             .combinations()
-            .minBy { lev(it.first, it.second) }
+            .minBy { lev(it.first, it.second, 1) }
 
         return minPair.first.filterIndexed { i, char ->
             minPair.second[i] == char
@@ -29,31 +29,27 @@ class InventoryManagementSystem : AdventOfCode<String>(2018, 2) {
     }
 }
 
-private val levCache = mutableMapOf<Pair<String, String>, Int>()
-
 /**
- * The Levenshtein distance (an edit distance).
+ * @return The Levenshtein distance (an edit distance) between the Strings [a] and [b].
+ * @param maxDistance Specifies an upper bound for the calculated distance. The function aborts if this value is exceeded
+ * returning the distance calculated so far (which might be much higher than [maxDistance]).
+ * @param distanceSoFar For recursive calls, only. The distance calculated to the current level.
  */
-fun lev(a: String, b: String): Int {
-    levCache[a to b]?.let { return it }
-
+fun lev(a: String, b: String, maxDistance: Int = Int.MAX_VALUE, distanceSoFar: Int = 0): Int {
     if (b.isEmpty()) return a.length
     if (a.isEmpty()) return b.length
+    if (distanceSoFar > maxDistance) return 0
 
     val aTail = a.substring(1)
     val bTail = b.substring(1)
 
-    val tailResult = lev(aTail, bTail)
-    levCache[aTail to bTail] = tailResult
-
     if (a.first() == b.first()) {
-        return tailResult
+        return lev(aTail, bTail, maxDistance, distanceSoFar)
     }
 
-    val aTailResult = lev(aTail, b)
-    val bTailResult = lev(a, bTail)
-    levCache[aTail to b] = aTailResult
-    levCache[a to bTail] = bTailResult
+    val aTailResult = lev(aTail, b, maxDistance, distanceSoFar + 1)
+    val bTailResult = lev(a, bTail, maxDistance, distanceSoFar + 1)
+    val tailResult = lev(aTail, bTail, maxDistance, distanceSoFar + 1)
 
     return 1 + min(min(aTailResult, bTailResult), tailResult)
 }

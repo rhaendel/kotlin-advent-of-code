@@ -48,4 +48,20 @@ class InventoryManagementSystemTest : StringSpec({
             lev(a, b) shouldBe distance
         }
     }
+
+    "The Levenshtein distance with an upper bound" {
+        forAll(
+            row("", "", 1, 0),
+            row("", "a", 1, 1),
+            row("a", "", 1, 1),
+            row("abc", "abc", 1, 0),
+            row("abc", "a_c", 1, 1),
+            row("abc", "axbyc", 1, 2),
+            row("abc", "axbycz", 1, 2),
+            row("abc", "xyz", 1, 2),
+            row("abc", "abcxyz", 1, 3),
+        ) { a, b, maxDistance, distance ->
+            lev(a, b, maxDistance) shouldBe distance
+        }
+    }
 })
