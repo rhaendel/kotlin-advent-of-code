@@ -1,6 +1,8 @@
 package de.ronny_h.aoc.extensions.collections
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
 class ListsTest : StringSpec({
@@ -42,5 +44,18 @@ class ListsTest : StringSpec({
 
     "filterMaxBy with more than one max element returns all max elements" {
         listOf("1", "123", "321").filterMaxBy(String::length) shouldBe listOf("123", "321")
+    }
+
+    "minByUniqueOrNull" {
+        forAll(
+            row(listOf(1), 1),
+            row(listOf(1, 2, 3), 1),
+            row(listOf(2, 1, 3), 1),
+            row(listOf(2, 2, 1, 3), 1),
+            row(emptyList(), null),
+            row(listOf(1, 1, 3), null),
+        ) { list, expected ->
+            list.minByUniqueOrNull { it } shouldBe expected
+        }
     }
 })

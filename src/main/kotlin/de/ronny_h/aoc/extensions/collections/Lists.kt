@@ -35,3 +35,32 @@ inline fun <T, R : Comparable<R>> Iterable<T>.filterMaxBy(selector: (T) -> R): I
     val max = maxOf(selector)
     return filter { selector(it) == max }
 }
+
+/**
+ * Returns the unique element yielding the smallest value of the given [selector] function or `null` if there are no elements
+ * or that element is not unique.
+ *
+ * If there are multiple equal minimal values returned by the [selector] function,
+ * this function returns `null`.
+ */
+inline fun <T, R : Comparable<R>> Iterable<T>.minByUniqueOrNull(selector: (T) -> R): T? {
+    val iterator = iterator()
+    if (!iterator.hasNext()) return null
+    var minElem = iterator.next()
+    if (!iterator.hasNext()) return minElem
+    var minValue = selector(minElem)
+    var minCount = 1
+    do {
+        val e = iterator.next()
+        val v = selector(e)
+        if (minValue == v) {
+            minCount++
+        }
+        if (minValue > v) {
+            minElem = e
+            minValue = v
+            minCount = 1
+        }
+    } while (iterator.hasNext())
+    return if (minCount == 1) minElem else null
+}
