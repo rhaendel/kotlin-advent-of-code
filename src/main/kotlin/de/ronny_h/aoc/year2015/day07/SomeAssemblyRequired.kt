@@ -23,9 +23,9 @@ class SomeAssemblyRequired : AdventOfCode<Int>(2015, 7) {
                 operations.forEach {
                     val result = it.execute(values)
                     if (result.out is ValueOutput) {
-                        values.put(result.wire, result.out.value)
+                        values[result.wire] = result.out.value
                     } else {
-                        this.add(it)
+                        add(it)
                     }
                 }
             }
@@ -71,12 +71,17 @@ data class ReWire(val from: String, val out: String) : Operation {
     override fun execute(values: Map<String, UShort>) = Output(out, values[from]?.let { ValueOutput(it) } ?: NoSignal)
 }
 
-data class UnaryOperation(val operand: String, val operator: UnaryOperator, val out: String) : Operation {
+data class UnaryOperation(private val operand: String, private val operator: UnaryOperator, val out: String) :
+    Operation {
     override fun execute(values: Map<String, UShort>) = Output(out, operator.execute(values, operand))
 }
 
-data class BinaryOperation(val op1: String, val op2: String, val operator: BinaryOperator, val out: String) :
-    Operation {
+data class BinaryOperation(
+    private val op1: String,
+    private val op2: String,
+    private val operator: BinaryOperator,
+    val out: String
+) : Operation {
     override fun execute(values: Map<String, UShort>) = Output(out, operator.execute(values, op1, op2))
 }
 
