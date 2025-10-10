@@ -1,14 +1,16 @@
 package de.ronny_h.aoc.extensions.collections
 
-class MutableRingList<T>(initialCapacity: Int) {
-    private val list: MutableList<T> = ArrayList<T>(initialCapacity)
+import java.util.*
+
+class MutableRingList<T>() {
+    private val list: MutableList<T> = LinkedList<T>()
     private var offset = 0
 
-    constructor(initialList: List<T>) : this(initialList.size) {
+    constructor(initialList: List<T>) : this() {
         list.addAll(initialList)
     }
 
-    constructor(size: Int, init: (index: Int) -> T) : this(size) {
+    constructor(size: Int, init: (index: Int) -> T) : this() {
         repeat(size) { index -> list.add(init(index)) }
     }
 

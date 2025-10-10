@@ -5,7 +5,7 @@ import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
-class Day09Test : StringSpec({
+class MarbleManiaTest : StringSpec({
 
     "part 1: the highest score with the given number of players and marbles" {
         forAll(
@@ -17,12 +17,12 @@ class Day09Test : StringSpec({
             row(30, 5807, 37305),
         ) { players, marbles, highScore ->
             val input = listOf("$players players; last marble is worth $marbles points")
-            Day09().part1(input) shouldBe highScore
+            MarbleMania().part1(input) shouldBe highScore
         }
     }
 
     "part 2: the highest score with the given number of players and 100 times the number of marbles" {
         val input = listOf("9 players; last marble is worth 25 points")
-        Day09().part2(input) shouldBe 22563
+        MarbleMania().part2(input) shouldBe 22563
     }
 })
