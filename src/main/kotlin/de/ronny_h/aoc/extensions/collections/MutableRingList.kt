@@ -24,11 +24,33 @@ class MutableRingList<T>(initialCapacity: Int) {
     }
 
     /**
+     * Inserts the given [value] at the current position (i.e. the current start of the ring list).
+     */
+    fun insert(value: T) {
+        list.add(offset, value)
+    }
+
+    /**
+     * Removes the value at the current position (i.e. the current start of the ring list) and returns it.
+     * All elements after the current position are shifted 1 position left.
+     *
+     * @return The element that has been removed.
+     */
+    fun removeFirst(): T = list.removeAt(offset)
+
+    /**
      * Makes [n] elements move from the end to the front, but maintain their order otherwise.
      */
     fun shiftRight(n: Int): MutableRingList<T> {
-        check(n <= list.size) { "the number of items to spin must be smaller than or equal to the list's length" }
-        offset = (offset + list.size - n) % list.size
+        offset = (offset + list.size - n).mod(list.size)
+        return this
+    }
+
+    /**
+     * Makes [n] elements move from the front to the end, but maintain their order otherwise.
+     */
+    fun shiftLeft(n: Int): MutableRingList<T> {
+        offset = (offset + list.size + n).mod(list.size)
         return this
     }
 

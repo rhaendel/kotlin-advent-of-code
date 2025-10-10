@@ -33,6 +33,46 @@ class MutableRingListTest : StringSpec({
         list[0] shouldBe 'y'
     }
 
+    "insert() inserts the value at the currently first position" {
+        val list = mutableRingListOf("abc")
+
+        list.insert('x')
+        list.toJoinedString() shouldBe "xabc"
+
+        list.shiftLeft(2)
+        list.insert('y')
+        list.toJoinedString() shouldBe "ybcxa"
+    }
+
+    "removeFirst removes the first element and shifts the remaining ones 1 position left" {
+        val list = mutableRingListOf("abcde")
+
+        val removed = list.removeFirst()
+
+        removed shouldBe 'a'
+        list.toJoinedString() shouldBe "bcde"
+    }
+
+    "removeFirst on a list shifted left" {
+        val list = mutableRingListOf("abcde")
+
+        list.shiftLeft(2)
+        val removed = list.removeFirst()
+
+        removed shouldBe 'c'
+        list.toJoinedString() shouldBe "deab"
+    }
+
+    "removeFirst on a list shifted right" {
+        val list = mutableRingListOf("abcde")
+
+        list.shiftRight(2)
+        val removed = list.removeFirst()
+
+        removed shouldBe 'd'
+        list.toJoinedString() shouldBe "eabc"
+    }
+
     "shiftRight() moves elements from the end to the front" {
         mutableRingListOf("abcde").shiftRight(1).toJoinedString() shouldBe "eabcd"
 
@@ -43,6 +83,22 @@ class MutableRingListTest : StringSpec({
         mutableRingListOf("abcde").shiftRight(1).shiftRight(2).toJoinedString() shouldBe "cdeab"
 
         mutableRingListOf("abcde").shiftRight(5).toJoinedString() shouldBe "abcde"
+
+        mutableRingListOf("abcde").shiftRight(7).toJoinedString() shouldBe "deabc"
+    }
+
+    "shiftLeft() moves elements from the front to the end" {
+        mutableRingListOf("abcde").shiftLeft(1).toJoinedString() shouldBe "bcdea"
+
+        mutableRingListOf("abcde").shiftLeft(2).toJoinedString() shouldBe "cdeab"
+        mutableRingListOf("abcde").shiftLeft(1).shiftLeft(1).toJoinedString() shouldBe "cdeab"
+
+        mutableRingListOf("abcde").shiftLeft(3).toJoinedString() shouldBe "deabc"
+        mutableRingListOf("abcde").shiftLeft(1).shiftLeft(2).toJoinedString() shouldBe "deabc"
+
+        mutableRingListOf("abcde").shiftLeft(5).toJoinedString() shouldBe "abcde"
+
+        mutableRingListOf("abcde").shiftLeft(7).toJoinedString() shouldBe "cdeab"
     }
 
     "get after shiftRight returns the shifted elements" {
