@@ -134,8 +134,10 @@ class MutableRingListTest : StringSpec({
     }
 
     "reversSubList on an unmodified ringList" {
+        mutableRingListOf(1, 2, 3, 4, 5, 6).reverseSubList(1, 3).toList() shouldBe listOf(1, 4, 3, 2, 5, 6)
         mutableRingListOf(1, 2, 3, 4, 5, 6).reverseSubList(1, 4).toList() shouldBe listOf(1, 5, 4, 3, 2, 6)
         mutableRingListOf(1, 2, 3, 4, 5, 6).reverseSubList(4, 4).toList() shouldBe listOf(6, 5, 3, 4, 2, 1)
+        mutableRingListOf(1, 2, 3, 4, 5, 6).reverseSubList(0, 6).toList() shouldBe listOf(6, 5, 4, 3, 2, 1)
     }
 
     "reversSubList on a shifted ringList" {
