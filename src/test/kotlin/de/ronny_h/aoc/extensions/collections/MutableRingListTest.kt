@@ -1,7 +1,10 @@
 package de.ronny_h.aoc.extensions.collections
 
 import de.ronny_h.aoc.extensions.collections.MutableRingList.Companion.mutableRingListOf
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
 class MutableRingListTest : StringSpec({
@@ -15,7 +18,25 @@ class MutableRingListTest : StringSpec({
     }
 
     "a MutableRingList can be created with an initializer function" {
-        MutableRingList(6) { it }.toJoinedString() shouldBe "012345"
+        forAll(
+            row(0, ""),
+            row(1, "0"),
+            row(6, "012345"),
+        ) { size, string ->
+            val list = MutableRingList(size) { it }
+            list.size shouldBe size
+            list.toJoinedString() shouldBe string
+        }
+    }
+
+    "the size of a MutableRingList" {
+        forAll(
+            row("", 0),
+            row("a", 1),
+            row("abcdef", 6),
+        ) { data, size ->
+            mutableRingListOf(data).size shouldBe size
+        }
     }
 
     "get(index) returns the element at index" {
@@ -71,6 +92,25 @@ class MutableRingListTest : StringSpec({
 
         removed shouldBe 'd'
         list.toJoinedString() shouldBe "eabc"
+    }
+
+    "removeFirst that makes a list of size 1 empty" {
+        val list = mutableRingListOf("a")
+
+        list.size shouldBe 1
+        list.removeFirst() shouldBe 'a'
+        list.size shouldBe 0
+        list.toJoinedString() shouldBe ""
+
+        list.add('b')
+        list.size shouldBe 1
+        list.toJoinedString() shouldBe "b"
+    }
+
+    "removeFirst fails on an empty list" {
+        shouldThrow<IndexOutOfBoundsException> {
+            mutableRingListOf("").removeFirst()
+        }
     }
 
     "shiftRight() moves elements from the end to the front" {
@@ -131,6 +171,13 @@ class MutableRingListTest : StringSpec({
         mutableRingListOf("abcde").swap('d', 'e').toJoinedString() shouldBe "abced"
         mutableRingListOf("abcde").swap('a', 'e').toJoinedString() shouldBe "ebcda"
         mutableRingListOf("abcde").swap('c', 'c').toJoinedString() shouldBe "abcde"
+    }
+
+    "swap with a non-existent value terminates with an error" {
+        val exception = shouldThrow<IllegalArgumentException> {
+            mutableRingListOf("abc").swap('a', 'd')
+        }
+        exception.message shouldBe "d is not in the list"
     }
 
     "reversSubList on an unmodified ringList" {

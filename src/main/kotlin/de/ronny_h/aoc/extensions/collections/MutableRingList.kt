@@ -3,13 +3,15 @@ package de.ronny_h.aoc.extensions.collections
 import kotlin.math.abs
 
 class MutableRingList<T>() {
-    private data class Node<T>(var value: T) {
-        lateinit var prev: Node<T>
-        lateinit var next: Node<T>
+    private interface Node<T> {
+        var value: T
+        var prev: Node<T>
+        var next: Node<T>
     }
 
-    private lateinit var head: Node<T>
-    private var size = 0
+    private var head: Node<T> = EmptyNode()
+    var size = 0
+        private set
 
     constructor(initialList: List<T>) : this() {
         initialList.forEach { add(it) }
@@ -56,8 +58,12 @@ class MutableRingList<T>() {
             throw IndexOutOfBoundsException("Unable to remove an element from an empty list.")
         }
         size--
-        val node = head.next
         val removed = head.value
+        if (size == 0) {
+            head = EmptyNode()
+            return removed
+        }
+        val node = head.next
         node.prev = head.prev
         node.prev.next = node
         head = node
@@ -139,12 +145,12 @@ class MutableRingList<T>() {
     }
 
     private fun addAsLast(value: T): Node<T> {
-        val newNode = Node(value)
+        val newNode = NodeWithValue(value)
         size++
-        if (this::head.isInitialized) {
-            insertBefore(head, newNode)
-        } else {
+        if (head is EmptyNode) {
             initHead(newNode)
+        } else {
+            insertBefore(head, newNode)
         }
         return newNode
     }
@@ -181,5 +187,22 @@ class MutableRingList<T>() {
             }
         }
         return node
+    }
+
+    private data class NodeWithValue<T>(override var value: T) : Node<T> {
+        override lateinit var prev: Node<T>
+        override lateinit var next: Node<T>
+    }
+
+    private class EmptyNode<T>() : Node<T> {
+        override var value: T
+            get() = throw IllegalStateException("An EmptyNode has no value.")
+            set(_) = throw IllegalStateException("An EmptyNode has no value.")
+        override var prev: Node<T>
+            get() = this
+            set(_) = throw IllegalStateException("Setting prev of an EmptyNode is not allowed.")
+        override var next: Node<T>
+            get() = this
+            set(_) = throw IllegalStateException("Setting next of an EmptyNode is not allowed.")
     }
 }
