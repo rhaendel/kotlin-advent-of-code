@@ -8,7 +8,6 @@ import de.ronny_h.aoc.extensions.numbers.digit
 fun main() = ChronalCharge().run("34,13", "280,218,11")
 
 class ChronalCharge : AdventOfCode<String>(2018, 11) {
-    // start:  11:59
     override fun part1(input: List<String>): String =
         PowerCellGrid(input.single().toInt()).find3x3SquareWithLargestTotal()
 
@@ -22,9 +21,8 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
     init {
         forEachIndex { y, x ->
             val rackId = x + 10
-            var powerLevel = rackId * y + serialNumber
-            powerLevel *= rackId
-            val hundredsDigit = powerLevel.digit(3)
+            val powerLevel = rackId * y + serialNumber
+            val hundredsDigit = (powerLevel * rackId).digit(3)
             this[y, x] = hundredsDigit - 5
             cache[Configuration(Coordinates(y, x), 1)] = this[y, x]
         }.last()
@@ -33,7 +31,7 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
     fun findSquareWithLargestTotal(): String {
         val max = (1..300)
             .map {
-                println("calc for square size $it")
+                if (it % 10 == 0) println("calc for square size $it")
                 findSquareWithLargestTotalForSize(it)
             }
             .maxBy { it.total }
@@ -50,14 +48,12 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
     private data class Square(val configuration: Configuration, val total: Int)
 
     private fun findSquareWithLargestTotalForSize(squareSize: Int): Square =
-        forEachCoordinates { coordinates, _ ->
+        forEachCoordinates(width - squareSize) { coordinates ->
             val config = Configuration(coordinates, squareSize)
             val total = if (squareSize == 1) {
                 cache.getValue(config)
             } else {
-                val smallerCached = cache[Configuration(coordinates, squareSize - 1)]
-
-                val total = smallerCached?.let { cached ->
+                val total = cache[Configuration(coordinates, squareSize - 1)]?.let { cached ->
                     val additionalColumnTotal =
                         (0..<squareSize).sumOf { this[coordinates.row + it, coordinates.col + squareSize - 1] }
                     val additionalRowTotal =
@@ -71,9 +67,17 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
         }
             .maxBy { it.total }
 
-    private fun sumOfSquare(coordinates: Coordinates, squareSize: Int): Int = (0..<squareSize).sumOf { i ->
-        (0..<squareSize).sumOf { j ->
-            this[coordinates.row + i, coordinates.col + j]
+    private fun <R> forEachCoordinates(upperIndex: Int, action: (position: Coordinates) -> R): Sequence<R> = sequence {
+        for (row in 0..upperIndex) {
+            for (col in 0..upperIndex) {
+                yield(action(Coordinates(row, col)))
+            }
+        }
+    }
+
+    private fun sumOfSquare(coordinates: Coordinates, squareSize: Int): Int = (0..<squareSize).sumOf { r ->
+        (0..<squareSize).sumOf { c ->
+            this[coordinates.row + r, coordinates.col + c]
         }
     }
 
