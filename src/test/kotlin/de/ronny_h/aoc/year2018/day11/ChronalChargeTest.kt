@@ -26,8 +26,7 @@ class ChronalChargeTest : StringSpec({
         ChronalCharge().part1(listOf("42")) shouldBe "21,61"
     }
 
-    "part 2" {
-        val input = listOf("")
-        ChronalCharge().part2(input) shouldBe ""
+    "part 2: For grid serial number 18, the largest total square is 16x16 with a top-left corner of 90,269" {
+        ChronalCharge().part2(listOf("18")) shouldBe "90,269,16"
     }
 })
