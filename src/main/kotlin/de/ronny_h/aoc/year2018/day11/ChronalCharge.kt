@@ -12,7 +12,7 @@ class ChronalCharge : AdventOfCode<String>(2018, 11) {
         PowerCellGrid(input.single().toInt()).find3x3SquareWithLargestTotal()
 
     override fun part2(input: List<String>): String =
-        PowerCellGrid(input.single().toInt()).findSquareWithLargestTotal()
+        PowerCellGrid(input.single().toInt()).findSquareWithLargestTotal(1..300)
 }
 
 class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
@@ -28,8 +28,8 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
         }.last()
     }
 
-    fun findSquareWithLargestTotal(): String {
-        val max = (1..300)
+    fun findSquareWithLargestTotal(squareSizeRange: IntRange): String {
+        val max = squareSizeRange
             .map {
                 if (it % 10 == 0) println("calc for square size $it")
                 findSquareWithLargestTotalForSize(it)
