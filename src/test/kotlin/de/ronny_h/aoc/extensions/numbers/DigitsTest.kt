@@ -31,6 +31,21 @@ class DigitsTest : StringSpec({
         }
     }
 
+    "The nth digit is returned" {
+        forAll(
+            row(0, 1, 0),
+            row(0, 2, 0),
+            row(54321, 1, 1),
+            row(54321, 2, 2),
+            row(54321, 3, 3),
+            row(54321, 4, 4),
+            row(54321, 5, 5),
+            row(54321, 6, 0),
+        ) { number, n, digit ->
+            number.digit(n) shouldBe digit
+        }
+    }
+
     "toBoolean converts a char digit to Boolean" {
         '0'.toBoolean() shouldBe false
         '1'.toBoolean() shouldBe true

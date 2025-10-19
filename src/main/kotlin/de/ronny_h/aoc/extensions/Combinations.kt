@@ -1,6 +1,6 @@
 package de.ronny_h.aoc.extensions
 
-import java.lang.Math.pow
+import kotlin.math.pow
 
 
 /**
@@ -46,7 +46,7 @@ fun <E> permutationsOf(list: List<E>): Sequence<List<E>> = sequence {
 fun <E> allSublistsOf(list: List<E>): Sequence<List<E>> = sequence {
     // count a binary number with list.size digits from 0...0 to 1...1
     var number = 0
-    while (number < pow(2.0, list.size.toDouble())) {
+    while (number < 2.0.pow(list.size.toDouble())) {
         val sublist = ArrayList<E>(list.size)
         val binary = number.toString(2).reversed()
         // take the list elements at indices of the 1 bits

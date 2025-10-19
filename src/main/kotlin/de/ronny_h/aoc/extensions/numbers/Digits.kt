@@ -18,9 +18,17 @@ fun Long.digitCount(): Int {
 }
 
 /**
- * Returns the ones digit (the rightmost digit) of the given Long number.
+ * @return The ones digit (the rightmost digit) of the given Long number.
  */
 fun Long.onesDigit(): Int = abs(this % 10).toInt()
+
+/**
+ * @return The [n]th digit of the given Int number.
+ */
+fun Int.digit(n: Int): Int {
+    require(n > 0) { "n must be greater than zero, but was: $n" }
+    return abs(this / 10.pow(n - 1) % 10)
+}
 
 /**
  * Converts a digit character to a boolean value.

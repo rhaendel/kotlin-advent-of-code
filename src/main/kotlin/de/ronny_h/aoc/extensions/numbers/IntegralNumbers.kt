@@ -25,3 +25,15 @@ fun Long.toIntChecked(): Int {
     }
     return this.toInt()
 }
+
+/**
+ * @return This Int to the power of [power].
+ */
+fun Int.pow(power: Int): Int {
+    if (power == 0) return 1
+    var result = this
+    repeat(power - 1) {
+        result *= this
+    }
+    return result
+}

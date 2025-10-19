@@ -76,4 +76,18 @@ class IntegralNumbersTest : StringSpec({
             }
         }
     }
+
+    "The power of Ints" {
+        forAll(
+            row(0, 0, 1),
+            row(1, 1, 1),
+            row(1, 2, 1),
+            row(10, 0, 1),
+            row(10, 1, 10),
+            row(10, 2, 100),
+            row(10, 5, 100000),
+        ) { number, power, result ->
+            number.pow(power) shouldBe result
+        }
+    }
 })
