@@ -3,7 +3,7 @@ package de.ronny_h.aoc.year2015.day17
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.allSublistsOf
 
-fun main() = NoSuchThingAsTooMuch().run(654, 0)
+fun main() = NoSuchThingAsTooMuch().run(654, 57)
 
 class NoSuchThingAsTooMuch : AdventOfCode<Int>(2015, 17) {
     override fun part1(input: List<String>): Int =

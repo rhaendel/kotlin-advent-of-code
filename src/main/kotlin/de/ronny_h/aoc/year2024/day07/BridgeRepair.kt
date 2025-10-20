@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2024.day07
 
 import de.ronny_h.aoc.AdventOfCode
-import kotlin.math.pow
+import de.ronny_h.aoc.extensions.numbers.pow
 
 fun main() = BridgeRepair().run(1399219271639, 275791737999003)
 
@@ -55,7 +55,7 @@ data class Equation(val result: Long, val numbers: List<Long>, var solvable: Boo
      * - `operatorIndexSequenceFor(2,3)` yields `[0,0,0,1,0,2,1,0,1,1,1,2,2,0,2,1,2,2]` (counting from 0 `00` to 9 `22`)
      */
     private fun operatorIndexSequenceFor(digits: Int, operatorCount: Int = 2) = sequence {
-        for (count in 0..<(operatorCount.toDouble().pow(digits).toInt())) {
+        for (count in 0..<operatorCount.pow(digits)) {
             val binary = count.toString(operatorCount).fillLeadingZeros(digits)
             for (i in 0..<digits) {
                 yield(binary[i].digitToInt())
