@@ -27,15 +27,15 @@ class SubterraneanSustainabilityTest : StringSpec({
     """.asList()
 
     "the first generation of the sample input" {
-        GameOfPlants(input, 20).nextGeneration() shouldContain "...#...#....#.....#..#..#..#..........."
+        GameOfPlants(input, 20).nextGeneration()
+            .joinToString("") shouldContain "...#...#....#.....#..#..#..#..........."
     }
 
     "part 1: the sum of the numbers of plant-containing pots after the 20th generation" {
         SubterraneanSustainability().part1(input) shouldBe 325
     }
 
-    "part 2" {
-        val input = listOf("")
-        SubterraneanSustainability().part2(input) shouldBe 0
+    "part 2 the sum of the numbers of plant-containing pots after the 50000000000th generation" {
+        SubterraneanSustainability().part2(input) shouldBe 999999999374L
     }
 })

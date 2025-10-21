@@ -3,66 +3,119 @@ package de.ronny_h.aoc.year2018.day12
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.collections.split
 
-fun main() = SubterraneanSustainability().run(3798, 0)
+private val verbose = false
 
-class SubterraneanSustainability : AdventOfCode<Int>(2018, 12) {
-    override fun part1(input: List<String>): Int {
+fun main() = SubterraneanSustainability().run(3798, 3900000002212)
+
+class SubterraneanSustainability : AdventOfCode<Long>(2018, 12) {
+    override fun part1(input: List<String>): Long {
         val pots = GameOfPlants(input, 20)
         pots.simulateGenerations()
         return pots.sumOfPlantContainingPotNumbers()
     }
 
-    override fun part2(input: List<String>): Int {
-        return 0
+    override fun part2(input: List<String>): Long {
+        val generations = 50000000000
+        val pots = GameOfPlants(input, generations)
+        val (generationCount, shifted) = pots.simulateGenerations()
+        return pots.sumOfPlantContainingPotNumbers(generations - generationCount, shifted)
     }
 }
 
-class GameOfPlants(input: List<String>, val generations: Int) {
+class GameOfPlants(input: List<String>, private val generations: Long) {
     private val plant = '#'
     private val noPlant = '.'
-    private val initialState = input.first().substringAfter("initial state: ")
+    private val initialState = input.first().substringAfter("initial state: ").toList()
 
     // a rule has the form of: LLCRR => N
     private val plantProducingPatterns = input.split()[1]
         .map { it.split(" => ") }
         .filter { it[1] == "$plant" }
-        .map { it.first() }
+        .map { it.first().toList() }
         .toSet()
     private val patternLength = 5
     private val patternCenter = 2
 
     // per generation the plants grow max 2 pots wider in each direction
-    private val offset = generations * 2
-    private val padding = "$noPlant".repeat(offset)
+    private val paddingLength = 40
+    private var offset = 0
+    private val padding = List(paddingLength) { noPlant }
 
-    var currentGeneration = padding + initialState + padding
-        private set
+    private var currentGeneration = initialState.toMutableList()
+    private var nextGeneration = currentGeneration.toMutableList()
 
-    fun nextGeneration(): String {
-        val nextGen = currentGeneration.toMutableList()
-
-        for (index in 0..nextGen.lastIndex - patternLength) {
-            nextGen[index + patternCenter] =
-                if (currentGeneration.substring(index, index + patternLength) in plantProducingPatterns) {
+    fun nextGeneration(): List<Char> {
+        var firstPlantIndex = currentGeneration.indexOf(plant)
+        if (firstPlantIndex < patternLength) {
+            firstPlantIndex += addPaddingAtFront()
+        }
+        if (currentGeneration.lastIndexOf(plant) > currentGeneration.lastIndex - patternLength) {
+            addPaddingAtEnd()
+        }
+        for (index in firstPlantIndex - patternLength..nextGeneration.lastIndex - patternLength) {
+            nextGeneration[index + patternCenter] =
+                if (currentGeneration.subList(index, index + patternLength) in plantProducingPatterns) {
                     plant
                 } else {
                     noPlant
                 }
         }
-        currentGeneration = nextGen.joinToString("")
+        swapGenerations()
         return currentGeneration
     }
 
-    fun sumOfPlantContainingPotNumbers(): Int =
-        currentGeneration.foldIndexed(0) { i, acc, pot ->
-            if (pot == plant) acc + i - offset else acc
-        }
+    private fun swapGenerations() {
+        val tmp = currentGeneration
+        currentGeneration = nextGeneration
+        nextGeneration = tmp
+    }
 
-    fun simulateGenerations() {
-        println("generation  0:$currentGeneration")
-        repeat(generations) {
-            nextGeneration()
-            println("generation ${"%2d".format(it + 1)}: $currentGeneration")
+    private fun addPaddingAtFront(): Int {
+        if (verbose) println("adding padding at the beginning")
+        offset += paddingLength
+        currentGeneration = (padding + currentGeneration).toMutableList()
+        nextGeneration = currentGeneration.toMutableList()
+        return paddingLength
+    }
+
+    private fun addPaddingAtEnd() {
+        if (verbose) println("adding padding at the end")
+        currentGeneration = (currentGeneration + padding).toMutableList()
+        nextGeneration = currentGeneration.toMutableList()
+    }
+
+    fun sumOfPlantContainingPotNumbers(remainingGenerations: Long = 0L, shiftPerGeneration: Int = 0): Long {
+        val correction = remainingGenerations * shiftPerGeneration - offset
+        return currentGeneration.foldIndexed(0L) { i, acc, pot ->
+            if (pot == plant) acc + i + correction else acc
         }
     }
+
+    // returns: a pair of
+    //  - the number of the generation at which the configuration of plants does not change anymore and
+    //  - the number of positions the pattern is shifted compared to the previous generation
+    fun simulateGenerations(): Pair<Long, Int> {
+        if (verbose) println("generation  0:${currentGeneration.joinToString("")}")
+        var generationCount = 1L
+        var lastPlantCount = currentGeneration.count { it == plant }
+        while (generationCount <= generations) {
+            nextGeneration()
+            if (generationCount < 202 || generationCount % 10000000 == 0L) {
+                if (verbose) println("generation ${"%2d".format(generationCount)}: ${currentGeneration.joinToString("")}")
+            }
+            val thisPlantCount = currentGeneration.count { it == plant }
+            if (thisPlantCount == lastPlantCount) {
+                if (currentGeneration.allPlantsContainingSubList() == nextGeneration.allPlantsContainingSubList()) {
+                    if (verbose) println("generation $generationCount: plants configuration did not change")
+                    return generationCount to currentGeneration.indexOf(plant) - nextGeneration.indexOf(plant)
+                }
+            }
+            generationCount++
+            lastPlantCount = thisPlantCount
+        }
+        return generationCount to 0
+    }
+
+    private fun MutableList<Char>.allPlantsContainingSubList(): MutableList<Char> =
+        subList(indexOf(plant), lastIndexOf(plant) + 1)
 }
