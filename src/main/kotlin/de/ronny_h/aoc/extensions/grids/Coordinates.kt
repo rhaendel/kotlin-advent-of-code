@@ -3,7 +3,7 @@ package de.ronny_h.aoc.extensions.grids
 import de.ronny_h.aoc.extensions.grids.Direction.*
 import kotlin.math.abs
 
-data class Coordinates(val row: Int, val col: Int) {
+data class Coordinates(val row: Int, val col: Int) : Comparable<Coordinates> {
 
     companion object {
         val ZERO = Coordinates(0, 0)
@@ -34,6 +34,13 @@ data class Coordinates(val row: Int, val col: Int) {
     infix fun taxiDistanceTo(other: Coordinates): Int = abs(other.col - col) + abs(other.row - row)
 
     override fun toString() = "($row,$col)"
+
+    override fun compareTo(other: Coordinates): Int {
+        if (this.row == other.row) {
+            return this.col - other.col
+        }
+        return this.row - other.row
+    }
 }
 
 operator fun Int.times(other: Coordinates) = Coordinates(this * other.row, this * other.col)
@@ -101,4 +108,14 @@ enum class Direction(val row: Int, val col: Int) {
         SOUTH -> "S"
         WEST -> "W"
     }
+
+    fun turn(turn: Turn): Direction = when (turn) {
+        Turn.LEFT -> turnLeft()
+        Turn.RIGHT -> turnRight()
+        Turn.STRAIGHT -> this
+    }
+}
+
+enum class Turn {
+    LEFT, RIGHT, STRAIGHT
 }

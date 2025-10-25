@@ -1,5 +1,7 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.ronny_h.aoc.extensions.grids.Direction.*
+import de.ronny_h.aoc.extensions.grids.Turn.*
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
@@ -46,10 +48,10 @@ class CoordinatesTest : StringSpec({
 
     "Add a direction" {
         forAll(
-            row(Coordinates(5, 5), Direction.NORTH, Coordinates(4, 5)),
-            row(Coordinates(5, 5), Direction.SOUTH, Coordinates(6, 5)),
-            row(Coordinates(5, 5), Direction.EAST, Coordinates(5, 6)),
-            row(Coordinates(5, 5), Direction.WEST, Coordinates(5, 4)),
+            row(Coordinates(5, 5), NORTH, Coordinates(4, 5)),
+            row(Coordinates(5, 5), SOUTH, Coordinates(6, 5)),
+            row(Coordinates(5, 5), EAST, Coordinates(5, 6)),
+            row(Coordinates(5, 5), WEST, Coordinates(5, 4)),
         ) { coordinates, direction, result ->
             coordinates + direction shouldBe result
         }
@@ -79,76 +81,108 @@ class CoordinatesTest : StringSpec({
 
     "Directed neighbours" {
         Coordinates(5, 5).directedNeighbours() shouldContainAll listOf(
-            Direction.NORTH to Coordinates(4, 5),
-            Direction.SOUTH to Coordinates(6, 5),
-            Direction.EAST to Coordinates(5, 6),
-            Direction.WEST to Coordinates(5, 4),
+            NORTH to Coordinates(4, 5),
+            SOUTH to Coordinates(6, 5),
+            EAST to Coordinates(5, 6),
+            WEST to Coordinates(5, 4),
         )
     }
 
+    "Coordinates are comparable and can be sorted" {
+        forAll(
+            row(listOf(Coordinates.ZERO), listOf(Coordinates.ZERO)),
+            row(listOf(Coordinates(1, 0), Coordinates.ZERO), listOf(Coordinates.ZERO, Coordinates(1, 0))),
+            row(
+                listOf(Coordinates(1, 1), Coordinates(1, 0), Coordinates.ZERO),
+                listOf(Coordinates.ZERO, Coordinates(1, 0), Coordinates(1, 1))
+            ),
+        ) { list, sorted ->
+            list.sorted() shouldBe sorted
+        }
+    }
+
     "Direction turnRight() turns right" {
-        Direction.NORTH.turnRight() shouldBe Direction.EAST
-        Direction.EAST.turnRight() shouldBe Direction.SOUTH
-        Direction.SOUTH.turnRight() shouldBe Direction.WEST
-        Direction.WEST.turnRight() shouldBe Direction.NORTH
+        NORTH.turnRight() shouldBe EAST
+        EAST.turnRight() shouldBe SOUTH
+        SOUTH.turnRight() shouldBe WEST
+        WEST.turnRight() shouldBe NORTH
     }
 
     "Direction turnLeft() turns left" {
-        Direction.NORTH.turnLeft() shouldBe Direction.WEST
-        Direction.EAST.turnLeft() shouldBe Direction.NORTH
-        Direction.SOUTH.turnLeft() shouldBe Direction.EAST
-        Direction.WEST.turnLeft() shouldBe Direction.SOUTH
+        NORTH.turnLeft() shouldBe WEST
+        EAST.turnLeft() shouldBe NORTH
+        SOUTH.turnLeft() shouldBe EAST
+        WEST.turnLeft() shouldBe SOUTH
     }
 
     "Direction reverse() does a u-turn" {
-        Direction.NORTH.reverse() shouldBe Direction.SOUTH
-        Direction.EAST.reverse() shouldBe Direction.WEST
-        Direction.SOUTH.reverse() shouldBe Direction.NORTH
-        Direction.WEST.reverse() shouldBe Direction.EAST
+        NORTH.reverse() shouldBe SOUTH
+        EAST.reverse() shouldBe WEST
+        SOUTH.reverse() shouldBe NORTH
+        WEST.reverse() shouldBe EAST
     }
 
     "asChar gives a graphical representation" {
-        Direction.NORTH.asChar() shouldBe '↑'
-        Direction.EAST.asChar() shouldBe '→'
-        Direction.SOUTH.asChar() shouldBe '↓'
-        Direction.WEST.asChar() shouldBe '←'
+        NORTH.asChar() shouldBe '↑'
+        EAST.asChar() shouldBe '→'
+        SOUTH.asChar() shouldBe '↓'
+        WEST.asChar() shouldBe '←'
     }
 
     "A Direction's orientation is checked right" {
-        Direction.NORTH.isVertical() shouldBe true
-        Direction.NORTH.isHorizontal() shouldBe false
-        Direction.SOUTH.isVertical() shouldBe true
-        Direction.SOUTH.isHorizontal() shouldBe false
+        NORTH.isVertical() shouldBe true
+        NORTH.isHorizontal() shouldBe false
+        SOUTH.isVertical() shouldBe true
+        SOUTH.isHorizontal() shouldBe false
 
-        Direction.EAST.isVertical() shouldBe false
-        Direction.EAST.isHorizontal() shouldBe true
-        Direction.WEST.isVertical() shouldBe false
-        Direction.WEST.isHorizontal() shouldBe true
+        EAST.isVertical() shouldBe false
+        EAST.isHorizontal() shouldBe true
+        WEST.isVertical() shouldBe false
+        WEST.isHorizontal() shouldBe true
     }
 
     "Opposite directions" {
-        Direction.NORTH.isOpposite(Direction.SOUTH) shouldBe true
-        Direction.SOUTH.isOpposite(Direction.NORTH) shouldBe true
-        Direction.EAST.isOpposite(Direction.WEST) shouldBe true
-        Direction.WEST.isOpposite(Direction.EAST) shouldBe true
+        NORTH.isOpposite(SOUTH) shouldBe true
+        SOUTH.isOpposite(NORTH) shouldBe true
+        EAST.isOpposite(WEST) shouldBe true
+        WEST.isOpposite(EAST) shouldBe true
 
-        Direction.NORTH.isOpposite(Direction.EAST) shouldBe false
-        Direction.SOUTH.isOpposite(Direction.EAST) shouldBe false
-        Direction.EAST.isOpposite(Direction.SOUTH) shouldBe false
-        Direction.WEST.isOpposite(Direction.SOUTH) shouldBe false
+        NORTH.isOpposite(EAST) shouldBe false
+        SOUTH.isOpposite(EAST) shouldBe false
+        EAST.isOpposite(SOUTH) shouldBe false
+        WEST.isOpposite(SOUTH) shouldBe false
     }
 
     "Difference between directions" {
-        Direction.NORTH - Direction.NORTH shouldBe 0
-        Direction.NORTH - Direction.EAST shouldBe 1
-        Direction.NORTH - Direction.SOUTH shouldBe 2
-        Direction.NORTH - Direction.WEST shouldBe 1
+        NORTH - NORTH shouldBe 0
+        NORTH - EAST shouldBe 1
+        NORTH - SOUTH shouldBe 2
+        NORTH - WEST shouldBe 1
     }
 
     "toString returns the abbreviation letter" {
-        Direction.NORTH.toString() shouldBe "N"
-        Direction.SOUTH.toString() shouldBe "S"
-        Direction.EAST.toString() shouldBe "E"
-        Direction.WEST.toString() shouldBe "W"
+        NORTH.toString() shouldBe "N"
+        SOUTH.toString() shouldBe "S"
+        EAST.toString() shouldBe "E"
+        WEST.toString() shouldBe "W"
+    }
+
+    "turning unsing Turns" {
+        forAll(
+            row(NORTH, STRAIGHT, NORTH),
+            row(NORTH, LEFT, WEST),
+            row(NORTH, RIGHT, EAST),
+            row(SOUTH, STRAIGHT, SOUTH),
+            row(SOUTH, LEFT, EAST),
+            row(SOUTH, RIGHT, WEST),
+            row(EAST, STRAIGHT, EAST),
+            row(EAST, LEFT, NORTH),
+            row(EAST, RIGHT, SOUTH),
+            row(WEST, STRAIGHT, WEST),
+            row(WEST, LEFT, SOUTH),
+            row(WEST, RIGHT, NORTH),
+        ) { direction, turn, newDirection ->
+            direction.turn(turn) shouldBe newDirection
+        }
     }
 })
