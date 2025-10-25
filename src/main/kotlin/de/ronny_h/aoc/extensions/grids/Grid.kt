@@ -52,7 +52,7 @@ abstract class Grid<T>(
      */
     constructor(input: List<String>, nullElement: T, overrideElement: T = nullElement) : this(
         input.size,
-        input[0].length,
+        input.maxOf { it.length },
         nullElement,
         overrideElement,
         emptyList()
