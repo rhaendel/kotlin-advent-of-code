@@ -58,4 +58,27 @@ class ListsTest : StringSpec({
             list.minByUniqueOrNull { it } shouldBe expected
         }
     }
+
+    "allUniqueBy" {
+        forAll(
+            row(emptyList(), true),
+            row(listOf(1, 2, 3), true),
+            row(listOf(1, 1, 3), false),
+        ) { list, unique ->
+            list.allUniqueBy { it } shouldBe unique
+        }
+    }
+
+    "firstDuplicate" {
+        forAll(
+            row(emptyList(), null),
+            row(listOf(1), null),
+            row(listOf(1, 2), null),
+            row(listOf(1, 2, 2), 2),
+            row(listOf(1, 2, 2, 3, 3), 2),
+            row(listOf(1, 3, 3, 2, 2), 3),
+        ) { list, element ->
+            list.firstDuplicate { it } shouldBe element
+        }
+    }
 })

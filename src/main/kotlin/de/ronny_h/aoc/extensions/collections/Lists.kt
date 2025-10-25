@@ -64,3 +64,26 @@ inline fun <T, R : Comparable<R>> Iterable<T>.minByUniqueOrNull(selector: (T) ->
     } while (iterator.hasNext())
     return if (minCount == 1) minElem else null
 }
+
+/**
+ * @return `true` if all elements of this [Iterable] are unique after applying the given [transform] function. Else `false`.
+ */
+inline fun <T, R> Iterable<T>.allUniqueBy(transform: (T) -> R): Boolean {
+    val hashset = hashSetOf<R>()
+    return all { hashset.add(transform(it)) }
+}
+
+/**
+ * @return The first transformed element of this [Iterable] that produces a duplicate (i.e. non-unique value) after
+ * applying the given [transform] function. `null`, if no such element exists.
+ */
+inline fun <T, R> Iterable<T>.firstDuplicate(transform: (T) -> R): R? {
+    val hashset = hashSetOf<R>()
+    for (it in this) {
+        val transformed = transform(it)
+        if (!hashset.add(transformed)) {
+            return transformed
+        }
+    }
+    return null
+}
