@@ -9,7 +9,7 @@ import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
 import de.ronny_h.aoc.extensions.grids.Turn
 import de.ronny_h.aoc.extensions.grids.Turn.*
 
-fun main() = MineCartMadness().run("33,69", "")
+fun main() = MineCartMadness().run("33,69", "135,9")
 
 class MineCartMadness : AdventOfCode<String>(2018, 13) {
     override fun part1(input: List<String>): String {
@@ -18,12 +18,13 @@ class MineCartMadness : AdventOfCode<String>(2018, 13) {
     }
 
     override fun part2(input: List<String>): String {
-        return ""
+        val remaining = Track(input).moveCartsUntilOnlyOneRemains()
+        return "${remaining.col},${remaining.row}"
     }
 }
 
 class Track(input: List<String>) : SimpleCharGrid(input, ' ') {
-    private val carts: List<Cart> = buildList {
+    private val carts: MutableList<Cart> = buildList {
         forEachCoordinates { position, element ->
             when (element) {
                 '<' -> {
@@ -47,22 +48,38 @@ class Track(input: List<String>) : SimpleCharGrid(input, ' ') {
                 }
             }
         }.last()
-    }
+    }.toMutableList()
 
     fun moveCartsUntilFirstCrash(): Coordinates {
         var collision: Coordinates? = null
         while (collision == null) {
-            collision = tick()
+            collision = tickUntilFirstCollision()
         }
         return collision
     }
 
-    private fun tick(): Coordinates? {
+    fun moveCartsUntilOnlyOneRemains(): Coordinates {
+        while (carts.size != 1) {
+            tickRemovingCollidingCarts()
+        }
+        return carts.single().position
+    }
+
+    private fun tickUntilFirstCollision(): Coordinates? {
         for (cart in carts.sortedBy { it.position }) {
             cart.move()
             carts.firstDuplicate(Cart::position)?.also { return it }
         }
         return null
+    }
+
+    private fun tickRemovingCollidingCarts() {
+        for (cart in carts.sortedBy { it.position }) {
+            cart.move()
+            carts.firstDuplicate(Cart::position)?.also { crashed ->
+                carts.removeAll { it.position == crashed }
+            }
+        }
     }
 
     private fun Cart.move() {

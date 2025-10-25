@@ -6,7 +6,8 @@ import io.kotest.matchers.shouldBe
 
 class MineCartMadnessTest : StringSpec({
 
-    val input = """
+    "part 1: the location of the first crash" {
+        val input = """
         /->-\        
         |   |  /----\
         | /-+--+-\  |
@@ -15,12 +16,19 @@ class MineCartMadnessTest : StringSpec({
           \------/   
     """.asList()
 
-    "part 1: the location of the first crash" {
         MineCartMadness().part1(input) shouldBe "7,3"
     }
 
-    "part 2" {
-        val input = listOf("")
-        MineCartMadness().part2(input) shouldBe ""
+    "part 2: the location of the last cart" {
+        val input = """
+            />-<\  
+            |   |  
+            | /<+-\
+            | | | v
+            \>+</ |
+              |   ^
+              \<->/
+          """.asList()
+        MineCartMadness().part2(input) shouldBe "6,4"
     }
 })
