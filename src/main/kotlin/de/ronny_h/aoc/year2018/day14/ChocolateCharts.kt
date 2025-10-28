@@ -1,6 +1,7 @@
 package de.ronny_h.aoc.year2018.day14
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.numbers.digitsReversed
 
 fun main() = ChocolateCharts().run("5992684592", "20181148")
 
@@ -35,8 +36,8 @@ private class ScoreBoard {
         while (true) {
             val scoreOne = scores[indexOne]
             val scoreTwo = scores[indexTwo]
-            "${scoreOne + scoreTwo}".forEach {
-                scores.add(it.digitToInt())
+            (scoreOne + scoreTwo).digitsReversed().forEach {
+                scores.add(it)
                 if (stopCondition(scores)) {
                     return scores.joinToString("")
                 }

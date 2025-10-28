@@ -7,6 +7,23 @@ import kotlin.math.abs
  */
 fun Long.digitCount(): Int {
     if (this == 0L) return 1
+    require(this >= 0)
+
+    var count = 0
+    var currentNumber = this
+    while (currentNumber > 0) {
+        currentNumber /= 10
+        count++
+    }
+    return count
+}
+
+/**
+ * Counts the number of digits of the given Int number.
+ */
+fun Int.digitCount(): Int {
+    if (this == 0) return 1
+    require(this >= 0)
 
     var count = 0
     var currentNumber = this
@@ -48,4 +65,29 @@ fun Char.toBoolean(): Boolean = when (this) {
 fun Boolean.toDigit(): String = when (this) {
     true -> "1"
     false -> "0"
+}
+
+/**
+ * @return this positive [Int]'s digits from the lowest to the highest.
+ */
+fun Int.digits(): Sequence<Int> = sequence {
+    require(this@digits >= 0)
+    var remainder = this@digits
+    if (remainder == 0) yield(0)
+    while (remainder != 0) {
+        yield(remainder % 10)
+        remainder /= 10
+    }
+}
+
+/**
+ * @return this positive [Int]'s digits from the highest to the lowest.
+ */
+fun Int.digitsReversed(): Sequence<Int> = sequence {
+    require(this@digitsReversed >= 0)
+    var factor = 10.pow(this@digitsReversed.digitCount() - 1)
+    while (factor > 0) {
+        yield((this@digitsReversed % (10 * factor) - this@digitsReversed % factor) / factor)
+        factor /= 10
+    }
 }

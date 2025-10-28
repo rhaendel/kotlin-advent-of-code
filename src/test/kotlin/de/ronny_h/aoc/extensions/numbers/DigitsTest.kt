@@ -7,9 +7,17 @@ import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
 class DigitsTest : StringSpec({
-    "Digits are counted" {
+    "Long Digits are counted" {
         forAll(
-            row(0L, 1), row(123L, 3), row(1234567890, 10)
+            row(0L, 1), row(123L, 3), row(1234567890L, 10)
+        ) { number, digits ->
+            number.digitCount() shouldBe digits
+        }
+    }
+
+    "Int Digits are counted" {
+        forAll(
+            row(0, 1), row(123, 3), row(1234567890, 10)
         ) { number, digits ->
             number.digitCount() shouldBe digits
         }
@@ -60,5 +68,27 @@ class DigitsTest : StringSpec({
     "toDigit converts a Boolean to a digit String" {
         true.toDigit() shouldBe "1"
         false.toDigit() shouldBe "0"
+    }
+
+    "the digits of an Int" {
+        forAll(
+            row(0, listOf(0)),
+            row(1, listOf(1)),
+            row(123, listOf(3, 2, 1)),
+            row(1234567, listOf(7, 6, 5, 4, 3, 2, 1)),
+        ) { int, digits ->
+            int.digits().toList() shouldBe digits
+        }
+    }
+
+    "the reversed digits of an Int" {
+        forAll(
+            row(0, listOf(0)),
+            row(1, listOf(1)),
+            row(123, listOf(1, 2, 3)),
+            row(1234567, listOf(1, 2, 3, 4, 5, 6, 7)),
+        ) { int, digits ->
+            int.digitsReversed().toList() shouldBe digits
+        }
     }
 })
