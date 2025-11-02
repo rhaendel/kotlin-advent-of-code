@@ -11,7 +11,7 @@ import io.kotest.matchers.shouldNotBe
 
 class GridTest : StringSpec() {
 
-    private val newLine: String = System.lineSeparator()
+    private val newLine = '\n'
 
     init {
         "a grid can be constructed from List of String" {

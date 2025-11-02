@@ -109,6 +109,22 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
+    "customized obstacles are not part of the shortest path" {
+        val grid = SimpleCharGrid(listOf("0X2", "3#5", "678"), '#')
+        grid.shortestPaths(
+            start = Coordinates(0, 0),
+            goal = Coordinates(0, 2),
+            neighbourPredicate = { grid.getAt(it) !in listOf('X', '#') }
+        ) shouldBe listOf(
+            ShortestPath(
+                listOf(
+                    Coordinates(0, 0), Coordinates(1, 0), Coordinates(2, 0),
+                    Coordinates(2, 1), Coordinates(2, 2), Coordinates(1, 2), Coordinates(0, 2)
+                ), 6
+            ),
+        )
+    }
+
     "cluster regions of same char with a single region" {
         val input = """
             xx

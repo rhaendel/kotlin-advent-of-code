@@ -177,4 +177,14 @@ class ShortestPathTest : StringSpec({
         aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 ShortestPath(listOf(start, a, b, goal), 9)
     }
+
+    "When there is no path at all, aStarAllPaths returns an empty list" {
+        val start = Node(At(0, 0))
+        val goal = Node(At(0, 10))
+
+        val d: (Node, Node) -> Int = { _, _ -> 0 }
+        val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
+
+        aStarAllPaths(start, goal::positionEquals, { emptyList() }, d, h) shouldBe emptyList()
+    }
 })

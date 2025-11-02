@@ -86,5 +86,5 @@ fun <N> aStarAllPaths(
     }
 
     // Open set is empty but goal was never reached
-    error("No path found from $start to goal")
+    return emptyList()
 }

@@ -183,20 +183,24 @@ abstract class Grid<T>(
             } else {
                 writer.print(element)
             }
-            if (position.col == width - 1) writer.println()
+            if (position.col == width - 1) writer.print('\n')
         }.last()
     }
 
     /**
      * Determines all shortest paths possible from [start] to [goal] with the following conditions:
-     * - The Grid's [nullElement] is the obstacle.
+     * - The [neighbourPredicate] defines the cells that are no obstacle - the obstacle defaults to the Grid's [nullElement].
      * - No path outside the Grid is possible.
      * - Only direct neighbours (no diagonal ones) are considered.
      * - The cost of moving to a neighbour equals 1.
      */
-    fun shortestPaths(start: Coordinates, goal: Coordinates): List<ShortestPath<Coordinates>> {
+    fun shortestPaths(
+        start: Coordinates,
+        goal: Coordinates,
+        neighbourPredicate: (Coordinates) -> Boolean = { getAt(it) != nullElement }
+    ): List<ShortestPath<Coordinates>> {
         val neighbours: (Coordinates) -> List<Coordinates> = { position ->
-            position.neighbours().filter { getAt(it) != nullElement }
+            position.neighbours().filter(neighbourPredicate)
         }
 
         val d: (Coordinates, Coordinates) -> Int = { a, b ->
