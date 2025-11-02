@@ -46,6 +46,16 @@ class ListsTest : StringSpec({
         listOf("1", "123", "321").filterMaxBy(String::length) shouldBe listOf("123", "321")
     }
 
+    "filterMinBy" {
+        forAll(
+            row(emptyList(), emptyList()),
+            row(listOf(1, 2, 3), listOf(1)),
+            row(listOf(1, 2, 1), listOf(1, 1)),
+        ) { list, minimums ->
+            list.filterMinBy { it } shouldBe minimums
+        }
+    }
+
     "minByUniqueOrNull" {
         forAll(
             row(listOf(1), 1),

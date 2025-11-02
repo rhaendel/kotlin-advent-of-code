@@ -37,6 +37,15 @@ inline fun <T, R : Comparable<R>> Iterable<T>.filterMaxBy(selector: (T) -> R): I
 }
 
 /**
+ * @return The [Iterable] of elements that minimize the given [selector].
+ */
+inline fun <T, R : Comparable<R>> Iterable<T>.filterMinBy(selector: (T) -> R): Iterable<T> {
+    if (none()) return this
+    val min = minOf(selector)
+    return filter { selector(it) == min }
+}
+
+/**
  * Returns the unique element yielding the smallest value of the given [selector] function or `null` if there are no elements
  * or that element is not unique.
  *
