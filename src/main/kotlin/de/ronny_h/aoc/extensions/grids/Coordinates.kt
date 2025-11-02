@@ -35,6 +35,9 @@ data class Coordinates(val row: Int, val col: Int) : Comparable<Coordinates> {
 
     override fun toString() = "($row,$col)"
 
+    /**
+     * Orders [Coordinates] in reading order: top-to-bottom, then left-to-right.
+     */
     override fun compareTo(other: Coordinates): Int {
         if (this.row == other.row) {
             return this.col - other.col
