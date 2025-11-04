@@ -1,6 +1,7 @@
 [versions]
 kotest = "6.0.4"
 kotlin = "2.2.21"
+kotlin-logging = "7.0.3"
 kotlinx-coroutines = "1.10.2"
 kover = "0.9.3"
 logback = "1.5.20"
@@ -9,6 +10,7 @@ system-lambda = "1.2.1"
 [libraries]
 kotest-assertions-table = { module = "io.kotest:kotest-assertions-table", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 system-lambda = { module = "com.github.stefanbirkner:system-lambda", version.ref = "system-lambda" }

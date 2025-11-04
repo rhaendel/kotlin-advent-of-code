@@ -8,12 +8,12 @@ repositories {
 }
 
 dependencies {
+    implementation(libs.kotlin.logging)
     implementation(libs.kotlinx.coroutines.core)
 
-    // for tapSystemOut
-    testImplementation(libs.system.lambda)
-    testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotest.assertions.table)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.system.lambda)
     testRuntimeOnly(libs.logback.classic)
 }
 
