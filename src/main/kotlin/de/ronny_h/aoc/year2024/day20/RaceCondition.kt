@@ -39,8 +39,8 @@ private class RaceTrack(input: List<String>) : Grid<Char>(input, '#') {
                 .filter { getAt(node) != wall }
         }
 
-        val d: (Coordinates, Coordinates) -> Int = { a, b ->
-            // pre-condition: a and b are neighbours
+        val d: (Coordinates, Coordinates) -> Int = { _, _ ->
+            // pre-condition: the coordinates are neighbours
             1
         }
 

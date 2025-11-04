@@ -55,8 +55,8 @@ private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>
                 .filter { getAt(node) != corrupted }
         }
 
-        val d: (Coordinates, Coordinates) -> Int = { a, b ->
-            // pre-condition: a and b are neighbours
+        val d: (Coordinates, Coordinates) -> Int = { _, _ ->
+            // pre-condition: the coordinates are neighbours
             1
         }
 
