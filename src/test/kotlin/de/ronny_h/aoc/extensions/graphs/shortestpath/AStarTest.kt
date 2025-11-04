@@ -1,4 +1,4 @@
-package de.ronny_h.aoc.extensions.graphs
+package de.ronny_h.aoc.extensions.graphs.shortestpath
 
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import io.kotest.core.spec.style.StringSpec

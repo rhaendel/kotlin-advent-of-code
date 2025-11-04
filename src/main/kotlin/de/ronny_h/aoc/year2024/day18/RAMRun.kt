@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year2024.day18
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.graphs.ShortestPath
-import de.ronny_h.aoc.extensions.graphs.aStar
+import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
+import de.ronny_h.aoc.extensions.graphs.shortestpath.aStar
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Direction
 import de.ronny_h.aoc.extensions.grids.Grid

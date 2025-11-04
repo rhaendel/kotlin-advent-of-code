@@ -1,6 +1,6 @@
-package de.ronny_h.aoc.extensions.graphs
+package de.ronny_h.aoc.extensions.graphs.shortestpath
 
-import java.util.PriorityQueue
+import java.util.*
 import kotlin.Int.Companion.MAX_VALUE
 
 // NOTE: This A* implementation is a 1:1 equivalent in Kotlin to the pseudo code on the Wikipedia page
@@ -16,8 +16,6 @@ private fun <N> reconstructPath(cameFrom: Map<N, N>, last: N): List<N> {
     return totalPath
 }
 
-data class ShortestPath<N>(val path: List<N>, val distance: Int)
-
 private const val LARGE_VALUE = MAX_VALUE / 2
 
 /**
@@ -28,8 +26,10 @@ private const val LARGE_VALUE = MAX_VALUE / 2
  * @param d is the distance/cost function. d(m,n) provides the distance (or cost) to reach node n from node m.
  * @param h is the heuristic function. h(n) estimates the cost to reach goal from node n.
  */
-fun <N> aStar(start: N, isGoal: N.() -> Boolean, neighbors: (N) -> List<N>, d: (N, N) -> Int, h: (N) -> Int,
-              printIt: (visited: Set<N>, current: N, additionalInfo: () -> String) -> Unit = {_, _, _ -> }): ShortestPath<N> {
+fun <N> aStar(
+    start: N, isGoal: N.() -> Boolean, neighbors: (N) -> List<N>, d: (N, N) -> Int, h: (N) -> Int,
+    printIt: (visited: Set<N>, current: N, additionalInfo: () -> String) -> Unit = { _, _, _ -> }
+): ShortestPath<N> {
     // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
     // how cheap a path could be from start to finish if it goes through n.
     val fScore = mutableMapOf<N, Int>().withDefault { _ -> LARGE_VALUE } // map with default value of Infinity

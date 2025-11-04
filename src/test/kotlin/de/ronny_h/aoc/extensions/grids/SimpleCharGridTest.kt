@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.extensions.grids
 
 import de.ronny_h.aoc.extensions.asList
-import de.ronny_h.aoc.extensions.graphs.ShortestPath
+import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe

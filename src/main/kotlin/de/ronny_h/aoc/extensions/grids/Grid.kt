@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.extensions.grids
 
-import de.ronny_h.aoc.extensions.graphs.ShortestPath
-import de.ronny_h.aoc.extensions.graphs.aStarAllPaths
+import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
+import de.ronny_h.aoc.extensions.graphs.shortestpath.aStarAllPaths
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.StandardCharsets

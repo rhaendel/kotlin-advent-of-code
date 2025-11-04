@@ -2,7 +2,7 @@ package de.ronny_h.aoc.year2018.day15
 
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.collections.filterMinBy
-import de.ronny_h.aoc.extensions.graphs.ShortestPath
+import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
 import de.ronny_h.aoc.year2018.day15.CombatArea.PlayerType.Elf
