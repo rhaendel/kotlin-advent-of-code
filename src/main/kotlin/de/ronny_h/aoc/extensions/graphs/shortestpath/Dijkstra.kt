@@ -12,14 +12,19 @@ data class Graph<V>(val vertices: Set<V>, val edges: (V, V) -> Int?)
  */
 data class DijkstraResult<V>(val distances: Map<V, Int>, val predecessors: Map<V, V>)
 
-fun <V> dijkstra(graph: Graph<V>, source: V, target: V): ShortestPath<V> =
-    reconstructPath(dijkstra(graph, source), source, target)
+/**
+ * @return A list containing one shortest path from [source] to each target in [targets] in the [graph].
+ */
+fun <V> dijkstra(graph: Graph<V>, source: V, targets: List<V>): List<ShortestPath<V>> {
+    val dijkstraResult = dijkstra(graph, source)
+    return targets.map { reconstructPath(dijkstraResult, source, it) }
+}
 
 // NOTE: This implementation of Dijkstra's Algorithm is a 1:1 equivalent in Kotlin to the pseudo code on the Wikipedia page
 //       https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm
 
 /**
- * Dijskstra's algorithm finds the shortest path from node [source] to all vertices in the [graph].
+ * Dijkstra's algorithm finds the shortest path from node [source] to all vertices in the [graph].
  */
 fun <V> dijkstra(graph: Graph<V>, source: V): DijkstraResult<V> {
     val dist = mutableMapOf(source to 0).withDefault { Int.MAX_VALUE }

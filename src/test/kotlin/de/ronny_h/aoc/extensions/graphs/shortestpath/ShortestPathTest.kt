@@ -63,7 +63,12 @@ class ShortestPathTest : StringSpec({
             )
         )
         aStar(start, goal::positionEquals, neighbours, d, h) shouldBe ShortestPath(listOf(start, goal), 1)
-        dijkstra(Graph(setOf(start, goal), d), start, goal) shouldBe ShortestPath(listOf(start, goal), 1)
+        dijkstra(Graph(setOf(start, goal), d), start, listOf(goal)) shouldBe listOf(
+            ShortestPath(
+                listOf(start, goal),
+                1
+            )
+        )
     }
 
     "With 2 different nodes between start and goal, the shorter path is taken" {
@@ -95,8 +100,8 @@ class ShortestPathTest : StringSpec({
                 ShortestPath(listOf(start, a, goal), 10)
 
         val edges: (Node, Node) -> Int? = { m, n -> distances[m to n] }
-        dijkstra(Graph(setOf(start, a, b, goal), edges), start, goal) shouldBe
-                ShortestPath(listOf(start, a, goal), 10)
+        dijkstra(Graph(setOf(start, a, b, goal), edges), start, listOf(goal)) shouldBe
+                listOf(ShortestPath(listOf(start, a, goal), 10))
     }
 
     "When direct distance from start to goal is longer, the path through a third node is taken" {
@@ -123,8 +128,8 @@ class ShortestPathTest : StringSpec({
                 listOf(ShortestPath(listOf(start, a, goal), 9))
         aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 ShortestPath(listOf(start, a, goal), 9)
-        dijkstra(Graph(setOf(start, a, goal), d), start, goal) shouldBe
-                ShortestPath(listOf(start, a, goal), 9)
+        dijkstra(Graph(setOf(start, a, goal), d), start, listOf(goal)) shouldBe
+                listOf(ShortestPath(listOf(start, a, goal), 9))
     }
 
     "The shortest path in a not directed graph is found" {
@@ -155,8 +160,8 @@ class ShortestPathTest : StringSpec({
                 listOf(ShortestPath(listOf(start, a, goal), 9))
         aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
                 ShortestPath(listOf(start, a, goal), 9)
-        dijkstra(Graph(setOf(start, a, goal), d), start, goal) shouldBe
-                ShortestPath(listOf(start, a, goal), 9)
+        dijkstra(Graph(setOf(start, a, goal), d), start, listOf(goal)) shouldBe
+                listOf(ShortestPath(listOf(start, a, goal), 9))
     }
 
     "Distances of 0 can be taken and nodes with same coordinates don't cause problems" {
@@ -188,8 +193,8 @@ class ShortestPathTest : StringSpec({
                 ShortestPath(listOf(start, a, b, goal), 9)
 
         val edges: (Node, Node) -> Int? = { m, n -> distances[m to n] }
-        dijkstra(Graph(setOf(start, a, b, goal), edges), start, goal) shouldBe
-                ShortestPath(listOf(start, a, b, goal), 9)
+        dijkstra(Graph(setOf(start, a, b, goal), edges), start, listOf(goal)) shouldBe
+                listOf(ShortestPath(listOf(start, a, b, goal), 9))
     }
 
     "When there is no path at all, aStarAllPaths returns an empty list" {
@@ -202,6 +207,12 @@ class ShortestPathTest : StringSpec({
         aStarAllPaths(start, goal::positionEquals, { emptyList() }, d, h) shouldBe emptyList()
 
         shouldThrow<IllegalStateException> { aStar(start, goal::positionEquals, { emptyList() }, d, h) }
-        shouldThrow<IllegalStateException> { dijkstra(Graph(setOf(start, goal), { _, _ -> null }), start, goal) }
+        shouldThrow<IllegalStateException> {
+            dijkstra(
+                Graph(setOf(start, goal), { _, _ -> null }),
+                start,
+                listOf(goal)
+            )
+        }
     }
 })

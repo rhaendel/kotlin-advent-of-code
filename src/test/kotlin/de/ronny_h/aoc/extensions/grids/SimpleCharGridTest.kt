@@ -9,8 +9,14 @@ import io.kotest.matchers.shouldBe
 class SimpleCharGridTest : StringSpec({
 
     "in a grid with a unique shortest path that path is found" {
-        SimpleCharGrid(listOf("12", "34")).shortestPaths(Coordinates(0, 0), Coordinates(0, 1)) shouldBe
-                listOf(ShortestPath(listOf(Coordinates(0, 0), Coordinates(0, 1)), 1))
+        val grid = SimpleCharGrid(listOf("12", "34"))
+        val shortestPaths = listOf(ShortestPath(listOf(Coordinates(0, 0), Coordinates(0, 1)), 1))
+        grid.shortestPaths(Coordinates(0, 0), Coordinates(0, 1)) shouldBe shortestPaths
+        grid.shortestPaths(
+            start = Coordinates(0, 0),
+            goals = listOf(Coordinates(0, 1)),
+            isObstacle = { it == grid.nullElement },
+        ) shouldBe shortestPaths
     }
 
     "in a small grid with multiple shortest paths all paths are found" {
@@ -96,10 +102,8 @@ class SimpleCharGridTest : StringSpec({
     }
 
     "obstacles are not part of the shortest path" {
-        SimpleCharGrid(listOf("0#2", "3#5", "678"), '#').shortestPaths(
-            Coordinates(0, 0),
-            Coordinates(0, 2)
-        ) shouldBe listOf(
+        val grid = SimpleCharGrid(listOf("0#2", "3#5", "678"), '#')
+        val expected = listOf(
             ShortestPath(
                 listOf(
                     Coordinates(0, 0), Coordinates(1, 0), Coordinates(2, 0),
@@ -107,20 +111,73 @@ class SimpleCharGridTest : StringSpec({
                 ), 6
             ),
         )
+
+        // A Star
+        grid.shortestPaths(
+            Coordinates(0, 0),
+            Coordinates(0, 2),
+        ) shouldBe expected
+
+        // Dijkstra
+        grid.shortestPaths(
+            start = Coordinates(0, 0),
+            goals = listOf(Coordinates(0, 2)),
+        ) shouldBe expected
     }
 
     "customized obstacles are not part of the shortest path" {
         val grid = SimpleCharGrid(listOf("0X2", "3#5", "678"), '#')
-        grid.shortestPaths(
-            start = Coordinates(0, 0),
-            goal = Coordinates(0, 2),
-            neighbourPredicate = { grid.getAt(it) !in listOf('X', '#') }
-        ) shouldBe listOf(
+        val expected = listOf(
             ShortestPath(
                 listOf(
                     Coordinates(0, 0), Coordinates(1, 0), Coordinates(2, 0),
                     Coordinates(2, 1), Coordinates(2, 2), Coordinates(1, 2), Coordinates(0, 2)
                 ), 6
+            ),
+        )
+
+        // A Star
+        grid.shortestPaths(
+            start = Coordinates(0, 0),
+            goal = Coordinates(0, 2),
+            isVisitable = { grid.getAt(it) !in listOf('X', '#') },
+        ) shouldBe expected
+
+        // Dijkstra
+        grid.shortestPaths(
+            start = Coordinates(0, 0),
+            goals = listOf(Coordinates(0, 2)),
+            isObstacle = { it in listOf('X', '#') },
+        ) shouldBe expected
+    }
+
+    "the Dijkstra implementation finds the shortest path to all goals" {
+        val input = """
+            1##2
+            3456
+            7##8
+        """.asList()
+        SimpleCharGrid(input)
+            .shortestPaths(
+                start = Coordinates(0, 0),
+                goals = listOf(Coordinates(0, 3), Coordinates(2, 0), Coordinates(2, 3))
+            ) shouldBe listOf(
+            ShortestPath(
+                listOf(
+                    Coordinates(0, 0), Coordinates(1, 0), Coordinates(1, 1),
+                    Coordinates(1, 2), Coordinates(1, 3), Coordinates(0, 3),
+                ), 5
+            ),
+            ShortestPath(
+                listOf(
+                    Coordinates(0, 0), Coordinates(1, 0), Coordinates(2, 0),
+                ), 2
+            ),
+            ShortestPath(
+                listOf(
+                    Coordinates(0, 0), Coordinates(1, 0), Coordinates(1, 1),
+                    Coordinates(1, 2), Coordinates(1, 3), Coordinates(2, 3),
+                ), 5
             ),
         )
     }

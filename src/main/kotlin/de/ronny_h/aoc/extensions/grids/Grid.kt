@@ -1,7 +1,9 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.ronny_h.aoc.extensions.graphs.shortestpath.Graph
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
 import de.ronny_h.aoc.extensions.graphs.shortestpath.aStarAllPaths
+import de.ronny_h.aoc.extensions.graphs.shortestpath.dijkstra
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.StandardCharsets
@@ -17,7 +19,7 @@ import java.nio.charset.StandardCharsets
 abstract class Grid<T>(
     val height: Int,
     val width: Int,
-    protected val nullElement: T,
+    val nullElement: T,
     private val fallbackElement: T = nullElement,
 ) {
 
@@ -189,7 +191,7 @@ abstract class Grid<T>(
 
     /**
      * Determines all shortest paths possible from [start] to [goal] with the following conditions:
-     * - The [neighbourPredicate] defines the cells that are no obstacle - the obstacle defaults to the Grid's [nullElement].
+     * - The [isVisitable] defines the cells that are no obstacle - the obstacle defaults to the Grid's [nullElement].
      * - No path outside the Grid is possible.
      * - Only direct neighbours (no diagonal ones) are considered.
      * - The cost of moving to a neighbour equals 1.
@@ -197,10 +199,10 @@ abstract class Grid<T>(
     fun shortestPaths(
         start: Coordinates,
         goal: Coordinates,
-        neighbourPredicate: (Coordinates) -> Boolean = { getAt(it) != nullElement }
+        isVisitable: (Coordinates) -> Boolean = { getAt(it) != nullElement }
     ): List<ShortestPath<Coordinates>> {
         val neighbours: (Coordinates) -> List<Coordinates> = { position ->
-            position.neighbours().filter(neighbourPredicate)
+            position.neighbours().filter(isVisitable)
         }
 
         val d: (Coordinates, Coordinates) -> Int = { a, b ->
@@ -211,6 +213,22 @@ abstract class Grid<T>(
         val h: (Coordinates) -> Int = { it taxiDistanceTo goal }
 
         return aStarAllPaths(start, { this == goal }, neighbours, d, h)
+    }
+
+    fun shortestPaths(
+        start: Coordinates,
+        goals: List<Coordinates>,
+        isObstacle: (T) -> Boolean = { it == nullElement },
+    ): List<ShortestPath<Coordinates>> {
+        val graph = Graph(
+            vertices = forEachCoordinates { position, element ->
+                if (isObstacle(element)) null else position
+            }.filterNotNull().toSet(),
+            edges = { from, to ->
+                if (to in from.neighbours().filter { !isObstacle(getAt(it)) }) 1 else null
+            }
+        )
+        return dijkstra(graph, start, goals)
     }
 
     /**
