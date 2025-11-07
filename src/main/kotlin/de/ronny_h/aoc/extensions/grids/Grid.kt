@@ -3,7 +3,7 @@ package de.ronny_h.aoc.extensions.grids
 import de.ronny_h.aoc.extensions.graphs.shortestpath.Graph
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
 import de.ronny_h.aoc.extensions.graphs.shortestpath.aStarAllPaths
-import de.ronny_h.aoc.extensions.graphs.shortestpath.dijkstra
+import de.ronny_h.aoc.extensions.graphs.shortestpath.dijkstraShortestPaths
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
 import java.nio.charset.StandardCharsets
@@ -218,6 +218,7 @@ abstract class Grid<T>(
     fun shortestPaths(
         start: Coordinates,
         goals: List<Coordinates>,
+        stopAfterMinimalPathsAreFound: Boolean = false,
         isObstacle: (T) -> Boolean = { it == nullElement },
     ): List<ShortestPath<Coordinates>> {
         val graph = Graph(
@@ -228,7 +229,7 @@ abstract class Grid<T>(
                 if (to in from.neighbours().filter { !isObstacle(getAt(it)) }) 1 else null
             }
         )
-        return dijkstra(graph, start, goals)
+        return dijkstraShortestPaths(graph, start, goals, stopAfterMinimalPathsAreFound)
     }
 
     /**

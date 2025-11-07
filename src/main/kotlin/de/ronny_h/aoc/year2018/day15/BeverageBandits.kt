@@ -112,6 +112,7 @@ class CombatArea(input: List<String>, val elfAttackPower: Int = 3) : SimpleCharG
         val shortestPaths = shortestPaths(
             start = position,
             goals = targetsInRange,
+            stopAfterMinimalPathsAreFound = true,
             isObstacle = { it != cavern })
 
         if (shortestPaths.isEmpty()) {

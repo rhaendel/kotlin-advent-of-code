@@ -179,6 +179,38 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
+    "the Dijkstra implementation stopAfterMinimalPathsAreFound if that option is set" {
+        val input = """
+            SoG
+            o.o
+            G.G
+            ..G
+        """.asList()
+        SimpleCharGrid(input)
+            .shortestPaths(
+                start = C(0, 0),
+                goals = listOf(C(0, 2), C(2, 0), C(2, 2), C(3, 2)),
+                stopAfterMinimalPathsAreFound = true,
+            ) shouldBe listOf(
+            ShortestPath(
+                listOf(
+                    C(0, 0), C(0, 1), C(0, 2),
+                ), 2
+            ),
+            ShortestPath(
+                listOf(
+                    C(0, 0), C(1, 0), C(2, 0),
+                ), 2
+            ),
+            // to know when all minimal paths are found, the algorithm has to continue to the next larger one
+            ShortestPath(
+                listOf(
+                    C(0, 0), C(0, 1), C(0, 2), C(1, 2), C(2, 2),
+                ), 4
+            ),
+        )
+    }
+
     "the Dijkstra implementation ignores unreachable goals" {
         val input = """
             1#2

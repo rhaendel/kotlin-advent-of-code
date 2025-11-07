@@ -15,8 +15,13 @@ data class DijkstraResult<V>(val distances: Map<V, Int>, val predecessors: Map<V
 /**
  * @return A list containing one shortest path from [source] to each target in [targets] in the [graph].
  */
-fun <V> dijkstra(graph: Graph<V>, source: V, targets: List<V>): List<ShortestPath<V>> {
-    val dijkstraResult = dijkstra(graph, source)
+fun <V> dijkstraShortestPaths(
+    graph: Graph<V>,
+    source: V,
+    targets: List<V>,
+    stopAfterMinimalPathsAreFound: Boolean = false,
+): List<ShortestPath<V>> {
+    val dijkstraResult = dijkstra(graph, source, targets, stopAfterMinimalPathsAreFound)
     return targets.mapNotNull { reconstructPath(dijkstraResult, source, it) }
 }
 
@@ -28,14 +33,30 @@ fun <V> dijkstra(graph: Graph<V>, source: V, targets: List<V>): List<ShortestPat
  *
  * While traversing, when more than one vertex has the same minimal distance to the current one, the vertex that comes
  * first in the [graph]'s `vertices` list is chosen.
+ *
+ * @param stopAfterMinimalPathsAreFound If `true`, the algorithm stops as soon as all minimal paths (i.e. paths of the
+ * same, minimal length to arbitrary vertices in the [targets] list) have been found.
  */
-fun <V> dijkstra(graph: Graph<V>, source: V): DijkstraResult<V> {
+fun <V> dijkstra(
+    graph: Graph<V>,
+    source: V,
+    targets: List<V>,
+    stopAfterMinimalPathsAreFound: Boolean = false,
+): DijkstraResult<V> {
     val dist = mutableMapOf(source to 0).withDefault { LARGE_VALUE }
     val prev = mutableMapOf<V, V>()
     val q = graph.vertices.toMutableList()
 
+    var minimalDistance = LARGE_VALUE
     while (q.isNotEmpty()) {
         val u = q.minBy { dist.getValue(it) }
+        if (stopAfterMinimalPathsAreFound && u in targets) {
+            if (minimalDistance == LARGE_VALUE) {
+                minimalDistance = dist.getValue(u)
+            } else if (minimalDistance < dist.getValue(u)) {
+                break
+            }
+        }
         q.remove(u)
 
         for (v in q) {
