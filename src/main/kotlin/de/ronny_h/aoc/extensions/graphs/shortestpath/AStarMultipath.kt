@@ -1,7 +1,6 @@
 package de.ronny_h.aoc.extensions.graphs.shortestpath
 
 import java.util.*
-import kotlin.Int.Companion.MAX_VALUE
 
 // NOTE: This modified A* implementation is based on the pseudocode on the Wikipedia page
 //       https://en.wikipedia.org/wiki/A*_search_algorithm
@@ -15,8 +14,6 @@ private fun <N> reconstructPaths(cameFrom: Map<N, Collection<N>>, currentNode: N
         .flatMap { pred -> reconstructPaths(cameFrom, pred) }
         .map { path -> path + currentNode }
 }
-
-private const val LARGE_VALUE = MAX_VALUE / 2
 
 /**
  * A modified A* algorithm that finds all shortest paths from `start` to `goal`.

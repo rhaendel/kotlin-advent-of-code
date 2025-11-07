@@ -17,7 +17,7 @@ data class DijkstraResult<V>(val distances: Map<V, Int>, val predecessors: Map<V
  */
 fun <V> dijkstra(graph: Graph<V>, source: V, targets: List<V>): List<ShortestPath<V>> {
     val dijkstraResult = dijkstra(graph, source)
-    return targets.map { reconstructPath(dijkstraResult, source, it) }
+    return targets.mapNotNull { reconstructPath(dijkstraResult, source, it) }
 }
 
 // NOTE: This implementation of Dijkstra's Algorithm is a 1:1 equivalent in Kotlin to the pseudo code on the Wikipedia page
@@ -27,7 +27,7 @@ fun <V> dijkstra(graph: Graph<V>, source: V, targets: List<V>): List<ShortestPat
  * Dijkstra's algorithm finds the shortest path from node [source] to all vertices in the [graph].
  */
 fun <V> dijkstra(graph: Graph<V>, source: V): DijkstraResult<V> {
-    val dist = mutableMapOf(source to 0).withDefault { Int.MAX_VALUE }
+    val dist = mutableMapOf(source to 0).withDefault { LARGE_VALUE }
     val prev = mutableMapOf<V, V>()
     val q = graph.vertices.toMutableSet()
 
@@ -39,6 +39,7 @@ fun <V> dijkstra(graph: Graph<V>, source: V): DijkstraResult<V> {
         for (v in q) {
             val edgeWeight = graph.edges(u, v) ?: continue
             val alt = dist.getValue(u) + edgeWeight
+            // TODO use <= and take the prev with highest precedence
             if (alt < dist.getValue(v)) {
                 dist[v] = alt
                 prev[v] = u
@@ -49,9 +50,9 @@ fun <V> dijkstra(graph: Graph<V>, source: V): DijkstraResult<V> {
     return DijkstraResult(dist.toMap(), prev.toMap())
 }
 
-private fun <V> reconstructPath(dijkstraResult: DijkstraResult<V>, source: V, target: V): ShortestPath<V> {
+private fun <V> reconstructPath(dijkstraResult: DijkstraResult<V>, source: V, target: V): ShortestPath<V>? {
     if (dijkstraResult.predecessors[target] == null && target != source) {
-        throw IllegalStateException("Target vertex $target is not reachable from $source")
+        return null
     }
 
     val s = mutableListOf<V>()

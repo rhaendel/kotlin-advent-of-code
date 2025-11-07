@@ -197,7 +197,7 @@ class ShortestPathTest : StringSpec({
                 listOf(ShortestPath(listOf(start, a, b, goal), 9))
     }
 
-    "When there is no path at all, aStarAllPaths returns an empty list" {
+    "When there is no path at all, aStarAllPaths and dijkstra return an empty list" {
         val start = Node(At(0, 0))
         val goal = Node(At(0, 10))
 
@@ -205,14 +205,8 @@ class ShortestPathTest : StringSpec({
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
         aStarAllPaths(start, goal::positionEquals, { emptyList() }, d, h) shouldBe emptyList()
+        dijkstra(Graph(setOf(start, goal), { _, _ -> null }), start, listOf(goal)) shouldBe emptyList()
 
         shouldThrow<IllegalStateException> { aStar(start, goal::positionEquals, { emptyList() }, d, h) }
-        shouldThrow<IllegalStateException> {
-            dijkstra(
-                Graph(setOf(start, goal), { _, _ -> null }),
-                start,
-                listOf(goal)
-            )
-        }
     }
 })

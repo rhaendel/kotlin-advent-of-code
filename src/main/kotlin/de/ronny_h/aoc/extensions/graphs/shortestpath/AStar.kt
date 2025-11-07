@@ -16,7 +16,11 @@ private fun <N> reconstructPath(cameFrom: Map<N, N>, last: N): List<N> {
     return totalPath
 }
 
-private const val LARGE_VALUE = MAX_VALUE / 2
+/**
+ * The maximum value for edge weights. In pseudocode of path-searching algorithms
+ * this is typically denoted as infinity (= a value larger than all others).
+ */
+const val LARGE_VALUE = MAX_VALUE / 2
 
 /**
  * A* finds a path from `start` to `goal`.

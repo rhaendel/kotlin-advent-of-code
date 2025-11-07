@@ -222,7 +222,7 @@ abstract class Grid<T>(
     ): List<ShortestPath<Coordinates>> {
         val graph = Graph(
             vertices = forEachCoordinates { position, element ->
-                if (isObstacle(element)) null else position
+                if (element == nullElement) null else position
             }.filterNotNull().toSet(),
             edges = { from, to ->
                 if (to in from.neighbours().filter { !isObstacle(getAt(it)) }) 1 else null

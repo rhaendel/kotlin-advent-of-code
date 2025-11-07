@@ -182,6 +182,25 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
+    "the Dijkstra implementation ignores unreachable goals" {
+        val input = """
+            1#2
+            3#4
+            5#6
+        """.asList()
+        SimpleCharGrid(input)
+            .shortestPaths(
+                start = Coordinates(0, 0),
+                goals = listOf(Coordinates(0, 2), Coordinates(2, 0), Coordinates(2, 2))
+            ) shouldBe listOf(
+            ShortestPath(
+                listOf(
+                    Coordinates(0, 0), Coordinates(1, 0), Coordinates(2, 0),
+                ), 2
+            ),
+        )
+    }
+
     "cluster regions of same char with a single region" {
         val input = """
             xx
