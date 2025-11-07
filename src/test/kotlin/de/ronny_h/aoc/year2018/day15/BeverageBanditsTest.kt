@@ -2,6 +2,8 @@ package de.ronny_h.aoc.year2018.day15
 
 import de.ronny_h.aoc.extensions.asList
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
 class BeverageBanditsTest : StringSpec({
@@ -122,8 +124,64 @@ class BeverageBanditsTest : StringSpec({
         combatArea.takeOneRound() shouldBe false
     }
 
-    "part 1: the outcome of the battle of the small example" {
-        BeverageBandits().part1(input) shouldBe 27730
+    "part 1: the outcome of the battle of some given examples" {
+        val input2 = """
+            #######
+            #G..#E#
+            #E#E.E#
+            #G.##.#
+            #...#E#
+            #...E.#
+            #######
+        """.asList()
+        val input3 = """
+            #######
+            #E..EG#
+            #.#G.E#
+            #E.##E#
+            #G..#.#
+            #..E#.#
+            #######
+        """.asList()
+        val input4 = """
+            #######
+            #E.G#.#
+            #.#G..#
+            #G.#.G#
+            #G..#.#
+            #...E.#
+            #######
+        """.asList()
+        val input5 = """
+            #######
+            #.E...#
+            #.#..G#
+            #.###.#
+            #E#G#G#
+            #...#G#
+            #######
+        """.asList()
+        val input6 = """
+            #########
+            #G......#
+            #.E.#...#
+            #..##..G#
+            #...##..#
+            #...#...#
+            #.G...G.#
+            #.....G.#
+            #########
+        """.asList()
+        forAll(
+            row(input, 27730),
+            row(input2, 36334),
+            row(input3, 39514),
+            row(input4, 27755),
+            row(input5, 28944),
+            row(input6, 18740),
+        ) { input, outcome ->
+            BeverageBandits().part1(input) shouldBe outcome
+        }
     }
 
     "part 2" {

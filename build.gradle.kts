@@ -10,6 +10,7 @@ repositories {
 dependencies {
     implementation(libs.kotlin.logging)
     implementation(libs.kotlinx.coroutines.core)
+    runtimeOnly(libs.logback.classic)
 
     testImplementation(libs.kotest.assertions.table)
     testImplementation(libs.kotest.runner.junit5)

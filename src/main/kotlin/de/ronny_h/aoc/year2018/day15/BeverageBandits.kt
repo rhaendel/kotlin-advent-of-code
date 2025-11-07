@@ -85,16 +85,16 @@ class CombatArea(input: List<String>) : SimpleCharGrid(input) {
             return
         }
 
-        val targetsWithPaths = targets.flatMap { target ->
-            target.position.neighbours()
-                .filter { getAt(it) == cavern }
-                .flatMap { inRange ->
-                    shortestPaths(position, inRange) { neighbour ->
-                        getAt(neighbour) == cavern
-                    }
-                        .map { Target(inRange, it) }
-                }
+        val targetsInRange = targets.flatMap { target ->
+            target.position.neighbours().filter { getAt(it) == cavern }
         }
+        // TODO make path precedence in reading order configurable
+        val targetsWithPaths = shortestPaths(
+            start = position,
+            goals = targetsInRange,
+            isObstacle = { it != cavern })
+            .map { Target(it.path.last(), it) }
+
         if (targetsWithPaths.isEmpty()) {
             // no path to any target found
             return
