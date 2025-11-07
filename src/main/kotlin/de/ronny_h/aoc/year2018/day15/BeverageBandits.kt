@@ -10,7 +10,7 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-fun main() = BeverageBandits().run(218272, 0)
+fun main() = BeverageBandits().run(218272, 40861)
 
 class BeverageBandits : AdventOfCode<Int>(2018, 15) {
     override fun part1(input: List<String>): Int {
@@ -22,13 +22,26 @@ class BeverageBandits : AdventOfCode<Int>(2018, 15) {
     }
 
     override fun part2(input: List<String>): Int {
-        return 0
+        var combatArea = CombatArea(input, elfAttackPower = 4)
+        while (true) {
+            while (combatArea.takeOneRound() && !combatArea.anElfDied) {
+                // the action takes place in the condition
+            }
+            if (combatArea.anElfDied) {
+                combatArea = CombatArea(input, elfAttackPower = combatArea.elfAttackPower + 1)
+            } else {
+                return combatArea.outcome()
+            }
+        }
     }
 }
 
-class CombatArea(input: List<String>) : SimpleCharGrid(input) {
+class CombatArea(input: List<String>, val elfAttackPower: Int = 3) : SimpleCharGrid(input) {
     private val cavern = '.'
-    private val attackPower = 3
+    private val goblinAttackPower = 3
+
+    var anElfDied = false
+        private set
 
     private var fullRounds = 0
     private val units = forEachCoordinates { position, square ->
@@ -38,6 +51,11 @@ class CombatArea(input: List<String>) : SimpleCharGrid(input) {
             else -> null
         }
     }.filterNotNull().toMutableList()
+
+
+    init {
+        logger.info { "starting new combat with attack powers: elfs: $elfAttackPower, goblins: $goblinAttackPower" }
+    }
 
     /**
      * @return if combat continues
@@ -119,12 +137,17 @@ class CombatArea(input: List<String>) : SimpleCharGrid(input) {
             .minByOrNull { it.position }
         if (opponent == null) return
 
-        opponent.hitPoints -= attackPower
+        opponent.hitPoints -= attackPower()
         logger.debug { " $this hit $opponent" }
 
         if (opponent.hitPoints <= 0) {
             opponent.die()
         }
+    }
+
+    private fun Player.attackPower() = when (type) {
+        Elf -> elfAttackPower
+        Goblin -> goblinAttackPower
     }
 
     private fun Player.moveTo(newPosition: Coordinates) {
@@ -138,6 +161,9 @@ class CombatArea(input: List<String>) : SimpleCharGrid(input) {
         logger.debug { " $this died" }
         setAt(position, cavern)
         units.remove(this)
+        if (type == Elf) {
+            anElfDied = true
+        }
     }
 
     private fun logStats() {

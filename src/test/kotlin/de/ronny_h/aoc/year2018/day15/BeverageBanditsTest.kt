@@ -124,17 +124,7 @@ class BeverageBanditsTest : StringSpec({
         combatArea.takeOneRound() shouldBe false
     }
 
-    "part 1: the outcome of the battle of some given examples" {
-        val input2 = """
-            #######
-            #G..#E#
-            #E#E.E#
-            #G.##.#
-            #...#E#
-            #...E.#
-            #######
-        """.asList()
-        val input3 = """
+    val input3 = """
             #######
             #E..EG#
             #.#G.E#
@@ -143,7 +133,7 @@ class BeverageBanditsTest : StringSpec({
             #..E#.#
             #######
         """.asList()
-        val input4 = """
+    val input4 = """
             #######
             #E.G#.#
             #.#G..#
@@ -152,7 +142,7 @@ class BeverageBanditsTest : StringSpec({
             #...E.#
             #######
         """.asList()
-        val input5 = """
+    val input5 = """
             #######
             #.E...#
             #.#..G#
@@ -161,7 +151,7 @@ class BeverageBanditsTest : StringSpec({
             #...#G#
             #######
         """.asList()
-        val input6 = """
+    val input6 = """
             #########
             #G......#
             #.E.#...#
@@ -172,10 +162,22 @@ class BeverageBanditsTest : StringSpec({
             #.....G.#
             #########
         """.asList()
+
+    "part 1: the outcome of the battle of some given examples" {
+        val input2 = """
+            #######
+            #G..#E#
+            #E#E.E#
+            #G.##.#
+            #...#E#
+            #...E.#
+            #######
+        """.asList()
+
         forAll(
             row(input, 27730),
-            row(input2, 36334), // round right, but 3 hit points too high
-            row(input3, 39514), // one round too low, but hit points right
+            row(input2, 36334),
+            row(input3, 39514),
             row(input4, 27755),
             row(input5, 28944),
             row(input6, 18740),
@@ -184,8 +186,15 @@ class BeverageBanditsTest : StringSpec({
         }
     }
 
-    "part 2" {
-        val input = listOf("")
-        BeverageBandits().part2(input) shouldBe 0
+    "part 2: the outcome of the battle with the smallest elf attack power so that no elf dies" {
+        forAll(
+//            row(input, 4988),
+//            row(input3, 31284),
+//            row(input4, 3478),
+//            row(input5, 6474),
+            row(input6, 1140),
+        ) { input, outcome ->
+            BeverageBandits().part2(input) shouldBe outcome
+        }
     }
 })
