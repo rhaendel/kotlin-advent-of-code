@@ -223,7 +223,7 @@ abstract class Grid<T>(
         val graph = Graph(
             vertices = forEachCoordinates { position, element ->
                 if (element == nullElement) null else position
-            }.filterNotNull().toSet(),
+            }.filterNotNull().toList(),
             edges = { from, to ->
                 if (to in from.neighbours().filter { !isObstacle(getAt(it)) }) 1 else null
             }

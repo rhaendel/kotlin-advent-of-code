@@ -4,7 +4,7 @@ package de.ronny_h.aoc.extensions.graphs.shortestpath
  * A [Graph] consists of a set of [vertices] and a function [edges] that returns the weight of the edge
  * between two vertices, `null` if there is no edge between them.
  */
-data class Graph<V>(val vertices: Set<V>, val edges: (V, V) -> Int?)
+data class Graph<V>(val vertices: List<V>, val edges: (V, V) -> Int?)
 
 /**
  * The [DijkstraResult] consists of [distances], storing the minimal distance from the source to each vertex,
@@ -25,21 +25,22 @@ fun <V> dijkstra(graph: Graph<V>, source: V, targets: List<V>): List<ShortestPat
 
 /**
  * Dijkstra's algorithm finds the shortest path from node [source] to all vertices in the [graph].
+ *
+ * While traversing, when more than one vertex has the same minimal distance to the current one, the vertex that comes
+ * first in the [graph]'s `vertices` list is chosen.
  */
 fun <V> dijkstra(graph: Graph<V>, source: V): DijkstraResult<V> {
     val dist = mutableMapOf(source to 0).withDefault { LARGE_VALUE }
     val prev = mutableMapOf<V, V>()
-    val q = graph.vertices.toMutableSet()
+    val q = graph.vertices.toMutableList()
 
     while (q.isNotEmpty()) {
-        // TODO if minimum is not unique, choose by a configurable criteria (with 1st as default)
         val u = q.minBy { dist.getValue(it) }
         q.remove(u)
 
         for (v in q) {
             val edgeWeight = graph.edges(u, v) ?: continue
             val alt = dist.getValue(u) + edgeWeight
-            // TODO use <= and take the prev with highest precedence
             if (alt < dist.getValue(v)) {
                 dist[v] = alt
                 prev[v] = u

@@ -2,7 +2,6 @@ package de.ronny_h.aoc.year2018.day15
 
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.collections.filterMinBy
-import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
 import de.ronny_h.aoc.year2018.day15.CombatArea.PlayerType.Elf
@@ -11,10 +10,10 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 
 private val logger = KotlinLogging.logger {}
 
-fun main() = BeverageBandits().run(0, 0)
+fun main() = BeverageBandits().run(218272, 0)
 
-class BeverageBandits : AdventOfCode<Long>(2018, 15) {
-    override fun part1(input: List<String>): Long {
+class BeverageBandits : AdventOfCode<Int>(2018, 15) {
+    override fun part1(input: List<String>): Int {
         val combatArea = CombatArea(input)
         while (combatArea.takeOneRound()) {
             // the action takes place in the condition
@@ -22,43 +21,31 @@ class BeverageBandits : AdventOfCode<Long>(2018, 15) {
         return combatArea.outcome()
     }
 
-    override fun part2(input: List<String>): Long {
+    override fun part2(input: List<String>): Int {
         return 0
     }
 }
 
 class CombatArea(input: List<String>) : SimpleCharGrid(input) {
     private val cavern = '.'
+    private val attackPower = 3
 
-    private data class Player(
-        val type: PlayerType,
-        var position: Coordinates,
-        val attackPower: Int = 3,
-        var hitPoints: Int = 200
-    )
-
-    private enum class PlayerType(val char: Char) {
-        Elf('E'), Goblin('G')
-    }
-
-    private val units = buildList {
-        forEachCoordinates { position, square ->
-            when (square) {
-                Elf.char -> add(Player(Elf, position))
-                Goblin.char -> add(Player(Goblin, position))
-            }
-        }.last()
-    }.toMutableList()
-
-    private var fullRounds = 0L
+    private var fullRounds = 0
+    private val units = forEachCoordinates { position, square ->
+        when (square) {
+            Elf.char -> Player(Elf, position)
+            Goblin.char -> Player(Goblin, position)
+            else -> null
+        }
+    }.filterNotNull().toMutableList()
 
     /**
      * @return if combat continues
      */
     fun takeOneRound(): Boolean {
-        if (fullRounds % 10 == 0L) logStats()
+        if (fullRounds % 50 == 0) logStats()
         units.sortedBy { it.position }.forEach { unit ->
-            logger.debug { "unit $unit" }
+            logger.trace { "unit $unit" }
             val enemyType = if (unit.type == Elf) Goblin else Elf
             val targets = units.filter { it.type == enemyType }
             if (targets.isEmpty()) {
@@ -72,14 +59,30 @@ class CombatArea(input: List<String>) : SimpleCharGrid(input) {
         return true
     }
 
-    fun outcome(): Long = fullRounds * units.sumOf { it.hitPoints }
+    fun outcome(): Int {
+        logStats()
+        val hitPointsLeft = units.sumOf { it.hitPoints }
+        logger.info { "rounds: $fullRounds, hit points left: $hitPointsLeft" }
+        return fullRounds * hitPointsLeft
+    }
 
-    private data class Target(val position: Coordinates, val path: ShortestPath<Coordinates>)
+    private data class Player(
+        val type: PlayerType,
+        var position: Coordinates,
+        var hitPoints: Int = 200
+    ) {
+        fun isDead() = hitPoints <= 0
+        override fun toString(): String = "${type.char}${position}_$hitPoints"
+    }
+
+    private enum class PlayerType(val char: Char) {
+        Elf('E'), Goblin('G')
+    }
 
     private fun Player.move(
         targets: List<Player>
     ) {
-        logger.debug { " moving $this" }
+        logger.trace { " moving $this" }
         if (targets.any { it.position in position.neighbours() }) {
             // already in range of a target
             return
@@ -88,28 +91,27 @@ class CombatArea(input: List<String>) : SimpleCharGrid(input) {
         val targetsInRange = targets.flatMap { target ->
             target.position.neighbours().filter { getAt(it) == cavern }
         }
-        // TODO make path precedence in reading order configurable
-        val targetsWithPaths = shortestPaths(
+        val shortestPaths = shortestPaths(
             start = position,
             goals = targetsInRange,
             isObstacle = { it != cavern })
-            .map { Target(it.path.last(), it) }
 
-        if (targetsWithPaths.isEmpty()) {
+        if (shortestPaths.isEmpty()) {
             // no path to any target found
             return
         }
-        logger.debug { "  ${targetsWithPaths.size} paths found" }
-        val nearestTargetPath = targetsWithPaths
-            .filterMinBy { it.path.distance }
-            .filterMinBy { it.position }
-            .filterMinBy { it.path.path[1] }
+        logger.trace { "  ${shortestPaths.size} paths found" }
+        val nearestTargetPath = shortestPaths
+            .filterMinBy { it.distance }
+            .filterMinBy { it.path.last() }
+            .filterMinBy { it.path[1] }
             .first()
-        moveTo(nearestTargetPath.path.path[1])
+        moveTo(nearestTargetPath.path[1])
     }
 
     private fun Player.attack(targets: List<Player>) {
-        logger.debug { " attacking with $this" }
+        if (this.isDead()) return
+        logger.trace { " attacking with $this" }
         val opponent = position
             .neighbours()
             .mapNotNull { neighbour -> targets.firstOrNull { it.position == neighbour } }
@@ -117,8 +119,8 @@ class CombatArea(input: List<String>) : SimpleCharGrid(input) {
             .minByOrNull { it.position }
         if (opponent == null) return
 
-        logger.debug { "  hitting $opponent" }
         opponent.hitPoints -= attackPower
+        logger.debug { " $this hit $opponent" }
 
         if (opponent.hitPoints <= 0) {
             opponent.die()
@@ -126,13 +128,14 @@ class CombatArea(input: List<String>) : SimpleCharGrid(input) {
     }
 
     private fun Player.moveTo(newPosition: Coordinates) {
-        logger.debug { "  moving to $newPosition" }
+        logger.debug { " $this moves to $newPosition" }
         setAt(position, cavern)
         setAt(newPosition, type.char)
         position = newPosition
     }
 
     private fun Player.die() {
+        logger.debug { " $this died" }
         setAt(position, cavern)
         units.remove(this)
     }

@@ -174,8 +174,8 @@ class BeverageBanditsTest : StringSpec({
         """.asList()
         forAll(
             row(input, 27730),
-            row(input2, 36334),
-            row(input3, 39514),
+            row(input2, 36334), // round right, but 3 hit points too high
+            row(input3, 39514), // one round too low, but hit points right
             row(input4, 27755),
             row(input5, 28944),
             row(input6, 18740),
