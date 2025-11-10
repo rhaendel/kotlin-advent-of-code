@@ -23,27 +23,36 @@ class ChronalClassificationTest : StringSpec({
             8 1 0 1
         """.asList()
 
-    "input can be parsed" {
+    "cpu samples can be parsed" {
         input.parseCPUSamples() shouldBe listOf(
             CPUSample(listOf(3, 2, 1, 1), 9, 2, 1, 2, listOf(3, 2, 2, 1)),
             CPUSample(listOf(3, 2, 1, 1), 9, 2, 1, 2, listOf(3, 2, 2, 1)),
         )
     }
 
+    "the test progarm can be parsed" {
+        input.parseTestProgram() shouldBe listOf(
+            ProgramStep(7, 3, 2, 0),
+            ProgramStep(7, 2, 1, 1),
+            ProgramStep(7, 1, 0, 3),
+            ProgramStep(8, 1, 0, 1),
+        )
+    }
+
     "the given sample behaves like three opcodes" {
-        WristDevice().behaveLikeNumberOfOpcodes(
-            listOf(
-                CPUSample(listOf(3, 2, 1, 1), 9, 2, 1, 2, listOf(3, 2, 2, 1))
-            )
-        ) shouldBe listOf(3)
+        val input = """
+            Before: [3, 2, 1, 1]
+            9 2 1 2
+            After:  [3, 2, 2, 1]
+
+
+
+            7 3 2 0
+        """.asList()
+        WristDevice(input).behaveLikeNumberOfOpcodes() shouldBe listOf(3)
     }
 
     "part 1: both of the given samples behave like three opcodes" {
         ChronalClassification().part1(input) shouldBe 2
-    }
-
-    "part 2" {
-        val input = listOf("")
-        ChronalClassification().part2(input) shouldBe 0
     }
 })
