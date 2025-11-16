@@ -7,9 +7,24 @@ import io.kotest.matchers.shouldBe
 class FireHazardTest : StringSpec({
 
     "turn can be parsed" {
-        FireHazard().parse("turn on 1,2 through 3,4") shouldBe SwitchLight(Action.ON, Coordinates(1,2), Coordinates(3,4))
-        FireHazard().parse("turn off 10,20 through 30,40") shouldBe SwitchLight(Action.OFF, Coordinates(10,20), Coordinates(30,40))
-        FireHazard().parse("toggle 0,0 through 999,999") shouldBe SwitchLight(Action.TOGGLE, Coordinates(0,0), Coordinates(999,999))
+        FireHazard().parse("turn on 1,2 through 3,4") shouldBe SwitchLight(
+            Action.ON, Coordinates(2, 1), Coordinates(
+                4,
+                3
+            )
+        )
+        FireHazard().parse("turn off 10,20 through 30,40") shouldBe SwitchLight(
+            Action.OFF, Coordinates(20, 10), Coordinates(
+                40,
+                30
+            )
+        )
+        FireHazard().parse("toggle 0,0 through 999,999") shouldBe SwitchLight(
+            Action.TOGGLE, Coordinates(0, 0), Coordinates(
+                999,
+                999
+            )
+        )
     }
 
     "part 1: turn on every light" {

@@ -18,7 +18,7 @@ fun List<String>.parseCoordinates(): Coordinates {
     val (row, col) = first()
         .substringAfter("Enter the code at row ")
         .split(", column ")
-    return Coordinates(row.toInt(), col.substring(0, col.lastIndex).toInt())
+    return Coordinates(col.substring(0, col.lastIndex).toInt(), row.toInt())
 }
 
 fun nextCodeFor(code: Int): Int = ((code * 252533L) % 33554393).toInt()

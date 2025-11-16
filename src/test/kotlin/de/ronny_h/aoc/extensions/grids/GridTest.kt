@@ -56,8 +56,8 @@ class GridTest : StringSpec() {
         "charAt with indices returns the same as charAt with Coordinates" {
             val grid = SimpleCharGrid(listOf("12", "34"))
             grid[0, 0] shouldBe grid.getAt(Coordinates(0, 0))
-            grid[0, 1] shouldBe grid.getAt(Coordinates(0, 1))
-            grid[1, 0] shouldBe grid.getAt(Coordinates(1, 0))
+            grid[0, 1] shouldBe grid.getAt(Coordinates(1, 0))
+            grid[1, 0] shouldBe grid.getAt(Coordinates(0, 1))
             grid[1, 1] shouldBe grid.getAt(Coordinates(1, 1))
         }
 
@@ -81,7 +81,7 @@ class GridTest : StringSpec() {
 
         "setAt sets the element at the given coordinates" {
             val grid = SimpleCharGrid(listOf("12", "34"))
-            grid.setAt(Coordinates(1, 0), '5')
+            grid.setAt(Coordinates(0, 1), '5')
             grid[0, 0] shouldBe '1'
             grid[0, 1] shouldBe '2'
             grid[1, 0] shouldBe '5'
@@ -136,8 +136,8 @@ class GridTest : StringSpec() {
             val grid = SimpleCharGrid(listOf("12", "34"))
             forAll(
                 row('1', Coordinates(0, 0)),
-                row('2', Coordinates(0, 1)),
-                row('3', Coordinates(1, 0)),
+                row('2', Coordinates(1, 0)),
+                row('3', Coordinates(0, 1)),
                 row('4', Coordinates(1, 1)),
             ) { char, result ->
                 grid.find(char) shouldBe result
@@ -162,7 +162,7 @@ class GridTest : StringSpec() {
             val output = tapSystemOut {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
-                    setOf(Coordinates(0, 1), Coordinates(1, 0))
+                    setOf(Coordinates(1, 0), Coordinates(0, 1))
                 )
             }
             output shouldBe "1#${newLine}#4$newLine"
@@ -172,7 +172,7 @@ class GridTest : StringSpec() {
             val output = tapSystemOut {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
-                    setOf(Coordinates(0, 1), Coordinates(1, 0)),
+                    setOf(Coordinates(1, 0), Coordinates(0, 1)),
                     '?'
                 )
             }
@@ -183,7 +183,7 @@ class GridTest : StringSpec() {
             val output = tapSystemOut {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
-                    highlightPosition = Coordinates(0, 1),
+                    highlightPosition = Coordinates(1, 0),
                     highlightDirection = Direction.SOUTH
                 )
             }
@@ -194,8 +194,8 @@ class GridTest : StringSpec() {
             val output = tapSystemOut {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
-                    overrides = setOf(Coordinates(0, 1)),
-                    highlightPosition = Coordinates(0, 1),
+                    overrides = setOf(Coordinates(1, 0)),
+                    highlightPosition = Coordinates(1, 0),
                     highlightDirection = Direction.SOUTH
                 )
             }
@@ -206,8 +206,8 @@ class GridTest : StringSpec() {
             val output = tapSystemOut {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
-                    overrides = setOf(Coordinates(0, 1)),
-                    highlightPosition = Coordinates(0, 1),
+                    overrides = setOf(Coordinates(1, 0)),
+                    highlightPosition = Coordinates(1, 0),
                 )
             }
             output shouldBe "1#${newLine}34$newLine"

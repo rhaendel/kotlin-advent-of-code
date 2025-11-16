@@ -35,7 +35,7 @@ class ClaimedAreas(input: List<String>) {
         claims.forEach {
             for (x in it.x..<it.x + it.width) {
                 for (y in it.y..<it.y + it.height) {
-                    claimedAreas[Coordinates(y, x)] = claimedAreas.getValue(Coordinates(y, x)) + 1
+                    claimedAreas[Coordinates(x, y)] = claimedAreas.getValue(Coordinates(x, y)) + 1
                 }
             }
         }
@@ -47,7 +47,7 @@ class ClaimedAreas(input: List<String>) {
         .filter {
             for (x in it.x..<it.x + it.width) {
                 for (y in it.y..<it.y + it.height) {
-                    if (claimedAreas.getValue(Coordinates(y, x)) > 1) return@filter false
+                    if (claimedAreas.getValue(Coordinates(x, y)) > 1) return@filter false
                 }
             }
             true

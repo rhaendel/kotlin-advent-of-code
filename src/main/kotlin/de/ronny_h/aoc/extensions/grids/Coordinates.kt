@@ -3,18 +3,18 @@ package de.ronny_h.aoc.extensions.grids
 import de.ronny_h.aoc.extensions.grids.Direction.*
 import kotlin.math.abs
 
-data class Coordinates(val y: Int, val x: Int) : Comparable<Coordinates> {
+data class Coordinates(val x: Int, val y: Int) : Comparable<Coordinates> {
 
     companion object {
         val ZERO = Coordinates(0, 0)
     }
 
-    operator fun plus(other: Coordinates) = Coordinates(y + other.y, x + other.x)
-    operator fun minus(other: Coordinates) = Coordinates(y - other.y, x - other.x)
+    operator fun plus(other: Coordinates) = Coordinates(x + other.x, y + other.y)
+    operator fun minus(other: Coordinates) = Coordinates(x - other.x, y - other.y)
 
-    operator fun times(other: Int) = Coordinates(y * other, x * other)
+    operator fun times(other: Int) = Coordinates(x * other, y * other)
 
-    operator fun plus(direction: Direction) = Coordinates(y + direction.y, x + direction.x)
+    operator fun plus(direction: Direction) = Coordinates(x + direction.x, y + direction.y)
 
     fun neighbours() = listOf(this + EAST, this + SOUTH, this + WEST, this + NORTH)
 
@@ -39,20 +39,20 @@ data class Coordinates(val y: Int, val x: Int) : Comparable<Coordinates> {
      * Orders [Coordinates] in reading order: top-to-bottom, then left-to-right.
      */
     override fun compareTo(other: Coordinates): Int {
-        if (this.y == other.y) {
-            return this.x - other.x
+        if (y == other.y) {
+            return x - other.x
         }
-        return this.y - other.y
+        return y - other.y
     }
 }
 
-operator fun Int.times(other: Coordinates) = Coordinates(this * other.y, this * other.x)
+operator fun Int.times(other: Coordinates) = Coordinates(this * other.x, this * other.y)
 
-enum class Direction(val y: Int, val x: Int) {
-    NORTH(-1, 0),
-    EAST(0, +1),
-    SOUTH(+1, 0),
-    WEST(0, -1),
+enum class Direction(val x: Int, val y: Int) {
+    NORTH(0, -1),
+    EAST(+1, 0),
+    SOUTH(0, +1),
+    WEST(-1, 0),
     ;
 
     fun turnRight() = when (this) {

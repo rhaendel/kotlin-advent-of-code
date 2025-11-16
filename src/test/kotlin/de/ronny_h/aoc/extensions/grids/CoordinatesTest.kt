@@ -14,7 +14,7 @@ class CoordinatesTest : StringSpec({
         forAll(
             row(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
             row(Coordinates(0, 0), Coordinates(1, 1), Coordinates(1, 1)),
-            row(Coordinates(1, 2), Coordinates(3, 4), Coordinates(4, 6)),
+            row(Coordinates(2, 1), Coordinates(4, 3), Coordinates(6, 4)),
         ) { first, second, result ->
             first + second shouldBe result
         }
@@ -24,7 +24,7 @@ class CoordinatesTest : StringSpec({
         forAll(
             row(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
             row(Coordinates(0, 0), Coordinates(1, 1), Coordinates(-1, -1)),
-            row(Coordinates(3, 5), Coordinates(2, 1), Coordinates(1, 4)),
+            row(Coordinates(5, 3), Coordinates(1, 2), Coordinates(4, 1)),
         ) { first, second, result ->
             first - second shouldBe result
         }
@@ -32,10 +32,10 @@ class CoordinatesTest : StringSpec({
 
     "Multiplication with a scalar" {
         forAll(
-            row(0, Coordinates(5, 7), Coordinates(0, 0)),
+            row(0, Coordinates(7, 5), Coordinates(0, 0)),
             row(7, Coordinates(0, 0), Coordinates(0, 0)),
-            row(3, Coordinates(5, 7), Coordinates(15, 21)),
-            row(-3, Coordinates(5, 7), Coordinates(-15, -21)),
+            row(3, Coordinates(7, 5), Coordinates(21, 15)),
+            row(-3, Coordinates(7, 5), Coordinates(-21, -15)),
         ) { scalar, coordinates, result ->
             scalar * coordinates shouldBe result
             coordinates * scalar shouldBe result
@@ -48,10 +48,10 @@ class CoordinatesTest : StringSpec({
 
     "Add a direction" {
         forAll(
-            row(Coordinates(5, 5), NORTH, Coordinates(4, 5)),
-            row(Coordinates(5, 5), SOUTH, Coordinates(6, 5)),
-            row(Coordinates(5, 5), EAST, Coordinates(5, 6)),
-            row(Coordinates(5, 5), WEST, Coordinates(5, 4)),
+            row(Coordinates(5, 5), NORTH, Coordinates(5, 4)),
+            row(Coordinates(5, 5), SOUTH, Coordinates(5, 6)),
+            row(Coordinates(5, 5), EAST, Coordinates(6, 5)),
+            row(Coordinates(5, 5), WEST, Coordinates(4, 5)),
         ) { coordinates, direction, result ->
             coordinates + direction shouldBe result
         }
@@ -59,42 +59,42 @@ class CoordinatesTest : StringSpec({
 
     "Neighbours" {
         Coordinates(5, 5).neighbours() shouldContainAll listOf(
-            Coordinates(4, 5),
-            Coordinates(6, 5),
             Coordinates(5, 4),
             Coordinates(5, 6),
+            Coordinates(4, 5),
+            Coordinates(6, 5),
         )
     }
 
     "Neighbours including diagonals" {
         Coordinates(5, 5).neighboursIncludingDiagonals() shouldContainAll listOf(
-            Coordinates(4, 5),
-            Coordinates(6, 5),
             Coordinates(5, 4),
             Coordinates(5, 6),
-            Coordinates(4, 6),
-            Coordinates(6, 6),
+            Coordinates(4, 5),
+            Coordinates(6, 5),
             Coordinates(6, 4),
+            Coordinates(6, 6),
+            Coordinates(4, 6),
             Coordinates(4, 4),
         )
     }
 
     "Directed neighbours" {
         Coordinates(5, 5).directedNeighbours() shouldContainAll listOf(
-            NORTH to Coordinates(4, 5),
-            SOUTH to Coordinates(6, 5),
-            EAST to Coordinates(5, 6),
-            WEST to Coordinates(5, 4),
+            NORTH to Coordinates(5, 4),
+            SOUTH to Coordinates(5, 6),
+            EAST to Coordinates(6, 5),
+            WEST to Coordinates(4, 5),
         )
     }
 
     "Coordinates are comparable and can be sorted" {
         forAll(
             row(listOf(Coordinates.ZERO), listOf(Coordinates.ZERO)),
-            row(listOf(Coordinates(1, 0), Coordinates.ZERO), listOf(Coordinates.ZERO, Coordinates(1, 0))),
+            row(listOf(Coordinates(0, 1), Coordinates.ZERO), listOf(Coordinates.ZERO, Coordinates(0, 1))),
             row(
-                listOf(Coordinates(1, 1), Coordinates(1, 0), Coordinates.ZERO),
-                listOf(Coordinates.ZERO, Coordinates(1, 0), Coordinates(1, 1))
+                listOf(Coordinates(1, 1), Coordinates(0, 1), Coordinates.ZERO),
+                listOf(Coordinates.ZERO, Coordinates(0, 1), Coordinates(1, 1))
             ),
         ) { list, sorted ->
             list.sorted() shouldBe sorted

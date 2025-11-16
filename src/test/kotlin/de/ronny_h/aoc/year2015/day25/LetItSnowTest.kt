@@ -10,7 +10,7 @@ class LetItSnowTest : StringSpec({
 
     "the input can be parsed" {
         listOf("To continue, please consult the code grid in the manual.  Enter the code at row 1, column 2.")
-            .parseCoordinates() shouldBe Coordinates(1, 2)
+            .parseCoordinates() shouldBe Coordinates(2, 1)
     }
 
     "the next code can be calculated" {
@@ -27,12 +27,12 @@ class LetItSnowTest : StringSpec({
     "number of sequence at coordinates" {
         forAll(
             row(Coordinates(1, 1), 1),
-            row(Coordinates(2, 1), 2),
-            row(Coordinates(1, 2), 3),
-            row(Coordinates(3, 1), 4),
+            row(Coordinates(1, 2), 2),
+            row(Coordinates(2, 1), 3),
+            row(Coordinates(1, 3), 4),
             row(Coordinates(2, 2), 5),
-            row(Coordinates(1, 3), 6),
-            row(Coordinates(1, 6), 21),
+            row(Coordinates(3, 1), 6),
+            row(Coordinates(6, 1), 21),
         ) { coordinates, number ->
             numberOfSequenceAt(coordinates) shouldBe number
         }

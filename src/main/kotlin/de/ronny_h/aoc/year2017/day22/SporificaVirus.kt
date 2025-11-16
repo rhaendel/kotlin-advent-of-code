@@ -31,13 +31,13 @@ class SeeminglyInfiniteGrid(input: List<String>) {
     init {
         input.forEachIndexed { row, line ->
             line.forEachIndexed { col, node ->
-                grid[Coordinates(row, col)] = node
+                grid[Coordinates(col, row)] = node
             }
         }
     }
 
     private var direction = NORTH
-    private var position = Coordinates(input.size / 2, input[0].length / 2)
+    private var position = Coordinates(input[0].length / 2, input.size / 2)
     var causedInfection = 0
         private set
 

@@ -66,7 +66,7 @@ class FractalArtGrid(size: Int) : Grid<Char>(size, size, off) {
                 if (squareSize == 2 && rule.onCount != 2 || rule.ruleMatches(square) || rule.ruleMatches(square.reversed())) {
                     newGrid.applyRuleAt(
                         rule,
-                        Coordinates(start.y + (start.y / squareSize), start.x + (start.x / squareSize))
+                        Coordinates(start.x + (start.x / squareSize), start.y + (start.y / squareSize))
                     )
                     applied = true
                     break
@@ -123,7 +123,7 @@ class FractalArtGrid(size: Int) : Grid<Char>(size, size, off) {
     private fun forEachSquareOfSize(size: Int, block: (Coordinates, List<List<Char>>) -> Unit) {
         for (row in 0..<height step size) {
             for (col in 0..<height step size) {
-                block(Coordinates(row, col), subGridAt(row, col, size))
+                block(Coordinates(col, row), subGridAt(row, col, size))
             }
         }
     }

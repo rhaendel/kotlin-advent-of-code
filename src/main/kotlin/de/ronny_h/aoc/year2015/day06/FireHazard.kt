@@ -39,7 +39,7 @@ class FireHazard : AdventOfCode<Int>(2015, 6) {
         val (from, to) = line.substring(action.text.length).split(" through ")
         val (fromRow, fromCol) = from.split(',').map(String::toInt)
         val (toRow, toCol) = to.split(',').map(String::toInt)
-        return SwitchLight(action, Coordinates(fromRow, fromCol), Coordinates(toRow, toCol))
+        return SwitchLight(action, Coordinates(fromCol, fromRow), Coordinates(toCol, toRow))
     }
 
     private val dimmingGrid = List(1000) {

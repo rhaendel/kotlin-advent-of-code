@@ -19,11 +19,11 @@ class ChronalCoordinatesTest : StringSpec({
     "input can be parsed" {
         input.parseCoordinates() shouldBe listOf(
             Coordinates(1, 1),
-            Coordinates(6, 1),
-            Coordinates(3, 8),
-            Coordinates(4, 3),
+            Coordinates(1, 6),
+            Coordinates(8, 3),
+            Coordinates(3, 4),
             Coordinates(5, 5),
-            Coordinates(9, 8),
+            Coordinates(8, 9),
         )
     }
 

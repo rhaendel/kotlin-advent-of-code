@@ -13,11 +13,11 @@ class SimpleCharGridTest : StringSpec({
 
     "in a grid with a unique shortest path that path is found" {
         val grid = SimpleCharGrid(listOf("12", "34"))
-        val shortestPaths = listOf(ShortestPath(listOf(C(0, 0), C(0, 1)), 1))
-        grid.shortestPaths(C(0, 0), C(0, 1)) shouldBe shortestPaths
+        val shortestPaths = listOf(ShortestPath(listOf(C(0, 0), C(1, 0)), 1))
+        grid.shortestPaths(C(0, 0), C(1, 0)) shouldBe shortestPaths
         grid.shortestPaths(
             start = C(0, 0),
-            goals = listOf(C(0, 1)),
+            goals = listOf(C(1, 0)),
             isObstacle = { it == grid.nullElement },
         ) shouldBe shortestPaths
     }
@@ -25,8 +25,8 @@ class SimpleCharGridTest : StringSpec({
     "in a small grid with multiple shortest paths all paths are found" {
         SimpleCharGrid(listOf("12", "34")).shortestPaths(C(0, 0), C(1, 1)) shouldBe
                 listOf(
-                    ShortestPath(listOf(C(0, 0), C(0, 1), C(1, 1)), 2),
                     ShortestPath(listOf(C(0, 0), C(1, 0), C(1, 1)), 2),
+                    ShortestPath(listOf(C(0, 0), C(0, 1), C(1, 1)), 2),
                 )
     }
 
@@ -39,54 +39,54 @@ class SimpleCharGridTest : StringSpec({
                     ShortestPath(
                         listOf(
                             C(0, 0),
-                            C(0, 1),
-                            C(0, 2),
-                            C(1, 2),
-                            C(2, 2)
-                        ), 4
-                    ),
-                    ShortestPath(
-                        listOf(
-                            C(0, 0),
-                            C(0, 1),
-                            C(1, 1),
-                            C(1, 2),
-                            C(2, 2)
-                        ), 4
-                    ),
-                    ShortestPath(
-                        listOf(
-                            C(0, 0),
-                            C(0, 1),
-                            C(1, 1),
-                            C(2, 1),
-                            C(2, 2)
-                        ), 4
-                    ),
-                    ShortestPath(
-                        listOf(
-                            C(0, 0),
-                            C(1, 0),
-                            C(1, 1),
-                            C(1, 2),
-                            C(2, 2)
-                        ), 4
-                    ),
-                    ShortestPath(
-                        listOf(
-                            C(0, 0),
-                            C(1, 0),
-                            C(1, 1),
-                            C(2, 1),
-                            C(2, 2)
-                        ), 4
-                    ),
-                    ShortestPath(
-                        listOf(
-                            C(0, 0),
                             C(1, 0),
                             C(2, 0),
                             C(2, 1),
+                            C(2, 2)
+                        ), 4
+                    ),
+                    ShortestPath(
+                        listOf(
+                            C(0, 0),
+                            C(1, 0),
+                            C(1, 1),
+                            C(2, 1),
+                            C(2, 2)
+                        ), 4
+                    ),
+                    ShortestPath(
+                        listOf(
+                            C(0, 0),
+                            C(1, 0),
+                            C(1, 1),
+                            C(1, 2),
+                            C(2, 2)
+                        ), 4
+                    ),
+                    ShortestPath(
+                        listOf(
+                            C(0, 0),
+                            C(0, 1),
+                            C(1, 1),
+                            C(2, 1),
+                            C(2, 2)
+                        ), 4
+                    ),
+                    ShortestPath(
+                        listOf(
+                            C(0, 0),
+                            C(0, 1),
+                            C(1, 1),
+                            C(1, 2),
+                            C(2, 2)
+                        ), 4
+                    ),
+                    ShortestPath(
+                        listOf(
+                            C(0, 0),
+                            C(0, 1),
+                            C(0, 2),
+                            C(1, 2),
                             C(2, 2)
                         ), 4
                     ),
@@ -95,12 +95,12 @@ class SimpleCharGridTest : StringSpec({
 
     "in a non-rectangular grid with multiple shortest paths all paths are found" {
         SimpleCharGrid(listOf("#12", "345"), '#').shortestPaths(
-            C(0, 1),
-            C(1, 2)
+            C(1, 0),
+            C(2, 1)
         ) shouldContainExactlyInAnyOrder
                 listOf(
-                    ShortestPath(listOf(C(0, 1), C(0, 2), C(1, 2)), 2),
-                    ShortestPath(listOf(C(0, 1), C(1, 1), C(1, 2)), 2),
+                    ShortestPath(listOf(C(1, 0), C(2, 0), C(2, 1)), 2),
+                    ShortestPath(listOf(C(1, 0), C(1, 1), C(2, 1)), 2),
                 )
     }
 
@@ -109,17 +109,17 @@ class SimpleCharGridTest : StringSpec({
         val expected = listOf(
             ShortestPath(
                 listOf(
-                    C(0, 0), C(1, 0), C(2, 0),
-                    C(2, 1), C(2, 2), C(1, 2), C(0, 2)
+                    C(0, 0), C(0, 1), C(0, 2),
+                    C(1, 2), C(2, 2), C(2, 1), C(2, 0)
                 ), 6
             ),
         )
 
         // A Star
-        grid.shortestPaths(C(0, 0), C(0, 2)) shouldBe expected
+        grid.shortestPaths(C(0, 0), C(2, 0)) shouldBe expected
 
         // Dijkstra
-        grid.shortestPaths(C(0, 0), listOf(C(0, 2))) shouldBe expected
+        grid.shortestPaths(C(0, 0), listOf(C(2, 0))) shouldBe expected
     }
 
     "customized obstacles are not part of the shortest path" {
@@ -127,8 +127,8 @@ class SimpleCharGridTest : StringSpec({
         val expected = listOf(
             ShortestPath(
                 listOf(
-                    C(0, 0), C(1, 0), C(2, 0),
-                    C(2, 1), C(2, 2), C(1, 2), C(0, 2)
+                    C(0, 0), C(0, 1), C(0, 2),
+                    C(1, 2), C(2, 2), C(2, 1), C(2, 0)
                 ), 6
             ),
         )
@@ -136,14 +136,14 @@ class SimpleCharGridTest : StringSpec({
         // A Star
         grid.shortestPaths(
             start = C(0, 0),
-            goal = C(0, 2),
+            goal = C(2, 0),
             isVisitable = { grid.getAt(it) !in listOf('X', '#') },
         ) shouldBe expected
 
         // Dijkstra
         grid.shortestPaths(
             start = C(0, 0),
-            goals = listOf(C(0, 2)),
+            goals = listOf(C(2, 0)),
             isObstacle = { it in listOf('X', '#') },
         ) shouldBe expected
     }
@@ -157,23 +157,23 @@ class SimpleCharGridTest : StringSpec({
         SimpleCharGrid(input)
             .shortestPaths(
                 start = C(0, 0),
-                goals = listOf(C(0, 3), C(2, 0), C(2, 3))
+                goals = listOf(C(3, 0), C(0, 2), C(3, 2))
             ) shouldBe listOf(
             ShortestPath(
                 listOf(
-                    C(0, 0), C(1, 0), C(1, 1),
-                    C(1, 2), C(1, 3), C(0, 3),
+                    C(0, 0), C(0, 1), C(1, 1),
+                    C(2, 1), C(3, 1), C(3, 0),
                 ), 5
             ),
             ShortestPath(
                 listOf(
-                    C(0, 0), C(1, 0), C(2, 0),
+                    C(0, 0), C(0, 1), C(0, 2),
                 ), 2
             ),
             ShortestPath(
                 listOf(
-                    C(0, 0), C(1, 0), C(1, 1),
-                    C(1, 2), C(1, 3), C(2, 3),
+                    C(0, 0), C(0, 1), C(1, 1),
+                    C(2, 1), C(3, 1), C(3, 2),
                 ), 5
             ),
         )
@@ -189,23 +189,23 @@ class SimpleCharGridTest : StringSpec({
         SimpleCharGrid(input)
             .shortestPaths(
                 start = C(0, 0),
-                goals = listOf(C(0, 2), C(2, 0), C(2, 2), C(3, 2)),
+                goals = listOf(C(2, 0), C(0, 2), C(2, 2), C(2, 3)),
                 stopAfterMinimalPathsAreFound = true,
             ) shouldBe listOf(
-            ShortestPath(
-                listOf(
-                    C(0, 0), C(0, 1), C(0, 2),
-                ), 2
-            ),
             ShortestPath(
                 listOf(
                     C(0, 0), C(1, 0), C(2, 0),
                 ), 2
             ),
+            ShortestPath(
+                listOf(
+                    C(0, 0), C(0, 1), C(0, 2),
+                ), 2
+            ),
             // to know when all minimal paths are found, the algorithm has to continue to the next larger one
             ShortestPath(
                 listOf(
-                    C(0, 0), C(0, 1), C(0, 2), C(1, 2), C(2, 2),
+                    C(0, 0), C(1, 0), C(2, 0), C(2, 1), C(2, 2),
                 ), 4
             ),
         )
@@ -220,8 +220,8 @@ class SimpleCharGridTest : StringSpec({
         SimpleCharGrid(input)
             .shortestPaths(
                 start = C(0, 0),
-                goals = listOf(C(0, 2), C(2, 0), C(2, 2))
-            ) shouldBe listOf(ShortestPath(listOf(C(0, 0), C(1, 0), C(2, 0)), 2))
+                goals = listOf(C(2, 0), C(0, 2), C(2, 2))
+            ) shouldBe listOf(ShortestPath(listOf(C(0, 0), C(0, 1), C(0, 2)), 2))
     }
 
     "the Dijkstra implementation takes the 'reading order' as vertex precedence" {
@@ -235,8 +235,8 @@ class SimpleCharGridTest : StringSpec({
                     """,
                 C(0, 0), C(3, 3),
                 listOf(
-                    C(0, 0), C(0, 1), C(0, 2), C(0, 3),
-                    C(1, 3), C(2, 3), C(3, 3),
+                    C(0, 0), C(1, 0), C(2, 0), C(3, 0),
+                    C(3, 1), C(3, 2), C(3, 3),
                 ),
             ),
             row(
@@ -246,10 +246,10 @@ class SimpleCharGridTest : StringSpec({
                         oo..
                         S...
                     """,
-                C(3, 0), C(0, 3),
+                C(0, 3), C(3, 0),
                 listOf(
-                    C(3, 0), C(2, 0), C(2, 1), C(1, 1),
-                    C(0, 1), C(0, 2), C(0, 3),
+                    C(0, 3), C(0, 2), C(1, 2), C(1, 1),
+                    C(1, 0), C(2, 0), C(3, 0),
                 )
             ),
         ) { input, start, goal, path ->
@@ -270,7 +270,7 @@ class SimpleCharGridTest : StringSpec({
             xx
         """.asList()
         SimpleCharGrid(input).clusterRegions() shouldBe listOf(
-            listOf(C(0, 0), C(0, 1)),
+            listOf(C(0, 0), C(1, 0)),
         )
     }
 
@@ -280,8 +280,8 @@ class SimpleCharGridTest : StringSpec({
             ..xx
         """.asList()
         SimpleCharGrid(input).clusterRegions() shouldBe listOf(
-            listOf(C(0, 0), C(0, 1), C(1, 1), C(1, 0)),
-            listOf(C(0, 2), C(0, 3), C(1, 3), C(1, 2)),
+            listOf(C(0, 0), C(1, 0), C(1, 1), C(0, 1)),
+            listOf(C(2, 0), C(3, 0), C(3, 1), C(2, 1)),
         )
     }
 
@@ -291,10 +291,10 @@ class SimpleCharGridTest : StringSpec({
             oo__
         """.asList()
         SimpleCharGrid(input).clusterRegions() shouldBe listOf(
-            listOf(C(0, 0), C(0, 1)),
-            listOf(C(0, 2), C(0, 3)),
-            listOf(C(1, 0), C(1, 1)),
-            listOf(C(1, 2), C(1, 3)),
+            listOf(C(0, 0), C(1, 0)),
+            listOf(C(2, 0), C(3, 0)),
+            listOf(C(0, 1), C(1, 1)),
+            listOf(C(2, 1), C(3, 1)),
         )
     }
 
@@ -306,7 +306,7 @@ class SimpleCharGridTest : StringSpec({
         """.asList()
         SimpleCharGrid(input).clusterRegions('x') shouldBe listOf(
             listOf(
-                C(0, 2), C(1, 2), C(1, 3),
+                C(2, 0), C(2, 1), C(3, 1),
                 C(2, 2), C(1, 1)
             ),
         )

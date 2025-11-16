@@ -12,7 +12,7 @@ fun main() = RAMRun().run("416", "50,23")
 class RAMRun : AdventOfCode<String>(2024, 18) {
     private fun List<String>.toCoordinates(): List<Coordinates> = map {
         val (x, y) = it.split(',')
-        Coordinates(x.toInt(), y.toInt())
+        Coordinates(y.toInt(), x.toInt())
     }
 
     fun part1(input: List<String>, width: Int): String {

@@ -50,8 +50,8 @@ private class ReindeerMazeGrid(input: List<String>) : Grid<Char>(input, '#') {
         // - weight function:
         //   * 1 for going forward
         //   * 1000 for each 90° turn
-        val start = Node(Direction.EAST, Coordinates(height - 2, 1))
-        val goal = Node(Direction.EAST, Coordinates(1, width - 2))
+        val start = Node(Direction.EAST, Coordinates(1, height - 2))
+        val goal = Node(Direction.EAST, Coordinates(width - 2, 1))
 
         val neighbours: (Node) -> List<Node> = { n ->
             listOf(

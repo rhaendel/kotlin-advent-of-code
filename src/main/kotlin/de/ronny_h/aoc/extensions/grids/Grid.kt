@@ -120,7 +120,7 @@ abstract class Grid<T>(
     fun <R> forEachCoordinates(action: (position: Coordinates, element: T) -> R): Sequence<R> = sequence {
         for (row in grid.indices) {
             for (col in grid[0].indices) {
-                yield(action(Coordinates(row, col), get(row, col)))
+                yield(action(Coordinates(col, row), get(row, col)))
             }
         }
     }
@@ -131,7 +131,7 @@ abstract class Grid<T>(
      * @throws NoSuchElementException If no matching element can be found.
      */
     fun find(value: T): Coordinates = forEachElement { row, col, element ->
-        if (element == value) Coordinates(row, col) else null
+        if (element == value) Coordinates(col, row) else null
     }.filterNotNull().first()
 
     override fun toString(): String = toString(setOf())

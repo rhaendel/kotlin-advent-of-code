@@ -47,7 +47,7 @@ class StarAlignmentGrid(initStars: List<Star>) {
         val (min, max) = findBorders()
         for (row in min.y..max.y) {
             for (col in min.x..max.x) {
-                if (Coordinates(row, col) in starPositions()) {
+                if (Coordinates(col, row) in starPositions()) {
                     print('#')
                 } else {
                     print(' ')
@@ -88,7 +88,7 @@ class StarAlignmentGrid(initStars: List<Star>) {
     private fun coordinatesColumnWise(min: Coordinates, max: Coordinates) = sequence {
         for (col in min.x..max.x) {
             for (row in min.y..max.y) {
-                yield(Coordinates(row, col))
+                yield(Coordinates(col, row))
             }
         }
     }
@@ -96,7 +96,7 @@ class StarAlignmentGrid(initStars: List<Star>) {
     private fun coordinatesRowWise(min: Coordinates, max: Coordinates) = sequence {
         for (row in min.y..max.y) {
             for (col in min.x..max.x) {
-                yield(Coordinates(row, col))
+                yield(Coordinates(col, row))
             }
         }
     }
@@ -106,7 +106,7 @@ class StarAlignmentGrid(initStars: List<Star>) {
         val minCol = stars.minOf { it.position.x }
         val maxRow = stars.maxOf { it.position.y }
         val maxCol = stars.maxOf { it.position.x }
-        return Coordinates(minRow, minCol) to Coordinates(maxRow, maxCol)
+        return Coordinates(minCol, minRow) to Coordinates(maxCol, maxRow)
     }
 
     companion object {
@@ -119,7 +119,7 @@ class StarAlignmentGrid(initStars: List<Star>) {
             val (pCol, pRow, vCol, vRow) = (1..4).map {
                 matcher.group(it).trim().toInt()
             }
-            Star(Coordinates(pRow, pCol), Coordinates(vRow, vCol))
+            Star(Coordinates(pCol, pRow), Coordinates(vCol, vRow))
         }
     }
 }

@@ -11,9 +11,9 @@ class SpiralMemoryTest : StringSpec({
     "square numbers and their coordinates" {
         forAll(
             row(1, Coordinates(0, 0)),
-            row(2, Coordinates(0, 1)),
-            row(12, Coordinates(-1, 2)),
-            row(23, Coordinates(2, 0)),
+            row(2, Coordinates(1, 0)),
+            row(12, Coordinates(2, -1)),
+            row(23, Coordinates(0, 2)),
             row(25, Coordinates(2, 2)),
         ) { number, coordinates ->
             coordinatesOf(number) shouldBe coordinates

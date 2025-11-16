@@ -38,9 +38,9 @@ class LikeAGIFForYourYard : AdventOfCode<Int>(2015, 18) {
 
         private fun GameOfLightGrid.withCornersStuckOn(): GameOfLightGrid {
             setAt(Coordinates(0, 0), on)
-            setAt(Coordinates(0, width - 1), on)
-            setAt(Coordinates(height - 1, 0), on)
-            setAt(Coordinates(height - 1, width - 1), on)
+            setAt(Coordinates(width - 1, 0), on)
+            setAt(Coordinates(0, height - 1), on)
+            setAt(Coordinates(width - 1, height - 1), on)
             return this
         }
     }

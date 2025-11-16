@@ -48,15 +48,15 @@ class TheStarsAlignTest : StringSpec({
 
     "Input can be parsed" {
         StarAlignmentGrid.of(smallInput).stars shouldBe listOf(
-            Star(Coordinates(1, 9), Coordinates(2, 0)),
-            Star(Coordinates(0, 7), Coordinates(0, -1)),
+            Star(Coordinates(9, 1), Coordinates(0, 2)),
+            Star(Coordinates(7, 0), Coordinates(-1, 0)),
         )
     }
 
     "Star movements can be calculated" {
         StarAlignmentGrid.of(smallInput).move().stars shouldBe listOf(
-            Star(Coordinates(3, 9), Coordinates(2, 0)),
-            Star(Coordinates(0, 6), Coordinates(0, -1)),
+            Star(Coordinates(9, 3), Coordinates(0, 2)),
+            Star(Coordinates(6, 0), Coordinates(-1, 0)),
         )
     }
 

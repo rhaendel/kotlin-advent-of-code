@@ -22,7 +22,7 @@ private class TopographicMap(input: List<String>) : Grid<Int>(input, Int.MIN_VAL
     override fun Char.toElementType() = if (isDigit()) digitToInt() else nullElement
 
     private fun heights(): Sequence<Pair<Coordinates, Int>> = forEachElement { row, col, height ->
-        Coordinates(row, col) to height
+        Coordinates(col, row) to height
     }
 
     private fun heightAt(coordinates: Coordinates) = getAt(coordinates)

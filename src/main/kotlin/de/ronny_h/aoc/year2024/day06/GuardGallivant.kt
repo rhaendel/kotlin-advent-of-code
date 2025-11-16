@@ -61,7 +61,7 @@ private class Lab(input: List<String>) : Grid<Char>(input, ' ') {
     @OptIn(ExperimentalCoroutinesApi::class)
     fun freePositions(scope: CoroutineScope, bufferSize: Int) = scope.produce(capacity = bufferSize) {
         forEachElement { row, col, char ->
-            if (char == free) Coordinates(row, col) else null
+            if (char == free) Coordinates(col, row) else null
         }
             .filterNotNull()
             .forEach {

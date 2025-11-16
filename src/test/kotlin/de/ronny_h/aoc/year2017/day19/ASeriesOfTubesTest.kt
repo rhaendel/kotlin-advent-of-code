@@ -17,7 +17,7 @@ class ASeriesOfTubesTest : StringSpec({
     """.trimMargin("#").asList()
 
     "input can be parsed" {
-        RoutingDiagram(input).findStartCoordinates() shouldBe Coordinates(0, 4)
+        RoutingDiagram(input).findStartCoordinates() shouldBe Coordinates(4, 0)
     }
 
     "part 1: the letters on the path from the beginning to the end" {

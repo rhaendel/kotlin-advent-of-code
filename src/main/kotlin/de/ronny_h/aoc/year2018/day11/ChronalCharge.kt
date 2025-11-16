@@ -24,7 +24,7 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
             val powerLevel = rackId * y + serialNumber
             val hundredsDigit = (powerLevel * rackId).digit(3)
             this[y, x] = hundredsDigit - 5
-            cache[Configuration(Coordinates(y, x), 1)] = this[y, x]
+            cache[Configuration(Coordinates(x, y), 1)] = this[y, x]
         }.last()
     }
 
@@ -70,7 +70,7 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
     private fun <R> forEachCoordinates(upperIndex: Int, action: (position: Coordinates) -> R): Sequence<R> = sequence {
         for (row in 0..upperIndex) {
             for (col in 0..upperIndex) {
-                yield(action(Coordinates(row, col)))
+                yield(action(Coordinates(col, row)))
             }
         }
     }

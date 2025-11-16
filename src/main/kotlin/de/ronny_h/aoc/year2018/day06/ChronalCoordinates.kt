@@ -18,7 +18,7 @@ class ChronalCoordinates : AdventOfCode<Int>(2018, 6) {
 
 fun List<String>.parseCoordinates() = map {
     val (col, row) = it.split(", ")
-    Coordinates(row.toInt(), col.toInt())
+    Coordinates(col.toInt(), row.toInt())
 }
 
 class AreaGrid(private val coordinates: List<Coordinates>) {
@@ -52,7 +52,7 @@ class AreaGrid(private val coordinates: List<Coordinates>) {
     private fun allGridCoordinates() = sequence {
         for (row in min.y..max.y) {
             for (col in min.x..max.x) {
-                yield(Coordinates(row, col))
+                yield(Coordinates(col, row))
             }
         }
     }
@@ -61,12 +61,12 @@ class AreaGrid(private val coordinates: List<Coordinates>) {
         // coordinates on the border are part of infinite areas -> filter them out
         val borderAreas = mutableSetOf<Coordinates>()
         for (col in min.x..max.x) {
-            grid[Coordinates(min.y, col)]?.let { borderAreas.add(it) }
-            grid[Coordinates(max.y, col)]?.let { borderAreas.add(it) }
+            grid[Coordinates(col, min.y)]?.let { borderAreas.add(it) }
+            grid[Coordinates(col, max.y)]?.let { borderAreas.add(it) }
         }
         for (row in min.y..max.y) {
-            grid[Coordinates(row, min.x)]?.let { borderAreas.add(it) }
-            grid[Coordinates(row, max.x)]?.let { borderAreas.add(it) }
+            grid[Coordinates(min.x, row)]?.let { borderAreas.add(it) }
+            grid[Coordinates(max.x, row)]?.let { borderAreas.add(it) }
         }
         return coordinates.toSet() - borderAreas
     }
@@ -82,6 +82,6 @@ class AreaGrid(private val coordinates: List<Coordinates>) {
             maxRow = max(maxRow, it.y)
             maxCol = max(maxCol, it.x)
         }
-        return Coordinates(minRow, minCol) to Coordinates(maxRow, maxCol)
+        return Coordinates(minCol, minRow) to Coordinates(maxCol, maxRow)
     }
 }
