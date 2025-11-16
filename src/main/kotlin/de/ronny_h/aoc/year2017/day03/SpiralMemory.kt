@@ -28,8 +28,8 @@ class SpiralMemory : AdventOfCode<Int>(2017, 3) {
 }
 
 fun coordinatesOf(number: Int): Coordinates {
-    fun Coordinates.isInACornerNotInSouthEast(): Boolean = abs(col) == abs(row) && (col <= 0 || row <= 0)
-    fun Coordinates.isOneStepEastOfSouthEastCorner(): Boolean = col == row + 1 && col > 0
+    fun Coordinates.isInACornerNotInSouthEast(): Boolean = abs(x) == abs(y) && (x <= 0 || y <= 0)
+    fun Coordinates.isOneStepEastOfSouthEastCorner(): Boolean = x == y + 1 && x > 0
 
     return generateSequence(ZERO to SOUTH) { (coordinates, direction) ->
         val newDirection =

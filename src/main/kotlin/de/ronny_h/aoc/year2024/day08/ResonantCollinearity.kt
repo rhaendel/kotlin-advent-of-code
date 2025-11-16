@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year2024.day08
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.combinations
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Grid
-import de.ronny_h.aoc.extensions.combinations
 
 fun main() = ResonantCollinearity().run(214, 809)
 
@@ -61,5 +61,5 @@ private class CityMap(input: List<String>) : Grid<Char>(input, '.') {
         return antinodes
     }
 
-    private fun Coordinates.isOnTheMap() = col in colIndices && row in rowIndices
+    private fun Coordinates.isOnTheMap() = x in colIndices && y in rowIndices
 }

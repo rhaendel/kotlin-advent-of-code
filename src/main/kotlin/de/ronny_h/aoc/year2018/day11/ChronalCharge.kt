@@ -36,12 +36,12 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
             }
             .maxBy { it.total }
             .configuration
-        return "${max.coordinates.col},${max.coordinates.row},${max.size}"  // X,Y,size
+        return "${max.coordinates.x},${max.coordinates.y},${max.size}"  // X,Y,size
     }
 
     fun find3x3SquareWithLargestTotal(): String {
         val maxCoordinates = findSquareWithLargestTotalForSize(3).configuration.coordinates
-        return "${maxCoordinates.col},${maxCoordinates.row}"  // X,Y
+        return "${maxCoordinates.x},${maxCoordinates.y}"  // X,Y
     }
 
     private data class Configuration(val coordinates: Coordinates, val size: Int)
@@ -55,9 +55,9 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
             } else {
                 val total = cache[Configuration(coordinates, squareSize - 1)]?.let { cached ->
                     val additionalColumnTotal =
-                        (0..<squareSize).sumOf { this[coordinates.row + it, coordinates.col + squareSize - 1] }
+                        (0..<squareSize).sumOf { this[coordinates.y + it, coordinates.x + squareSize - 1] }
                     val additionalRowTotal =
-                        (0..<squareSize - 1).sumOf { this[coordinates.row + squareSize - 1, coordinates.col + it] }
+                        (0..<squareSize - 1).sumOf { this[coordinates.y + squareSize - 1, coordinates.x + it] }
                     cached + additionalColumnTotal + additionalRowTotal
                 } ?: sumOfSquare(coordinates, squareSize)
                 cache[config] = total
@@ -77,7 +77,7 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
 
     private fun sumOfSquare(coordinates: Coordinates, squareSize: Int): Int = (0..<squareSize).sumOf { r ->
         (0..<squareSize).sumOf { c ->
-            this[coordinates.row + r, coordinates.col + c]
+            this[coordinates.y + r, coordinates.x + c]
         }
     }
 

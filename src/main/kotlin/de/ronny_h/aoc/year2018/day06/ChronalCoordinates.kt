@@ -50,8 +50,8 @@ class AreaGrid(private val coordinates: List<Coordinates>) {
         .count()
 
     private fun allGridCoordinates() = sequence {
-        for (row in min.row..max.row) {
-            for (col in min.col..max.col) {
+        for (row in min.y..max.y) {
+            for (col in min.x..max.x) {
                 yield(Coordinates(row, col))
             }
         }
@@ -60,27 +60,27 @@ class AreaGrid(private val coordinates: List<Coordinates>) {
     private fun collectFiniteAreas(): Set<Coordinates> {
         // coordinates on the border are part of infinite areas -> filter them out
         val borderAreas = mutableSetOf<Coordinates>()
-        for (col in min.col..max.col) {
-            grid[Coordinates(min.row, col)]?.let { borderAreas.add(it) }
-            grid[Coordinates(max.row, col)]?.let { borderAreas.add(it) }
+        for (col in min.x..max.x) {
+            grid[Coordinates(min.y, col)]?.let { borderAreas.add(it) }
+            grid[Coordinates(max.y, col)]?.let { borderAreas.add(it) }
         }
-        for (row in min.row..max.row) {
-            grid[Coordinates(row, min.col)]?.let { borderAreas.add(it) }
-            grid[Coordinates(row, max.col)]?.let { borderAreas.add(it) }
+        for (row in min.y..max.y) {
+            grid[Coordinates(row, min.x)]?.let { borderAreas.add(it) }
+            grid[Coordinates(row, max.x)]?.let { borderAreas.add(it) }
         }
         return coordinates.toSet() - borderAreas
     }
 
     private fun List<Coordinates>.findBoundaries(): Pair<Coordinates, Coordinates> {
-        var minRow = first().row
-        var minCol = first().col
+        var minRow = first().y
+        var minCol = first().x
         var maxRow = minRow
         var maxCol = minCol
         forEach {
-            minRow = min(minRow, it.row)
-            minCol = min(minCol, it.col)
-            maxRow = max(maxRow, it.row)
-            maxCol = max(maxCol, it.col)
+            minRow = min(minRow, it.y)
+            minCol = min(minCol, it.x)
+            maxRow = max(maxRow, it.y)
+            maxCol = max(maxCol, it.x)
         }
         return Coordinates(minRow, minCol) to Coordinates(maxRow, maxCol)
     }

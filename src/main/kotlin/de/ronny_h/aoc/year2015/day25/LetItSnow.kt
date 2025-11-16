@@ -24,8 +24,8 @@ fun List<String>.parseCoordinates(): Coordinates {
 fun nextCodeFor(code: Int): Int = ((code * 252533L) % 33554393).toInt()
 
 fun numberOfSequenceAt(coordinates: Coordinates): Int {
-    return (sumOfFirstNaturalNumbers(coordinates.col)
-            + sumOfFirstNaturalNumbers(coordinates.col + coordinates.row - 2)
-            - sumOfFirstNaturalNumbers(coordinates.col - 1)
+    return (sumOfFirstNaturalNumbers(coordinates.x)
+            + sumOfFirstNaturalNumbers(coordinates.x + coordinates.y - 2)
+            - sumOfFirstNaturalNumbers(coordinates.x - 1)
             ).toInt()
 }

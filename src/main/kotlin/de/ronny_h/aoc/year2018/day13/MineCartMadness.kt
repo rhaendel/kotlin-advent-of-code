@@ -14,12 +14,12 @@ fun main() = MineCartMadness().run("33,69", "135,9")
 class MineCartMadness : AdventOfCode<String>(2018, 13) {
     override fun part1(input: List<String>): String {
         val collision = Track(input).moveCartsUntilFirstCrash()
-        return "${collision.col},${collision.row}"
+        return "${collision.x},${collision.y}"
     }
 
     override fun part2(input: List<String>): String {
         val remaining = Track(input).moveCartsUntilOnlyOneRemains()
-        return "${remaining.col},${remaining.row}"
+        return "${remaining.x},${remaining.y}"
     }
 }
 

@@ -45,8 +45,8 @@ class StarAlignmentGrid(initStars: List<Star>) {
 
     fun printStars() {
         val (min, max) = findBorders()
-        for (row in min.row..max.row) {
-            for (col in min.col..max.col) {
+        for (row in min.y..max.y) {
+            for (col in min.x..max.x) {
                 if (Coordinates(row, col) in starPositions()) {
                     print('#')
                 } else {
@@ -61,7 +61,7 @@ class StarAlignmentGrid(initStars: List<Star>) {
 
     private fun aMessageCanBeSeen(): Boolean {
         val (min, max) = findBorders()
-        if (max.row - min.row > 50 || max.col - min.col > 100) {
+        if (max.y - min.y > 50 || max.x - min.x > 100) {
             // if the stars are too far away from each other, we don't need to check
             return false
         }
@@ -86,26 +86,26 @@ class StarAlignmentGrid(initStars: List<Star>) {
     }
 
     private fun coordinatesColumnWise(min: Coordinates, max: Coordinates) = sequence {
-        for (col in min.col..max.col) {
-            for (row in min.row..max.row) {
+        for (col in min.x..max.x) {
+            for (row in min.y..max.y) {
                 yield(Coordinates(row, col))
             }
         }
     }
 
     private fun coordinatesRowWise(min: Coordinates, max: Coordinates) = sequence {
-        for (row in min.row..max.row) {
-            for (col in min.col..max.col) {
+        for (row in min.y..max.y) {
+            for (col in min.x..max.x) {
                 yield(Coordinates(row, col))
             }
         }
     }
 
     private fun findBorders(): Pair<Coordinates, Coordinates> {
-        val minRow = stars.minOf { it.position.row }
-        val minCol = stars.minOf { it.position.col }
-        val maxRow = stars.maxOf { it.position.row }
-        val maxCol = stars.maxOf { it.position.col }
+        val minRow = stars.minOf { it.position.y }
+        val minCol = stars.minOf { it.position.x }
+        val maxRow = stars.maxOf { it.position.y }
+        val maxCol = stars.maxOf { it.position.x }
         return Coordinates(minRow, minCol) to Coordinates(maxRow, maxCol)
     }
 

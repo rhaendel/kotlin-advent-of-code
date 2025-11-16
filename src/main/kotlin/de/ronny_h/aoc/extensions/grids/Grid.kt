@@ -42,7 +42,7 @@ abstract class Grid<T>(
         overrides: List<Coordinates> = emptyList()
     ) : this(height, width, nullElement, overrideElement) {
         overrides.forEach {
-            grid[it.row][it.col] = overrideElement
+            grid[it.y][it.x] = overrideElement
         }
     }
 
@@ -82,9 +82,9 @@ abstract class Grid<T>(
         grid[row][col] = value
     }
 
-    fun getAt(position: Coordinates) = get(position.row, position.col)
+    fun getAt(position: Coordinates) = get(position.y, position.x)
     fun setAt(position: Coordinates, element: T) {
-        this[position.row, position.col] = element
+        this[position.y, position.x] = element
     }
 
     /**
@@ -185,7 +185,7 @@ abstract class Grid<T>(
             } else {
                 writer.print(element)
             }
-            if (position.col == width - 1) writer.print('\n')
+            if (position.x == width - 1) writer.print('\n')
         }.last()
     }
 

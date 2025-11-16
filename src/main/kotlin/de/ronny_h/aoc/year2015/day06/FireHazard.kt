@@ -2,9 +2,7 @@ package de.ronny_h.aoc.year2015.day06
 
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.grids.Coordinates
-import de.ronny_h.aoc.year2015.day06.Action.OFF
-import de.ronny_h.aoc.year2015.day06.Action.ON
-import de.ronny_h.aoc.year2015.day06.Action.TOGGLE
+import de.ronny_h.aoc.year2015.day06.Action.*
 
 fun main() = FireHazard().run(400410, 15343601)
 
@@ -15,9 +13,9 @@ class FireHazard : AdventOfCode<Int>(2015, 6) {
     }
 
     private fun switch(switchLight: SwitchLight) = with(switchLight) {
-        for (row in from.row..to.row) {
-            for (col in from.col..to.col) {
-                when(action) {
+        for (row in from.y..to.y) {
+            for (col in from.x..to.x) {
+                when (action) {
                     ON -> onOfGrid[row][col] = true
                     OFF -> onOfGrid[row][col] = false
                     TOGGLE -> onOfGrid[row][col] = !onOfGrid[row][col]
@@ -49,9 +47,9 @@ class FireHazard : AdventOfCode<Int>(2015, 6) {
     }
 
     private fun dim(switchLight: SwitchLight) = with(switchLight) {
-        for (row in from.row..to.row) {
-            for (col in from.col..to.col) {
-                when(action) {
+        for (row in from.y..to.y) {
+            for (col in from.x..to.x) {
+                when (action) {
                     ON -> dimmingGrid[row][col]++
                     OFF -> if (dimmingGrid[row][col] > 0) dimmingGrid[row][col]--
                     TOGGLE -> dimmingGrid[row][col] = dimmingGrid[row][col] + 2
