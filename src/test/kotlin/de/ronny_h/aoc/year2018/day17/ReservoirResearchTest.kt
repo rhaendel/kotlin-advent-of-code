@@ -37,13 +37,133 @@ class ReservoirResearchTest : StringSpec({
         VerticalSliceOfGround(input).toString() shouldBe expectedSlice
     }
 
-    "part 1" {
-        val input = listOf("")
-        ReservoirResearch().part1(input) shouldBe 0
+    "let the water flow according to the puzzle's example" {
+        val expectedSlice = """
+            ......+.......
+            ......|.....#.
+            .#..#||||...#.
+            .#..#~~#|.....
+            .#..#~~#|.....
+            .#~~~~~#|.....
+            .#~~~~~#|.....
+            .#######|.....
+            ........|.....
+            ...|||||||||..
+            ...|#~~~~~#|..
+            ...|#~~~~~#|..
+            ...|#~~~~~#|..
+            ...|#######|..
+        """.trimIndent()
+
+        val slice = VerticalSliceOfGround(input)
+        slice.waterFlow(slice.springCoordinates)
+        slice.toString() shouldBe expectedSlice
     }
 
-    "part 2" {
-        val input = listOf("")
-        ReservoirResearch().part2(input) shouldBe 0
+    "overflow within a bin" {
+        val input = """
+            x=498, y=2..6
+            x=505, y=2..6
+            x=502, y=3..4
+            y=6, x=498..505
+        """.asList()
+        val expectedInit = """
+            ...+......
+            ..........
+            .#......#.
+            .#...#..#.
+            .#...#..#.
+            .#......#.
+            .########.
+        """.trimIndent()
+        val expectedFlooded = """
+            ....+.......
+            .||||||||||.
+            .|#~~~~~~#|.
+            .|#~~~#~~#|.
+            .|#~~~#~~#|.
+            .|#~~~~~~#|.
+            .|########|.
+        """.trimIndent()
+
+        val slice = VerticalSliceOfGround(input)
+        slice.toString() shouldBe expectedInit
+        slice.waterFlow(slice.springCoordinates)
+        slice.toString() shouldBe expectedFlooded
+    }
+
+    "plateau within a bin" {
+        val input = """
+            x=496, y=2..6
+            x=503, y=2..6
+            x=499, y=3..4
+            x=500, y=3..4
+            y=6, x=496..503
+        """.asList()
+        val expectedInit = """
+            .....+....
+            ..........
+            .#......#.
+            .#..##..#.
+            .#..##..#.
+            .#......#.
+            .########.
+        """.trimIndent()
+        val expectedFlooded = """
+            ......+.....
+            .||||||||||.
+            .|#~~~~~~#|.
+            .|#~~##~~#|.
+            .|#~~##~~#|.
+            .|#~~~~~~#|.
+            .|########|.
+        """.trimIndent()
+
+        val slice = VerticalSliceOfGround(input)
+        slice.toString() shouldBe expectedInit
+        slice.waterFlow(slice.springCoordinates)
+        slice.toString() shouldBe expectedFlooded
+    }
+
+    "two springs into one bin" {
+        val input = """
+            x=500, y=2..2
+            x=499, y=5..7
+            x=503, y=3..7
+            y=7, x=499..503
+        """.asList()
+        val expectedInit = """
+            ..+....
+            .......
+            ..#....
+            .....#.
+            .....#.
+            .#...#.
+            .#...#.
+            .#####.
+        """.trimIndent()
+        val expectedFlooded = """
+            ...+....
+            ..|||...
+            ..|#|...
+            ..|.|.#.
+            .|||||#.
+            .|#~~~#.
+            .|#~~~#.
+            .|#####.
+        """.trimIndent()
+
+        val slice = VerticalSliceOfGround(input)
+        slice.toString() shouldBe expectedInit
+        slice.waterFlow(slice.springCoordinates)
+        slice.toString() shouldBe expectedFlooded
+    }
+
+    "part 1: the number of tiles the water can reach" {
+        ReservoirResearch().part1(input) shouldBe 57
+    }
+
+    "part 2: the number of tiles with resting water" {
+        ReservoirResearch().part2(input) shouldBe 29
     }
 })
