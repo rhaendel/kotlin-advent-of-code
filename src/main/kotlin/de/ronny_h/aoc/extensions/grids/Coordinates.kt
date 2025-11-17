@@ -33,7 +33,7 @@ data class Coordinates(val x: Int, val y: Int) : Comparable<Coordinates> {
      */
     infix fun taxiDistanceTo(other: Coordinates): Int = abs(other.x - x) + abs(other.y - y)
 
-    override fun toString() = "($y,$x)"
+    override fun toString() = "($x,$y)"
 
     /**
      * Orders [Coordinates] in reading order: top-to-bottom, then left-to-right.
