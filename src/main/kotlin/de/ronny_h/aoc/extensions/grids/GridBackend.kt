@@ -1,5 +1,8 @@
 package de.ronny_h.aoc.extensions.grids
 
+import kotlin.math.max
+import kotlin.math.min
+
 interface GridBackend<T> {
     operator fun get(x: Int, y: Int): T
     operator fun get(at: Coordinates): T
@@ -57,5 +60,55 @@ class ListGridBackend<T>(width: Int, height: Int, nullElement: T) : GridBackend<
             }
         }
     }
+}
 
+class MapGridBackend<T>(defaultValue: T) : GridBackend<T> {
+    private var minX = Int.MAX_VALUE
+    private var maxX = Int.MIN_VALUE
+    private var minY = Int.MAX_VALUE
+    private var maxY = Int.MIN_VALUE
+
+    private val grid = mutableMapOf<Coordinates, T>().withDefault { defaultValue }
+
+    override fun get(x: Int, y: Int): T = get(Coordinates(x, y))
+
+    override fun get(at: Coordinates): T {
+        if (at.x !in minX..maxX || at.y !in minY..maxY) {
+            throw IndexOutOfBoundsException("Coordinates $at are not inside the bound of this Grid (min and max coordinates for which values were set)")
+        }
+        return grid.getValue(at)
+    }
+
+    override fun set(x: Int, y: Int, value: T) = set(Coordinates(x, y), value)
+
+    override fun set(at: Coordinates, value: T) {
+        minX = min(minX, at.x)
+        minY = min(minY, at.y)
+        maxX = max(maxX, at.x)
+        maxY = max(maxY, at.y)
+        grid[at] = value
+    }
+
+    override fun getOrNull(x: Int, y: Int): T? = grid[Coordinates(x, y)]
+
+    override fun getOrNull(at: Coordinates): T? = grid[at]
+
+    override fun subGridAt(x: Int, y: Int, width: Int, height: Int): List<List<T>> = buildList {
+        for (row in y..<y + height) {
+            add(buildList {
+                for (col in x..<x + width) {
+                    add(grid.getValue(Coordinates(col, row)))
+                }
+            }
+            )
+        }
+    }
+
+    override fun <R> mapToSequence(transform: (x: Int, y: Int) -> R): Sequence<R> = sequence {
+        for (row in minY..maxY) {
+            for (col in minX..maxX) {
+                yield(transform(col, row))
+            }
+        }
+    }
 }
