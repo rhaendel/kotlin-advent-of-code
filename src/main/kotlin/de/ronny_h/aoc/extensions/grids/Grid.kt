@@ -23,7 +23,7 @@ abstract class Grid<T>(
     private val fallbackElement: T = nullElement,
 ) {
 
-    private val grid: MutableList<MutableList<T>> = MutableList(height) { MutableList(width) { nullElement } }
+    private val grid: GridBackend<T> = ListGridBackend(width, height, nullElement)
 
     /**
      * A function that maps each `Char` that may occur in the `input: List<String>` to a value of type [T].
@@ -41,9 +41,7 @@ abstract class Grid<T>(
         overrideElement: T = nullElement,
         overrides: List<Coordinates> = emptyList()
     ) : this(height, width, nullElement, overrideElement) {
-        overrides.forEach {
-            grid[it.y][it.x] = overrideElement
-        }
+        overrides.forEach { grid[it] = overrideElement }
     }
 
     /**
@@ -64,27 +62,22 @@ abstract class Grid<T>(
 
     protected fun initGrid(input: List<String>) = input.forEachIndexed { y, line ->
         line.forEachIndexed { x, char ->
-            grid[y][x] = char.toElementType()
+            grid[x, y] = char.toElementType()
         }
     }
 
     /**
      * @return The value at the specified cell.
      */
-    operator fun get(x: Int, y: Int): T {
-        return grid
-            .getOrNull(y)
-            ?.getOrNull(x)
-            ?: fallbackElement
-    }
+    operator fun get(x: Int, y: Int): T = grid.getOrNull(x, y) ?: fallbackElement
 
     operator fun set(x: Int, y: Int, value: T) {
-        grid[y][x] = value
+        grid[x, y] = value
     }
 
-    fun getAt(position: Coordinates) = get(position.x, position.y)
+    fun getAt(position: Coordinates) = grid.getOrNull(position) ?: fallbackElement
     fun setAt(position: Coordinates, element: T) {
-        this.set(position.x, position.y, element)
+        grid[position] = element
     }
 
     /**
@@ -93,37 +86,18 @@ abstract class Grid<T>(
      * in this Grid, and vice-versa.
      * Structural changes in the base Grid make the behavior of the view undefined.
      */
-    fun subGridAt(x: Int, y: Int, width: Int, height: Int = width): List<List<T>> {
-        return buildList {
-            for (r in y..<y + height) {
-                add(grid[r].subList(x, x + width))
-            }
-        }
+    fun subGridAt(x: Int, y: Int, width: Int, height: Int = width): List<List<T>> = grid.subGridAt(x, y, width, height)
+
+    fun <R> forEachIndex(action: (x: Int, y: Int) -> R): Sequence<R> = grid.mapToSequence(action)
+
+    fun <R> forEachElement(action: (x: Int, y: Int, element: T) -> R): Sequence<R> = grid.mapToSequence { x, y ->
+        action(x, y, get(x, y))
     }
 
-    fun <R> forEachIndex(action: (x: Int, y: Int) -> R): Sequence<R> = sequence {
-        for (y in grid.indices) {
-            for (x in grid[0].indices) {
-                yield(action(x, y))
-            }
+    fun <R> forEachCoordinates(action: (position: Coordinates, element: T) -> R): Sequence<R> =
+        grid.mapToSequence { x, y ->
+            action(Coordinates(x, y), get(x, y))
         }
-    }
-
-    fun <R> forEachElement(action: (x: Int, y: Int, element: T) -> R): Sequence<R> = sequence {
-        for (y in grid.indices) {
-            for (x in grid[0].indices) {
-                yield(action(x, y, get(x, y)))
-            }
-        }
-    }
-
-    fun <R> forEachCoordinates(action: (position: Coordinates, element: T) -> R): Sequence<R> = sequence {
-        for (y in grid.indices) {
-            for (x in grid[0].indices) {
-                yield(action(Coordinates(x, y), get(x, y)))
-            }
-        }
-    }
 
     /**
      * Returns the first element matching the given [value].
