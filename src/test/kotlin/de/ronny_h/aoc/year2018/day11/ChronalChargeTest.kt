@@ -14,7 +14,7 @@ class ChronalChargeTest : StringSpec({
             row(217, 196, 39, 0),
             row(101, 153, 71, 4),
         ) { x, y, serialNumber, powerLevel ->
-            PowerCellGrid(serialNumber)[y, x] shouldBe powerLevel
+            PowerCellGrid(serialNumber)[x, y] shouldBe powerLevel
         }
     }
 

@@ -27,9 +27,9 @@ private class CityMap(input: List<String>) : Grid<Char>(input, '.') {
     private val rowIndices = input.indices
 
     private val antennas: Map<Char, List<Coordinates>> = buildMap<Char, MutableList<Coordinates>> {
-        forEachElement { row, col, char ->
+        forEachElement { x, y, char ->
             if (char != nullElement) {
-                getOrPut(char, ::mutableListOf).add(Coordinates(col, row))
+                getOrPut(char, ::mutableListOf).add(Coordinates(x, y))
             }
         }.last()
     }

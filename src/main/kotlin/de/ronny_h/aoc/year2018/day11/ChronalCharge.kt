@@ -19,12 +19,12 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
     private val cache = mutableMapOf<Configuration, Int>()
 
     init {
-        forEachIndex { y, x ->
+        forEachIndex { x, y ->
             val rackId = x + 10
             val powerLevel = rackId * y + serialNumber
             val hundredsDigit = (powerLevel * rackId).digit(3)
-            this[y, x] = hundredsDigit - 5
-            cache[Configuration(Coordinates(x, y), 1)] = this[y, x]
+            this[x, y] = hundredsDigit - 5
+            cache[Configuration(Coordinates(x, y), 1)] = this[x, y]
         }.last()
     }
 
@@ -55,9 +55,9 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
             } else {
                 val total = cache[Configuration(coordinates, squareSize - 1)]?.let { cached ->
                     val additionalColumnTotal =
-                        (0..<squareSize).sumOf { this[coordinates.y + it, coordinates.x + squareSize - 1] }
+                        (0..<squareSize).sumOf { this[coordinates.x + squareSize - 1, coordinates.y + it] }
                     val additionalRowTotal =
-                        (0..<squareSize - 1).sumOf { this[coordinates.y + squareSize - 1, coordinates.x + it] }
+                        (0..<squareSize - 1).sumOf { this[coordinates.x + it, coordinates.y + squareSize - 1] }
                     cached + additionalColumnTotal + additionalRowTotal
                 } ?: sumOfSquare(coordinates, squareSize)
                 cache[config] = total
@@ -77,7 +77,7 @@ class PowerCellGrid(serialNumber: Int) : Grid<Int>(300, 300, -1000) {
 
     private fun sumOfSquare(coordinates: Coordinates, squareSize: Int): Int = (0..<squareSize).sumOf { r ->
         (0..<squareSize).sumOf { c ->
-            this[coordinates.y + r, coordinates.x + c]
+            this[coordinates.x + c, coordinates.y + r]
         }
     }
 

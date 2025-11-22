@@ -62,65 +62,65 @@ abstract class Grid<T>(
         initGrid(input)
     }
 
-    protected fun initGrid(input: List<String>) = input.forEachIndexed { row, line ->
-        line.forEachIndexed { col, char ->
-            grid[row][col] = char.toElementType()
+    protected fun initGrid(input: List<String>) = input.forEachIndexed { y, line ->
+        line.forEachIndexed { x, char ->
+            grid[y][x] = char.toElementType()
         }
     }
 
     /**
      * @return The value at the specified cell.
      */
-    operator fun get(row: Int, col: Int): T {
+    operator fun get(x: Int, y: Int): T {
         return grid
-            .getOrNull(row)
-            ?.getOrNull(col)
+            .getOrNull(y)
+            ?.getOrNull(x)
             ?: fallbackElement
     }
 
-    operator fun set(row: Int, col: Int, value: T) {
-        grid[row][col] = value
+    operator fun set(x: Int, y: Int, value: T) {
+        grid[y][x] = value
     }
 
-    fun getAt(position: Coordinates) = get(position.y, position.x)
+    fun getAt(position: Coordinates) = get(position.x, position.y)
     fun setAt(position: Coordinates, element: T) {
-        this[position.y, position.x] = element
+        this.set(position.x, position.y, element)
     }
 
     /**
-     * @return a view of the portion of this Grid between the specified [row], [col] (inclusive) and [row] + [height], [col] + [width] (exclusive).
+     * @return a view of the portion of this Grid between the specified [x], [y] (inclusive) and [x] + [width], [y] + [height] (exclusive).
      * The returned list of lists is backed by this Grid, so non-structural changes in the returned list are reflected
      * in this Grid, and vice-versa.
      * Structural changes in the base Grid make the behavior of the view undefined.
      */
-    fun subGridAt(row: Int, col: Int, height: Int, width: Int = height): List<List<T>> {
+    fun subGridAt(x: Int, y: Int, width: Int, height: Int = width): List<List<T>> {
         return buildList {
-            for (r in row..<row + height) {
-                add(grid[r].subList(col, col + width))
+            for (r in y..<y + height) {
+                add(grid[r].subList(x, x + width))
             }
         }
     }
 
-    fun <R> forEachIndex(action: (row: Int, col: Int) -> R): Sequence<R> = sequence {
-        for (row in grid.indices) {
-            for (col in grid[0].indices) {
-                yield(action(row, col))
+    fun <R> forEachIndex(action: (x: Int, y: Int) -> R): Sequence<R> = sequence {
+        for (y in grid.indices) {
+            for (x in grid[0].indices) {
+                yield(action(x, y))
             }
         }
     }
 
-    fun <R> forEachElement(action: (row: Int, col: Int, element: T) -> R): Sequence<R> = sequence {
-        for (row in grid.indices) {
-            for (col in grid[0].indices) {
-                yield(action(row, col, get(row, col)))
+    fun <R> forEachElement(action: (x: Int, y: Int, element: T) -> R): Sequence<R> = sequence {
+        for (y in grid.indices) {
+            for (x in grid[0].indices) {
+                yield(action(x, y, get(x, y)))
             }
         }
     }
 
     fun <R> forEachCoordinates(action: (position: Coordinates, element: T) -> R): Sequence<R> = sequence {
-        for (row in grid.indices) {
-            for (col in grid[0].indices) {
-                yield(action(Coordinates(col, row), get(row, col)))
+        for (y in grid.indices) {
+            for (x in grid[0].indices) {
+                yield(action(Coordinates(x, y), get(x, y)))
             }
         }
     }
@@ -130,8 +130,8 @@ abstract class Grid<T>(
      *
      * @throws NoSuchElementException If no matching element can be found.
      */
-    fun find(value: T): Coordinates = forEachElement { row, col, element ->
-        if (element == value) Coordinates(col, row) else null
+    fun find(value: T): Coordinates = forEachElement { x, y, element ->
+        if (element == value) Coordinates(x, y) else null
     }.filterNotNull().first()
 
     override fun toString(): String = toString(setOf())

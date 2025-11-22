@@ -113,17 +113,17 @@ class FractalArtGrid(size: Int) : Grid<Char>(size, size, off) {
     }
 
     private fun applyRuleAt(rule: Rule, start: Coordinates) {
-        rule.replacement.forEachIndexed { row, rowString ->
-            rowString.forEachIndexed { col, value ->
-                this[start.y + row, start.x + col] = value
+        rule.replacement.forEachIndexed { y, rowString ->
+            rowString.forEachIndexed { x, value ->
+                this[start.x + x, start.y + y] = value
             }
         }
     }
 
     private fun forEachSquareOfSize(size: Int, block: (Coordinates, List<List<Char>>) -> Unit) {
-        for (row in 0..<height step size) {
-            for (col in 0..<height step size) {
-                block(Coordinates(col, row), subGridAt(row, col, size))
+        for (y in 0..<height step size) {
+            for (x in 0..<height step size) {
+                block(Coordinates(x, y), subGridAt(x, y, width = size))
             }
         }
     }

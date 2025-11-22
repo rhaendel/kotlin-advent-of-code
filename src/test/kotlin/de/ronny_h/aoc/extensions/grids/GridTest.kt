@@ -38,8 +38,8 @@ class GridTest : StringSpec() {
         "charAt returns the input values from the right indices" {
             val grid = SimpleCharGrid(listOf("12", "34"))
             grid[0, 0] shouldBe '1'
-            grid[0, 1] shouldBe '2'
-            grid[1, 0] shouldBe '3'
+            grid[1, 0] shouldBe '2'
+            grid[0, 1] shouldBe '3'
             grid[1, 1] shouldBe '4'
         }
 
@@ -48,24 +48,24 @@ class GridTest : StringSpec() {
                 override fun Char.toElementType() = digitToInt()
             }
             grid[0, 0] shouldBe 1
-            grid[0, 1] shouldBe 2
-            grid[1, 0] shouldBe 3
+            grid[1, 0] shouldBe 2
+            grid[0, 1] shouldBe 3
             grid[1, 1] shouldBe 4
         }
 
         "charAt with indices returns the same as charAt with Coordinates" {
             val grid = SimpleCharGrid(listOf("12", "34"))
             grid[0, 0] shouldBe grid.getAt(Coordinates(0, 0))
-            grid[0, 1] shouldBe grid.getAt(Coordinates(1, 0))
-            grid[1, 0] shouldBe grid.getAt(Coordinates(0, 1))
+            grid[0, 1] shouldBe grid.getAt(Coordinates(0, 1))
+            grid[1, 0] shouldBe grid.getAt(Coordinates(1, 0))
             grid[1, 1] shouldBe grid.getAt(Coordinates(1, 1))
         }
 
         "charAt with index out of the input values returns the nullElement of a Char Grid" {
             val grid = SimpleCharGrid(listOf("12", "34"), ' ')
-            grid[-1, 0] shouldBe ' '
-            grid[0, 2] shouldBe ' '
-            grid[1, -1] shouldBe ' '
+            grid[0, -1] shouldBe ' '
+            grid[2, 0] shouldBe ' '
+            grid[-1, 1] shouldBe ' '
             grid[2, 2] shouldBe ' '
         }
 
@@ -73,9 +73,9 @@ class GridTest : StringSpec() {
             val grid = object : Grid<Int>(listOf("12", "34"), Int.MIN_VALUE) {
                 override fun Char.toElementType() = digitToInt()
             }
-            grid[-1, 0] shouldBe Int.MIN_VALUE
-            grid[0, 2] shouldBe Int.MIN_VALUE
-            grid[1, -1] shouldBe Int.MIN_VALUE
+            grid[0, -1] shouldBe Int.MIN_VALUE
+            grid[2, 0] shouldBe Int.MIN_VALUE
+            grid[-1, 1] shouldBe Int.MIN_VALUE
             grid[2, 2] shouldBe Int.MIN_VALUE
         }
 
@@ -83,17 +83,17 @@ class GridTest : StringSpec() {
             val grid = SimpleCharGrid(listOf("12", "34"))
             grid.setAt(Coordinates(0, 1), '5')
             grid[0, 0] shouldBe '1'
-            grid[0, 1] shouldBe '2'
-            grid[1, 0] shouldBe '5'
+            grid[1, 0] shouldBe '2'
+            grid[0, 1] shouldBe '5'
             grid[1, 1] shouldBe '4'
         }
 
         "set with array access sets the element at the given coordinates" {
             val grid = SimpleCharGrid(listOf("12", "34"))
-            grid[1, 0] = '5'
+            grid[0, 1] = '5'
             grid[0, 0] shouldBe '1'
-            grid[0, 1] shouldBe '2'
-            grid[1, 0] shouldBe '5'
+            grid[1, 0] shouldBe '2'
+            grid[0, 1] shouldBe '5'
             grid[1, 1] shouldBe '4'
         }
 
@@ -104,7 +104,7 @@ class GridTest : StringSpec() {
                 90AB
                 CDEF
             """.asList()
-            SimpleCharGrid(input).subGridAt(1, 1, 2) shouldBe listOf(
+            SimpleCharGrid(input).subGridAt(1, 1, width = 2) shouldBe listOf(
                 listOf('6', '7'),
                 listOf('0', 'A'),
             )
@@ -112,16 +112,16 @@ class GridTest : StringSpec() {
 
         "forEachIndex calls the provided function on each element in the expected order" {
             val grid = SimpleCharGrid(listOf("12", "34"))
-            val chars = grid.forEachIndex { row, column ->
-                grid[row, column]
+            val chars = grid.forEachIndex { x, y ->
+                grid[x, y]
             }.toList()
             chars shouldBe listOf('1', '2', '3', '4')
         }
 
         "forEachElement calls the provided function on each element in the expected order" {
             val grid = SimpleCharGrid(listOf("12", "34"))
-            val strings = grid.forEachElement { row, column, char ->
-                "$row,$column:$char"
+            val strings = grid.forEachElement { x, y, char ->
+                "$y,$x:$char"
             }.toList()
             strings shouldBe
                     listOf(

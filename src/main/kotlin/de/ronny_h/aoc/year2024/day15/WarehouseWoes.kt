@@ -66,9 +66,9 @@ abstract class Warehouse(input: List<String>) : Grid<Char>(input, '#') {
     }
 
     // GPS = Goods Positioning System
-    fun sumGPSCoordinates(): Int = forEachElement { row, col, element ->
+    fun sumGPSCoordinates(): Int = forEachElement { x, y, element ->
         if (element == leftGoodsChar) {
-            100 * row + col
+            100 * y + x
         } else {
             0
         }
