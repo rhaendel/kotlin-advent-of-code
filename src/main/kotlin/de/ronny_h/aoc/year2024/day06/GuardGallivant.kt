@@ -77,10 +77,10 @@ private class Lab(input: List<String>) : Grid<Char>(input, ' ') {
         var position = find(guard)
         var doWalkFurther = true
 
-        while (getAt(position) != offMap && doWalkFurther) {
+        while (get(position) != offMap && doWalkFurther) {
             doWalkFurther = visit(position, direction)
             val stepAhead = position + direction
-            if (getAt(stepAhead) == obstruction || stepAhead == additionalObstruction) {
+            if (get(stepAhead) == obstruction || stepAhead == additionalObstruction) {
                 direction = direction.turnRight()
             } else {
                 position = stepAhead

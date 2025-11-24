@@ -29,22 +29,22 @@ class Track(input: List<String>) : SimpleCharGrid(input, ' ') {
             when (element) {
                 '<' -> {
                     add(Cart(position, WEST))
-                    setAt(position, '-')
+                    set(position, '-')
                 }
 
                 '>' -> {
                     add(Cart(position, EAST))
-                    setAt(position, '-')
+                    set(position, '-')
                 }
 
                 '^' -> {
                     add(Cart(position, NORTH))
-                    setAt(position, '|')
+                    set(position, '|')
                 }
 
                 'v' -> {
                     add(Cart(position, SOUTH))
-                    setAt(position, '|')
+                    set(position, '|')
                 }
             }
         }.last()
@@ -84,7 +84,7 @@ class Track(input: List<String>) : SimpleCharGrid(input, ' ') {
 
     private fun Cart.move() {
         position += direction
-        direction = when (getAt(position)) {
+        direction = when (get(position)) {
             '+' -> direction.turn(nextTurn())
             '/' -> if (direction == NORTH || direction == SOUTH) direction.turnRight() else direction.turnLeft()
             '\\' -> if (direction == NORTH || direction == SOUTH) direction.turnLeft() else direction.turnRight()

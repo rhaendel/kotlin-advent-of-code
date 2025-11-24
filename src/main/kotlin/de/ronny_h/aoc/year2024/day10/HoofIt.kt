@@ -25,7 +25,7 @@ private class TopographicMap(input: List<String>) : Grid<Int>(input, Int.MIN_VAL
         Coordinates(x, y) to height
     }
 
-    private fun heightAt(coordinates: Coordinates) = getAt(coordinates)
+    private fun heightAt(coordinates: Coordinates) = get(coordinates)
 
     fun searchTrailheads(): List<Trailhead> {
         val startPositions = heights().filter { it.second == 0 }

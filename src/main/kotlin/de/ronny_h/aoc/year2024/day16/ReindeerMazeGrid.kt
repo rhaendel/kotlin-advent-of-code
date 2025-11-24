@@ -58,7 +58,7 @@ private class ReindeerMazeGrid(input: List<String>) : Grid<Char>(input, '#') {
                 Node(n.direction, n.position + n.direction),
                 Node(n.direction.turnLeft(), n.position),
                 Node(n.direction.turnRight(), n.position)
-            ).filter { getAt(it.position) != wall }
+            ).filter { get(it.position) != wall }
         }
 
         val d: (Node, Node) -> Int = { a, b ->

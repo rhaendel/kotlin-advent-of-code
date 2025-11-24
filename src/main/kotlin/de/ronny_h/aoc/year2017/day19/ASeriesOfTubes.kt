@@ -25,17 +25,17 @@ class RoutingDiagram(input: List<String>) : SimpleCharGrid(input, ' ') {
         var direction = SOUTH
         var steps = 0
 
-        while (getAt(position) != nullElement) {
-            if (getAt(position).isLetter()) {
-                letters.add(getAt(position))
+        while (get(position) != nullElement) {
+            if (get(position).isLetter()) {
+                letters.add(get(position))
             }
 
             position += direction
             steps++
 
-            if (getAt(position) == '+') {
+            if (get(position) == '+') {
                 val turnRight = direction.turnRight()
-                val charAtRight = getAt(position + turnRight)
+                val charAtRight = get(position + turnRight)
                 direction = if (charAtRight == turnRight.char() || charAtRight.isLetter()) {
                     turnRight
                 } else {

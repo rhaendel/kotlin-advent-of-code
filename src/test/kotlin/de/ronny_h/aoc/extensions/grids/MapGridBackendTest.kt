@@ -74,4 +74,34 @@ class MapGridBackendTest : StringSpec({
             "${grid[x, y]}"
         }.toList() shouldBe listOf("0", "1", "2", "3")
     }
+
+    "min and max indices are consistent with what was set" {
+        forAll(
+            row(listOf(Coordinates(7, 7)), 7, 7, 7, 7, 1, 1),
+            row(listOf(Coordinates(7, 7), Coordinates(8, 9)), 7, 7, 8, 9, 2, 3),
+        ) { set, minX, minY, maxX, maxY, width, height ->
+            val grid = MapGridBackend(0)
+            set.forEach { grid[it] = 1 }
+
+            grid.minX shouldBe minX
+            grid.minY shouldBe minY
+            grid.maxX shouldBe maxX
+            grid.maxY shouldBe maxY
+            grid.width shouldBe width
+            grid.height shouldBe height
+        }
+
+    }
+
+    "entries returns a set containing only grid entries that were explicitly set" {
+        val grid = MapGridBackend(0)
+        grid[1, 0] = 1
+        grid[0, 1] = 2
+        grid[1, 1] = 3
+
+        grid.entries shouldBe setOf(
+            Coordinates(0, 1) to 2,
+            Coordinates(1, 0) to 1, Coordinates(1, 1) to 3
+        )
+    }
 })

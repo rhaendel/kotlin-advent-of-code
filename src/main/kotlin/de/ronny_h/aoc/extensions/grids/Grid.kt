@@ -17,18 +17,23 @@ import java.nio.charset.StandardCharsets
  * @param fallbackElement Used for out of bound positions. Defaults to [nullElement].
  */
 abstract class Grid<T>(
-    val height: Int,
-    val width: Int,
+    height: Int, width: Int,
     val nullElement: T,
     private val fallbackElement: T = nullElement,
+    protected val grid: GridBackend<T> = ListGridBackend(width, height, nullElement),
 ) {
-
-    private val grid: GridBackend<T> = ListGridBackend(width, height, nullElement)
+    val height: Int get() = grid.height
+    val width: Int get() = grid.width
 
     /**
      * A function that maps each `Char` that may occur in the `input: List<String>` to a value of type [T].
      */
     abstract fun Char.toElementType(): T
+
+    /**
+     * Overwrite in sub-classes to perform actions before the [value] is set at [position].
+     */
+    open fun preSet(position: Coordinates, value: T) {}
 
     /**
      * Constructs a Grid with the specified dimensions filled with the [nullElement] as default value and all
@@ -38,9 +43,9 @@ abstract class Grid<T>(
         height: Int,
         width: Int,
         nullElement: T,
-        overrideElement: T = nullElement,
+        overrideElement: T,
         overrides: List<Coordinates> = emptyList()
-    ) : this(height, width, nullElement, overrideElement) {
+    ) : this(height, width, nullElement, fallbackElement = overrideElement) {
         overrides.forEach { grid[it] = overrideElement }
     }
 
@@ -72,12 +77,26 @@ abstract class Grid<T>(
     operator fun get(x: Int, y: Int): T = grid.getOrNull(x, y) ?: fallbackElement
 
     operator fun set(x: Int, y: Int, value: T) {
+        preSet(Coordinates(x, y), value)
         grid[x, y] = value
     }
 
-    fun getAt(position: Coordinates) = grid.getOrNull(position) ?: fallbackElement
-    fun setAt(position: Coordinates, element: T) {
+    operator fun get(position: Coordinates) = grid.getOrNull(position) ?: fallbackElement
+    operator fun set(position: Coordinates, element: T) {
+        preSet(position, element)
         grid[position] = element
+    }
+
+    operator fun set(x: Int, yRange: IntRange, value: T) {
+        for (y in yRange) {
+            this[Coordinates(x, y)] = value
+        }
+    }
+
+    operator fun set(xRange: IntRange, y: Int, value: T) {
+        for (x in xRange) {
+            this[Coordinates(x, y)] = value
+        }
     }
 
     /**
@@ -117,10 +136,11 @@ abstract class Grid<T>(
     fun toString(
         overrides: Set<Coordinates> = setOf(),
         overrideChar: Char = '#',
+        padding: Int = 0,
     ): String {
         val out = ByteArrayOutputStream()
         PrintStream(out, true, StandardCharsets.UTF_8).use {
-            printGrid(it, overrides = overrides, overrideChar = overrideChar)
+            printGrid(it, overrides = overrides, overrideChar = overrideChar, padding = padding)
         }
         return out.toString().trim()
     }
@@ -148,8 +168,11 @@ abstract class Grid<T>(
         highlightPosition: Coordinates? = null,
         highlightDirection: Direction? = null,
         path: Map<Coordinates, Char> = mapOf(),
+        padding: Int = 0,
     ) {
+        val paddingString = "$fallbackElement".repeat(padding)
         forEachCoordinates { position, element ->
+            if (position.x == grid.minX) writer.print(paddingString)
             if (highlightPosition == position && highlightDirection != null) {
                 writer.print(highlightDirection.asChar())
             } else if (path.contains(position)) {
@@ -159,7 +182,7 @@ abstract class Grid<T>(
             } else {
                 writer.print(element)
             }
-            if (position.x == width - 1) writer.print('\n')
+            if (position.x == grid.maxX) writer.print("$paddingString\n")
         }.last()
     }
 
@@ -173,7 +196,7 @@ abstract class Grid<T>(
     fun shortestPaths(
         start: Coordinates,
         goal: Coordinates,
-        isVisitable: (Coordinates) -> Boolean = { getAt(it) != nullElement }
+        isVisitable: (Coordinates) -> Boolean = { get(it) != nullElement }
     ): List<ShortestPath<Coordinates>> {
         val neighbours: (Coordinates) -> List<Coordinates> = { position ->
             position.neighbours().filter(isVisitable)
@@ -200,7 +223,7 @@ abstract class Grid<T>(
                 if (element == nullElement) null else position
             }.filterNotNull().toList(),
             edges = { from, to ->
-                if (to in from.neighbours().filter { !isObstacle(getAt(it)) }) 1 else null
+                if (to in from.neighbours().filter { !isObstacle(get(it)) }) 1 else null
             }
         )
         return dijkstraShortestPaths(graph, start, goals, stopAfterMinimalPathsAreFound)
@@ -235,7 +258,7 @@ abstract class Grid<T>(
         regionsCoordinates: MutableList<Coordinates> = mutableListOf(position),
     ): List<Coordinates> {
         position.neighbours().forEach { coordinates ->
-            if (getAt(coordinates) == value && visited.add(coordinates)) {
+            if (get(coordinates) == value && visited.add(coordinates)) {
                 regionsCoordinates.add(coordinates)
                 collectRegionAt(coordinates, value, visited, regionsCoordinates)
             }

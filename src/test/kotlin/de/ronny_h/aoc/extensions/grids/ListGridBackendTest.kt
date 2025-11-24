@@ -72,4 +72,24 @@ class ListGridBackendTest : StringSpec({
             "${grid[x, y]}"
         }.toList() shouldBe listOf("0", "1", "2", "3")
     }
+
+    "min and max indices are consistent with width and height" {
+        val grid = ListGridBackend(2, 3, 0)
+        grid.minX shouldBe 0
+        grid.minY shouldBe 0
+        grid.maxX shouldBe 1
+        grid.maxY shouldBe 2
+    }
+
+    "entries returns a set containing all, dense grid entries" {
+        val grid = ListGridBackend(2, 2, 0)
+        grid[1, 0] = 1
+        grid[0, 1] = 2
+        grid[1, 1] = 3
+
+        grid.entries shouldBe setOf(
+            Coordinates(0, 0) to 0, Coordinates(0, 1) to 2,
+            Coordinates(1, 0) to 1, Coordinates(1, 1) to 3
+        )
+    }
 })

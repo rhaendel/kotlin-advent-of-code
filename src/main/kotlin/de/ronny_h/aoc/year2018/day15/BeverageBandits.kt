@@ -107,7 +107,7 @@ class CombatArea(input: List<String>, val elfAttackPower: Int = 3) : SimpleCharG
         }
 
         val targetsInRange = targets.flatMap { target ->
-            target.position.neighbours().filter { getAt(it) == cavern }
+            target.position.neighbours().filter { get(it) == cavern }
         }
         val shortestPaths = shortestPaths(
             start = position,
@@ -153,14 +153,14 @@ class CombatArea(input: List<String>, val elfAttackPower: Int = 3) : SimpleCharG
 
     private fun Player.moveTo(newPosition: Coordinates) {
         logger.debug { " $this moves to $newPosition" }
-        setAt(position, cavern)
-        setAt(newPosition, type.char)
+        set(position, cavern)
+        set(newPosition, type.char)
         position = newPosition
     }
 
     private fun Player.die() {
         logger.debug { " $this died" }
-        setAt(position, cavern)
+        set(position, cavern)
         units.remove(this)
         if (type == Elf) {
             anElfDied = true

@@ -2,13 +2,10 @@ package de.ronny_h.aoc.year2018.day17
 
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.grids.Coordinates
+import de.ronny_h.aoc.extensions.grids.Grid
+import de.ronny_h.aoc.extensions.grids.MapGridBackend
 import de.ronny_h.aoc.year2018.day17.Direction.*
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
-import kotlin.collections.MutableMap.MutableEntry
-import kotlin.math.max
 import kotlin.math.min
-import kotlin.text.Charsets.UTF_8
 
 fun main() = ReservoirResearch().run(31934, 0)
 
@@ -36,7 +33,7 @@ class VerticalSliceOfGround(input: List<String>) {
 
     val springCoordinates = Coordinates(500, 0)
 
-    private val slice = MapBackedCharGrid(springCoordinates, sand)
+    private val slice = MapBackedCharGrid(sand)
 
     init {
         slice[springCoordinates] = waterSpring
@@ -114,7 +111,8 @@ class VerticalSliceOfGround(input: List<String>) {
     fun countTilesOfWater(): Int = slice.count { it in listOf(waterFalling, waterResting) }
     fun countTilesOfRestingWater(): Int = slice.count { it == waterResting }
 
-    override fun toString(): String = slice.toString()
+    override fun toString(): String = toString(0)
+    fun toString(padding: Int): String = slice.toString(padding = padding)
 
     private fun String.intAfter(delimiter: String): Int = substringAfter(delimiter).toInt()
 
@@ -142,58 +140,22 @@ operator fun Coordinates.plus(direction: Direction) = when (direction) {
     RIGHT -> Coordinates(x + 1, y)
 }
 
-class MapBackedCharGrid(center: Coordinates, default: Char) {
+class MapBackedCharGrid(default: Char) :
+    Grid<Char>(0, 0, default, grid = MapGridBackend(default)) {
     private var minClayY = Int.MAX_VALUE
-    private var minX = center.x
-    private var maxX = center.x
-    private var minY = center.y
-    var maxY = center.y
-        private set
 
-    private val slice = mutableMapOf<Coordinates, Char>().withDefault { default }
+    override fun Char.toElementType() = this
 
-    operator fun set(position: Coordinates, value: Char) {
-        check(value == clay || slice[position] != clay) { "clay must not be overwritten" }
+    override fun preSet(position: Coordinates, value: Char) {
+        check(value == clay || get(position) != clay) { "clay must not be overwritten" }
         if (value == clay) {
             minClayY = min(minClayY, position.y)
         }
-        minX = min(minX, position.x)
-        minY = min(minY, position.y)
-        maxX = max(maxX, position.x)
-        maxY = max(maxY, position.y)
-        slice[position] = value
-    }
-
-    operator fun set(x: Int, y: Int, value: Char) = set(Coordinates(x, y), value)
-
-    operator fun get(position: Coordinates) = slice.getValue(position)
-
-    operator fun set(x: Int, yRange: IntRange, value: Char) {
-        for (y in yRange) {
-            this[Coordinates(x, y)] = value
-        }
-    }
-
-    operator fun set(xRange: IntRange, y: Int, value: Char) {
-        for (x in xRange) {
-            this[Coordinates(x, y)] = value
-        }
-    }
-
-    override fun toString(): String {
-        val out = ByteArrayOutputStream()
-        PrintStream(out, true, UTF_8).use {
-            for (y in minY..maxY) {
-                for (x in minX - 1..maxX + 1) {
-                    it.print(this[Coordinates(x, y)])
-                }
-                it.print('\n')
-            }
-        }
-        return out.toString(UTF_8).trim()
     }
 
     fun count(predicate: (Char) -> Boolean): Int =
-        slice.entries.filter { it.key.y >= minClayY }.map(MutableEntry<Coordinates, Char>::value)
+        grid.entries.filter { it.first.y >= minClayY }.map(Pair<Coordinates, Char>::second)
             .count(predicate)
+
+    val maxY: Int get() = grid.maxY
 }

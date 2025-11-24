@@ -34,7 +34,7 @@ class ReservoirResearchTest : StringSpec({
             ....#.....#...
             ....#######...
         """.trimIndent()
-        VerticalSliceOfGround(input).toString() shouldBe expectedSlice
+        VerticalSliceOfGround(input).toString(1) shouldBe expectedSlice
     }
 
     "let the water flow according to the puzzle's example" {
@@ -57,7 +57,7 @@ class ReservoirResearchTest : StringSpec({
 
         val slice = VerticalSliceOfGround(input)
         slice.waterFlow(slice.springCoordinates)
-        slice.toString() shouldBe expectedSlice
+        slice.toString(1) shouldBe expectedSlice
     }
 
     "overflow within a bin" {
@@ -87,9 +87,9 @@ class ReservoirResearchTest : StringSpec({
         """.trimIndent()
 
         val slice = VerticalSliceOfGround(input)
-        slice.toString() shouldBe expectedInit
+        slice.toString(1) shouldBe expectedInit
         slice.waterFlow(slice.springCoordinates)
-        slice.toString() shouldBe expectedFlooded
+        slice.toString(1) shouldBe expectedFlooded
     }
 
     "plateau within a bin" {
@@ -120,9 +120,9 @@ class ReservoirResearchTest : StringSpec({
         """.trimIndent()
 
         val slice = VerticalSliceOfGround(input)
-        slice.toString() shouldBe expectedInit
+        slice.toString(1) shouldBe expectedInit
         slice.waterFlow(slice.springCoordinates)
-        slice.toString() shouldBe expectedFlooded
+        slice.toString(1) shouldBe expectedFlooded
     }
 
     "two springs into one bin" {
@@ -154,9 +154,9 @@ class ReservoirResearchTest : StringSpec({
         """.trimIndent()
 
         val slice = VerticalSliceOfGround(input)
-        slice.toString() shouldBe expectedInit
+        slice.toString(1) shouldBe expectedInit
         slice.waterFlow(slice.springCoordinates)
-        slice.toString() shouldBe expectedFlooded
+        slice.toString(1) shouldBe expectedFlooded
     }
 
     "part 1: the number of tiles the water can reach" {

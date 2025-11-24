@@ -26,7 +26,7 @@ private class Farm(input: List<String>) : SimpleCharGrid(input, ' ') {
 
     fun separateRegions(): List<Region> = clusterRegions()
         .map { region ->
-            val plant = getAt(region.first())
+            val plant = get(region.first())
             val perimeter = perimeterOf(region, plant)
             val numberOfSides = numberOfSidesOf(region, plant)
             if (verbose) {
@@ -39,11 +39,11 @@ private class Farm(input: List<String>) : SimpleCharGrid(input, ' ') {
         }
 
     private fun perimeterOf(region: List<Coordinates>, plant: Char) = region.sumOf {
-        it.neighbours().filter { n -> getAt(n) != plant }.size
+        it.neighbours().filter { n -> get(n) != plant }.size
     }
 
     private fun numberOfSidesOf(region: List<Coordinates>, plant: Char): Int {
-        val boundary = region.filter { it.neighbours().any { n -> getAt(n) != plant } }
+        val boundary = region.filter { it.neighbours().any { n -> get(n) != plant } }
         val visited = mutableSetOf<Pair<Coordinates, Direction>>()
         val sides = boundary.sumOf { start ->
             val walk = walkAroundTheBoundary(start, plant) { position, direction ->
@@ -77,7 +77,7 @@ private class Farm(input: List<String>) : SimpleCharGrid(input, ' ') {
         while (visit(position, direction)) {
             val stepAhead = position + direction
             // check if next tile is part of the same side
-            if (getAt(stepAhead) == plant) {
+            if (get(stepAhead) == plant) {
                 if (leftOf(stepAhead, direction) == plant) {
                     sideCount++
                     position = stepAhead
@@ -93,17 +93,17 @@ private class Farm(input: List<String>) : SimpleCharGrid(input, ' ') {
         return sideCount
     }
 
-    private fun leftOf(position: Coordinates, direction: Direction) = getAt(position + direction.turnLeft())
+    private fun leftOf(position: Coordinates, direction: Direction) = get(position + direction.turnLeft())
 
     private fun findStartDirectionFor(start: Coordinates, plant: Char): Direction {
         val startDirection = NORTH
         var direction = startDirection
-        var inLastDirection = getAt(start + direction)
+        var inLastDirection = get(start + direction)
         var inDirection = inLastDirection
         do {
             direction = direction.turnRight()
             inLastDirection = inDirection
-            inDirection = getAt(start + direction)
+            inDirection = get(start + direction)
         } while ((inLastDirection == plant || inDirection != plant) && direction != startDirection) // last condition prohibits endless loops on 1-tile gardens
         return direction
     }

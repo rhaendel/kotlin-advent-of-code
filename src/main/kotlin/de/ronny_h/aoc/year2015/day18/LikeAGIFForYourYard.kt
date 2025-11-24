@@ -29,18 +29,18 @@ class LikeAGIFForYourYard : AdventOfCode<Int>(2015, 18) {
         private fun GameOfLightGrid.animateStep(): GameOfLightGrid {
             val nextGeneration = GameOfLightGrid(this.height, this.width)
             forEachCoordinates { position, light ->
-                val neighboursOn = position.neighboursIncludingDiagonals().count { getAt(it) == on }
+                val neighboursOn = position.neighboursIncludingDiagonals().count { get(it) == on }
                 val nextState = if (neighboursOn == 3 || light == on && neighboursOn == 2) on else off
-                nextGeneration.setAt(position, nextState)
+                nextGeneration[position] = nextState
             }.last()
             return nextGeneration
         }
 
         private fun GameOfLightGrid.withCornersStuckOn(): GameOfLightGrid {
-            setAt(Coordinates(0, 0), on)
-            setAt(Coordinates(width - 1, 0), on)
-            setAt(Coordinates(0, height - 1), on)
-            setAt(Coordinates(width - 1, height - 1), on)
+            set(Coordinates(0, 0), on)
+            set(Coordinates(width - 1, 0), on)
+            set(Coordinates(0, height - 1), on)
+            set(Coordinates(width - 1, height - 1), on)
             return this
         }
     }

@@ -25,9 +25,22 @@ interface GridBackend<T> {
     fun subGridAt(x: Int, y: Int, width: Int, height: Int = width): List<List<T>>
 
     fun <R> mapToSequence(transform: (x: Int, y: Int) -> R): Sequence<R>
+
+    val width: Int
+    val height: Int
+    val minX: Int
+    val minY: Int
+    val maxX: Int
+    val maxY: Int
+    val entries: Set<Pair<Coordinates, T>>
 }
 
-class ListGridBackend<T>(width: Int, height: Int, nullElement: T) : GridBackend<T> {
+class ListGridBackend<T>(override val width: Int, override val height: Int, nullElement: T) : GridBackend<T> {
+    override val minX: Int get() = 0
+    override val minY: Int get() = 0
+    override val maxX: Int get() = width - 1
+    override val maxY: Int get() = height - 1
+
     private val grid: MutableList<MutableList<T>> = MutableList(height) { MutableList(width) { nullElement } }
 
     override fun get(x: Int, y: Int) = grid[y][x]
@@ -60,13 +73,24 @@ class ListGridBackend<T>(width: Int, height: Int, nullElement: T) : GridBackend<
             }
         }
     }
+
+    override val entries: Set<Pair<Coordinates, T>>
+        get() = mapToSequence { x, y ->
+            Coordinates(x, y) to get(x, y)
+        }.toSet()
 }
 
 class MapGridBackend<T>(defaultValue: T) : GridBackend<T> {
-    private var minX = Int.MAX_VALUE
-    private var maxX = Int.MIN_VALUE
-    private var minY = Int.MAX_VALUE
-    private var maxY = Int.MIN_VALUE
+    override val height: Int get() = maxY + 1 - minY
+    override val width: Int get() = maxX + 1 - minX
+    override var minX = Int.MAX_VALUE
+        private set
+    override var maxX = Int.MIN_VALUE
+        private set
+    override var minY = Int.MAX_VALUE
+        private set
+    override var maxY = Int.MIN_VALUE
+        private set
 
     private val grid = mutableMapOf<Coordinates, T>().withDefault { defaultValue }
 
@@ -111,4 +135,6 @@ class MapGridBackend<T>(defaultValue: T) : GridBackend<T> {
             }
         }
     }
+
+    override val entries: Set<Pair<Coordinates, T>> get() = grid.entries.map { it.key to it.value }.toSet()
 }

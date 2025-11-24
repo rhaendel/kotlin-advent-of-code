@@ -36,7 +36,7 @@ private class RaceTrack(input: List<String>) : Grid<Char>(input, '#') {
             Direction
                 .entries
                 .map { node + it }
-                .filter { getAt(node) != wall }
+                .filter { get(node) != wall }
         }
 
         val d: (Coordinates, Coordinates) -> Int = { _, _ ->

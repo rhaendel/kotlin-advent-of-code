@@ -35,7 +35,7 @@ class GridTest : StringSpec() {
             grid.width shouldBe 2
         }
 
-        "charAt returns the input values from the right indices" {
+        "get returns the input values from the right indices" {
             val grid = SimpleCharGrid(listOf("12", "34"))
             grid[0, 0] shouldBe '1'
             grid[1, 0] shouldBe '2'
@@ -53,15 +53,15 @@ class GridTest : StringSpec() {
             grid[1, 1] shouldBe 4
         }
 
-        "charAt with indices returns the same as charAt with Coordinates" {
+        "get with indices returns the same as get with Coordinates" {
             val grid = SimpleCharGrid(listOf("12", "34"))
-            grid[0, 0] shouldBe grid.getAt(Coordinates(0, 0))
-            grid[0, 1] shouldBe grid.getAt(Coordinates(0, 1))
-            grid[1, 0] shouldBe grid.getAt(Coordinates(1, 0))
-            grid[1, 1] shouldBe grid.getAt(Coordinates(1, 1))
+            grid[0, 0] shouldBe grid[Coordinates(0, 0)]
+            grid[0, 1] shouldBe grid[Coordinates(0, 1)]
+            grid[1, 0] shouldBe grid[Coordinates(1, 0)]
+            grid[1, 1] shouldBe grid[Coordinates(1, 1)]
         }
 
-        "charAt with index out of the input values returns the nullElement of a Char Grid" {
+        "get with index out of the input values returns the nullElement of a Char Grid" {
             val grid = SimpleCharGrid(listOf("12", "34"), ' ')
             grid[0, -1] shouldBe ' '
             grid[2, 0] shouldBe ' '
@@ -69,7 +69,7 @@ class GridTest : StringSpec() {
             grid[2, 2] shouldBe ' '
         }
 
-        "charAt with index out of the input values returns the nullElement of an Int Grid" {
+        "get with index out of the input values returns the nullElement of an Int Grid" {
             val grid = object : Grid<Int>(listOf("12", "34"), Int.MIN_VALUE) {
                 override fun Char.toElementType() = digitToInt()
             }
@@ -79,9 +79,9 @@ class GridTest : StringSpec() {
             grid[2, 2] shouldBe Int.MIN_VALUE
         }
 
-        "setAt sets the element at the given coordinates" {
+        "set with Coordinates sets the element at the given coordinates" {
             val grid = SimpleCharGrid(listOf("12", "34"))
-            grid.setAt(Coordinates(0, 1), '5')
+            grid[Coordinates(0, 1)] = '5'
             grid[0, 0] shouldBe '1'
             grid[1, 0] shouldBe '2'
             grid[0, 1] shouldBe '5'
@@ -95,6 +95,49 @@ class GridTest : StringSpec() {
             grid[1, 0] shouldBe '2'
             grid[0, 1] shouldBe '5'
             grid[1, 1] shouldBe '4'
+        }
+
+        "all setters call preSet" {
+            val grid = object : Grid<Char>(listOf("12", "34"), '#') {
+                override fun Char.toElementType() = this
+
+                var setterWasCalledFor = mutableListOf<Pair<Coordinates, Char>>()
+
+                override fun preSet(position: Coordinates, value: Char) {
+                    setterWasCalledFor.add(position to value)
+                }
+            }
+
+            val position = Coordinates(0, 0)
+            val position2 = Coordinates(0, 1)
+            val position3 = Coordinates(1, 0)
+            val value = 'a'
+            grid.set(position, value)
+            grid.setterWasCalledFor shouldBe listOf(position to value)
+
+            grid.setterWasCalledFor.clear()
+            grid[position] = value
+            grid.setterWasCalledFor shouldBe listOf(position to value)
+
+            grid.setterWasCalledFor.clear()
+            grid.set(position.x, position.y, value)
+            grid.setterWasCalledFor shouldBe listOf(position to value)
+
+            grid.setterWasCalledFor.clear()
+            grid[position.x, position.y] = value
+            grid.setterWasCalledFor shouldBe listOf(position to value)
+
+            grid.setterWasCalledFor.clear()
+            grid[position.x, position.y] = value
+            grid.setterWasCalledFor shouldBe listOf(position to value)
+
+            grid.setterWasCalledFor.clear()
+            grid[position.x, position.y..position2.y] = value
+            grid.setterWasCalledFor shouldBe listOf(position to value, position2 to value)
+
+            grid.setterWasCalledFor.clear()
+            grid[position.x..position3.x, position.y] = value
+            grid.setterWasCalledFor shouldBe listOf(position to value, position3 to value)
         }
 
         "subGridAt returns a sub grid at the given coordinates" {
@@ -221,6 +264,11 @@ class GridTest : StringSpec() {
         "toString with overrides returns a string representation with the given overrides" {
             val grid = SimpleCharGrid(listOf("12", "34"))
             grid.toString(setOf(Coordinates(1, 1)), 'o') shouldBe "12${newLine}3o"
+        }
+
+        "toString with padding adds padding" {
+            val grid = SimpleCharGrid(listOf("12", "34"), nullElement = '.')
+            grid.toString(padding = 2) shouldBe "..12..$newLine..34.."
         }
     }
 }

@@ -137,7 +137,7 @@ class SimpleCharGridTest : StringSpec({
         grid.shortestPaths(
             start = C(0, 0),
             goal = C(2, 0),
-            isVisitable = { grid.getAt(it) !in listOf('X', '#') },
+            isVisitable = { grid[it] !in listOf('X', '#') },
         ) shouldBe expected
 
         // Dijkstra

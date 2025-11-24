@@ -52,7 +52,7 @@ private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>
             Direction
                 .entries
                 .map { node + it }
-                .filter { getAt(node) != corrupted }
+                .filter { get(node) != corrupted }
         }
 
         val d: (Coordinates, Coordinates) -> Int = { _, _ ->
