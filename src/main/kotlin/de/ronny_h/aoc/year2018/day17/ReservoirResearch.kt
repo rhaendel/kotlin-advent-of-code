@@ -7,7 +7,7 @@ import de.ronny_h.aoc.extensions.grids.MapGridBackend
 import de.ronny_h.aoc.year2018.day17.Direction.*
 import kotlin.math.min
 
-fun main() = ReservoirResearch().run(31934, 0)
+fun main() = ReservoirResearch().run(31934, 24790)
 
 class ReservoirResearch : AdventOfCode<Int>(2018, 17) {
     override fun part1(input: List<String>): Int {
