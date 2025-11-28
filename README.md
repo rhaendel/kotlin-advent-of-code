@@ -10,8 +10,8 @@ I started this repository in december 2024 using the [Advent of Code Kotlin Temp
 Since I solved all the puzzles of year 2024, I continued with the first ones, the year 2015, and restructured the
 project iteratively.
 
-I'm solving the challenges for fun, but not only. It's a good possibility to learn - about the programming language of my
-choice, about algorithms in general, about when it's time to throw code away and start over again with a totally
+I'm solving the challenges for fun, but not only. It's a good possibility to learn - about the programming language of
+my choice, about algorithms in general, about when it's time to throw code away and start over again with a totally
 different approach.
 
 Over the time, a small library of helping functions, classes and algorithms keeps growing in the
@@ -25,15 +25,18 @@ oriented or even procedural if that's more expressive in a situation.
 
 There is a file template for IntelliJ IDEA that creates...
 
-* A new source file containing a main function and an initial implementation of [`AdventOfCode`](src/main/kotlin/de/ronny_h/aoc/AdventOfCode.kt)
+* A new source file containing a main function and an initial implementation of
+  [`AdventOfCode`](src/main/kotlin/de/ronny_h/aoc/AdventOfCode.kt)
 * An empty text file in [resources](src/main/resources) for the day's puzzle input
 * A test class in the test source set containing assertions for part one and two
 
-**Using the template**
+**Using the template in IntelliJ IDEA**
 
-In IntelliJ IDEA, in the the [source directory](src)'s context menu, choose:
+Preparation: In _Settings... > Editor > File and Code Templates_, set the _Scheme_ to `Project`.
 
-`New > Advent of Code`
+Usage: In the the [source directory](src)'s context menu, choose:
+
+_New > Advent of Code_
 
 ## Kotlin Resources
 
