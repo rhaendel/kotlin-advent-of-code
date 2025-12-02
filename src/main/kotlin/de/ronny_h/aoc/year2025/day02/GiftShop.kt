@@ -27,7 +27,7 @@ fun Long.isSequenceRepeatedTwice(): Boolean {
         return false
     }
     val first = id.take(id.length / 2)
-    val second = id.substring(id.length / 2)
+    val second = id.takeLast(id.length / 2)
     return first == second
 }
 
@@ -37,12 +37,8 @@ fun Long.isSequenceRepeatedAtLeastTwice(): Boolean {
         if (id.length % size != 0) {
             continue
         }
-        val subsequences = buildList {
-            id.windowed(size, size) {
-                add(it)
-            }
-        }
-        if (subsequences.all { it == subsequences.first() }) {
+        val chunks = id.chunked(size)
+        if (chunks.all { it == chunks.first() }) {
             return true
         }
     }
