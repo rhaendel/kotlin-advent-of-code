@@ -6,24 +6,17 @@ fun main() = Lobby().run(17324, 171846613143331)
 
 class Lobby : AdventOfCode<Long>(2025, 3) {
     override fun part1(input: List<String>): Long = input
-        .parse().sumOf(List<Int>::joltage)
+        .parse().sumOf { it.joltage(2) }
 
     override fun part2(input: List<String>): Long = input
-        .parse().sumOf(List<Int>::joltageWithSafetyOverride)
+        .parse().sumOf { it.joltage(12) }
 }
 
-fun List<Int>.joltage(): Long {
-    val first = subList(0, lastIndex).max()
-    val firstIndex = indexOf(first)
-    val second = subList(firstIndex + 1, size).max()
-    return "$first$second".toLong()
-}
-
-fun List<Int>.joltageWithSafetyOverride(): Long {
-    var index = -1
+fun List<Int>.joltage(numberOfBatteries: Int): Long {
+    var index = 0
     val batteriesSwitchedOn = mutableListOf<Int>()
-    for (remaining in 11 downTo 0) {
-        val remainingBatteries = subList(index + 1, size - remaining)
+    for (remaining in numberOfBatteries - 1 downTo 0) {
+        val remainingBatteries = subList(index, size - remaining)
         val chosenBattery = remainingBatteries.max()
         batteriesSwitchedOn.add(chosenBattery)
         index += 1 + remainingBatteries.indexOf(chosenBattery)

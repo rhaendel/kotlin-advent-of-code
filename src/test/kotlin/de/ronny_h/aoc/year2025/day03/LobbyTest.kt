@@ -22,7 +22,7 @@ class LobbyTest : StringSpec({
             row(listOf(2, 3, 4, 2, 3, 4, 2, 3, 4, 2, 3, 4, 2, 7, 8), 78),
             row(listOf(8, 1, 8, 1, 8, 1, 9, 1, 1, 1, 1, 2, 1, 1, 1), 92),
         ) { bank, expected ->
-            bank.joltage() shouldBe expected
+            bank.joltage(2) shouldBe expected
         }
     }
 
@@ -33,7 +33,7 @@ class LobbyTest : StringSpec({
             row(listOf(2, 3, 4, 2, 3, 4, 2, 3, 4, 2, 3, 4, 2, 7, 8), 434234234278),
             row(listOf(8, 1, 8, 1, 8, 1, 9, 1, 1, 1, 1, 2, 1, 1, 1), 888911112111),
         ) { bank, expected ->
-            bank.joltageWithSafetyOverride() shouldBe expected
+            bank.joltage(12) shouldBe expected
         }
     }
 
