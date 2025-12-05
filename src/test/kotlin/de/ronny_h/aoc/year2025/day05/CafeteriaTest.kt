@@ -36,12 +36,12 @@ class CafeteriaTest : StringSpec({
 
     "mergeRange merges the added range with the existing ones" {
         forAll(
-            row(mutableListOf(2L..5L), 3L..4L, listOf(2L..5L)),
-            row(mutableListOf(2L..5L), 6L..7L, listOf(2L..5L, 6L..7L)),
-            row(mutableListOf(2L..5L, 8L..9L), 4L..6L, listOf(2L..6L, 8L..9L)),
-            row(mutableListOf(2L..5L, 8L..9L), 4L..8L, listOf(2L..9L)),
-            row(mutableListOf(2L..5L, 8L..9L, 11L..13L), 4L..11L, listOf(2L..13L)),
-            row(mutableListOf(0L..1L, 4L..5L, 8L..9L, 11L..13L, 15L..20L), 4L..11L, listOf(0L..1L, 4L..13L, 15L..20L)),
+            row(listOf(2L..5L), 3L..4L, listOf(2L..5L)),
+            row(listOf(2L..5L), 6L..7L, listOf(2L..5L, 6L..7L)),
+            row(listOf(2L..5L, 8L..9L), 4L..6L, listOf(2L..6L, 8L..9L)),
+            row(listOf(2L..5L, 8L..9L), 4L..8L, listOf(2L..9L)),
+            row(listOf(2L..5L, 8L..9L, 11L..13L), 4L..11L, listOf(2L..13L)),
+            row(listOf(0L..1L, 4L..5L, 8L..9L, 11L..13L, 15L..20L), 4L..11L, listOf(0L..1L, 4L..13L, 15L..20L)),
         ) { list, range, expected ->
             list.mergeRange(range) shouldBe expected
         }

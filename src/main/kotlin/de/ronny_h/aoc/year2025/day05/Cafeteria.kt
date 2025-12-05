@@ -16,7 +16,7 @@ class Cafeteria : AdventOfCode<Long>(2025, 5) {
         input.parseIngredients()
             .freshRanges
             .sortedBy { it.first }
-            .fold(mutableListOf<LongRange>()) { compactRanges, range ->
+            .fold(listOf<LongRange>()) { compactRanges, range ->
                 compactRanges.mergeRange(range)
             }.sumOf {
                 it.last - it.first + 1
@@ -27,11 +27,10 @@ data class Ingredients(val freshRanges: List<LongRange>, val available: List<Lon
 
 // invariant: ranges in this MutableList are non-overlapping and sorted
 // pre-condition: add operations only occur with ranges sorted by their first value
-fun MutableList<LongRange>.mergeRange(toAdd: LongRange): MutableList<LongRange> {
+fun List<LongRange>.mergeRange(toAdd: LongRange): List<LongRange> {
     if (none { toAdd.first in it || toAdd.last in it }) {
         // disjunct -> just add it
-        add(toAdd)
-        return this
+        return this + listOf(toAdd)
     }
     for ((i, range) in withIndex()) {
         if (toAdd.first in range && toAdd.last in range) {
@@ -45,17 +44,12 @@ fun MutableList<LongRange>.mergeRange(toAdd: LongRange): MutableList<LongRange> 
         val lastOverlappingRangeIndex = indexOfLast { toAdd.last in it }
         if (toAdd.first in range && lastOverlappingRangeIndex == -1) {
             // the beginning overlaps with this range -> merge
-            this[i] = range.first..toAdd.last
-            return this
+            return this.take(i) + listOf(range.first..toAdd.last) + this.drop(i + 1)
         }
 
         // overlaps with several ranges -> squash them
         val lastOverlappingRange = this[lastOverlappingRangeIndex]
-        for (index in lastOverlappingRangeIndex downTo i + 1) {
-            this.removeAt(index)
-        }
-        this[i] = range.first..lastOverlappingRange.last
-        return this
+        return this.take(i) + listOf(range.first..lastOverlappingRange.last) + this.drop(lastOverlappingRangeIndex + 1)
     }
     error("If this line is reached, a case is missing")
 }
