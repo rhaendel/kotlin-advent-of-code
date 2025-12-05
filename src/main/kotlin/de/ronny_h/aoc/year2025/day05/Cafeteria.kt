@@ -15,17 +15,22 @@ class Cafeteria : AdventOfCode<Long>(2025, 5) {
     override fun part2(input: List<String>): Long =
         input.parseIngredients()
             .freshRanges
-            .sortedBy { it.first }
-            .fold(listOf<LongRange>()) { compactRanges, range ->
-                compactRanges.mergeRange(range)
-            }.sumOf {
-                it.last - it.first + 1
-            }
+            .compact()
+            .sumOf(LongRange::size)
 }
 
 data class Ingredients(val freshRanges: List<LongRange>, val available: List<Long>)
 
-// invariant: ranges in this MutableList are non-overlapping and sorted
+val LongRange.size: Long
+    get() = last - first + 1
+
+fun List<LongRange>.compact() =
+    sortedBy { it.first }
+        .fold(listOf<LongRange>()) { compactRanges, range ->
+            compactRanges.mergeRange(range)
+        }
+
+// invariant: ranges in this List are non-overlapping and sorted
 // pre-condition: add operations only occur with ranges sorted by their first value
 fun List<LongRange>.mergeRange(toAdd: LongRange): List<LongRange> {
     if (none { toAdd.first in it || toAdd.last in it }) {
@@ -44,12 +49,12 @@ fun List<LongRange>.mergeRange(toAdd: LongRange): List<LongRange> {
         val lastOverlappingRangeIndex = indexOfLast { toAdd.last in it }
         if (toAdd.first in range && lastOverlappingRangeIndex == -1) {
             // the beginning overlaps with this range -> merge
-            return this.take(i) + listOf(range.first..toAdd.last) + this.drop(i + 1)
+            return take(i) + listOf(range.first..toAdd.last) + drop(i + 1)
         }
 
         // overlaps with several ranges -> squash them
         val lastOverlappingRange = this[lastOverlappingRangeIndex]
-        return this.take(i) + listOf(range.first..lastOverlappingRange.last) + this.drop(lastOverlappingRangeIndex + 1)
+        return take(i) + listOf(range.first..lastOverlappingRange.last) + drop(lastOverlappingRangeIndex + 1)
     }
     error("If this line is reached, a case is missing")
 }
