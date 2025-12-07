@@ -1,5 +1,6 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.ronny_h.aoc.extensions.animation.AnimationRecorder
 import de.ronny_h.aoc.extensions.graphs.shortestpath.Graph
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
 import de.ronny_h.aoc.extensions.graphs.shortestpath.aStarAllPaths
@@ -24,6 +25,8 @@ abstract class Grid<T>(
 ) {
     val height: Int get() = grid.height
     val width: Int get() = grid.width
+
+    var recorder: AnimationRecorder? = null
 
     /**
      * A function that maps each `Char` that may occur in the `input: List<String>` to a value of type [T].
@@ -79,12 +82,14 @@ abstract class Grid<T>(
     operator fun set(x: Int, y: Int, value: T) {
         preSet(Coordinates(x, y), value)
         grid[x, y] = value
+        recorder?.record(toString())
     }
 
     operator fun get(position: Coordinates) = grid.getOrNull(position) ?: fallbackElement
     operator fun set(position: Coordinates, element: T) {
         preSet(position, element)
         grid[position] = element
+        recorder?.record(toString())
     }
 
     operator fun set(x: Int, yRange: IntRange, value: T) {
