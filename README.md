@@ -4,6 +4,8 @@ Welcome to the Advent of Code[^aoc] Kotlin project created by [rhaendel][github]
 
 In this repository, rhaendel is about to provide solutions for the puzzles using [Kotlin][kotlin] language.
 
+![Laboratories animation](2025-07_laboratories-animation.gif)
+
 ## It's all about Learning
 
 I started this repository in december 2024 using the [Advent of Code Kotlin Template][template] delivered by JetBrains.

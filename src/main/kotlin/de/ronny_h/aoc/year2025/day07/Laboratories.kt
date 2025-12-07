@@ -1,14 +1,32 @@
 package de.ronny_h.aoc.year2025.day07
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.animation.gray
+import de.ronny_h.aoc.extensions.animation.lightGreen
+import de.ronny_h.aoc.extensions.animation.purpleBlue
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Direction.*
 import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
+import java.awt.Color.white
 
 fun main() = Laboratories().run(1600, 8632253783011)
 
 class Laboratories : AdventOfCode<Long>(2025, 7) {
-    override fun part1(input: List<String>): Long = TachyonManifoldDiagram(input).followTheBeam().splitterCount
+    override fun part1(input: List<String>): Long {
+        val diagram = TachyonManifoldDiagram(input)
+//        diagram.recorder = AnimationRecorder()
+        val splitterCount = diagram.followTheBeam().splitterCount
+        diagram.recorder?.saveTo(
+            "2025-07_laboratories-animation.gif",
+            mapOf(
+                emptySpace to gray,
+                splitter to lightGreen,
+                beam to white,
+            ),
+            purpleBlue,
+        )
+        return splitterCount
+    }
 
     override fun part2(input: List<String>): Long = TachyonManifoldDiagram(input).followTheBeam().numberOfTimeLines
 }

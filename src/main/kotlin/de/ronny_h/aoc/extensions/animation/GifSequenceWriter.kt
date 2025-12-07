@@ -1,5 +1,7 @@
 package de.ronny_h.aoc.extensions.animation
 
+import java.awt.Color
+import java.awt.Color.LIGHT_GRAY
 import java.awt.Font
 import java.awt.Font.MONOSPACED
 import java.awt.Font.PLAIN
@@ -16,22 +18,36 @@ import javax.imageio.metadata.IIOMetadataNode
 import javax.imageio.stream.FileImageOutputStream
 import javax.imageio.stream.ImageOutputStream
 
+val green = Color(0, 153, 0)
+val lightGreen = Color(0, 186, 13)
+val purpleBlue = Color(15, 15, 35)
+val lightGrey = Color(204, 204, 204)
+val gray = Color(70, 70, 70)
+val darkGrey = Color(16, 16, 26)
 
-private const val fontSize = 20
+private const val scale = 1
+private const val fontSize = scale * 20
 private const val drawStartX = 3
-private const val rowHeight = fontSize + 1
+private const val rowHeight = fontSize + scale
 private const val colWidth = 3 / 5.0 * fontSize
+private const val timeBetweenFramesMS = 250
 private val font = Font(MONOSPACED, PLAIN, fontSize)
 
-fun List<String>.createImage(): BufferedImage {
+fun List<String>.createImage(colors: Map<Char, Color>, background: Color): BufferedImage {
+    val gifColors = colors.withDefault { LIGHT_GRAY }
     val width = 2 * drawStartX + (this.first().length * colWidth).toInt()
-    val height = size * rowHeight - 13
+    val height = size * rowHeight - scale * 13
     val bufferedImage = BufferedImage(width, height, TYPE_INT_RGB)
     val graphics2D = bufferedImage.graphics as Graphics2D
     graphics2D.font = font
     graphics2D.setRenderingHint(KEY_TEXT_ANTIALIASING, VALUE_TEXT_ANTIALIAS_ON)
+    graphics2D.background = background
+    graphics2D.clearRect(0, 0, width, height)
     forEachIndexed { rowNo, row ->
-        graphics2D.drawString(row, drawStartX, rowNo * rowHeight)
+        row.forEachIndexed { colNo, char ->
+            graphics2D.color = gifColors.getValue(char)
+            graphics2D.drawString("$char", (drawStartX + colNo * colWidth).toInt(), rowNo * rowHeight)
+        }
     }
     return bufferedImage
 }
@@ -113,9 +129,12 @@ class GifSequenceWriter(
 
 fun List<BufferedImage>.writeToGifFile(file: File) {
     FileImageOutputStream(file).use { out ->
-        GifSequenceWriter(out, first().type, 200, true).use { gifWriter ->
+        GifSequenceWriter(out, first().type, timeBetweenFramesMS, true).use { gifWriter ->
             forEach { image ->
                 gifWriter.write(image)
+            }
+            repeat(3) {
+                gifWriter.write(last())
             }
         }
     }
