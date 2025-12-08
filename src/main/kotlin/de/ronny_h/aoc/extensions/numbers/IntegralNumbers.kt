@@ -26,6 +26,8 @@ fun Long.toIntChecked(): Int {
     return this.toInt()
 }
 
+fun Long.squared() = this * this
+
 /**
  * @return This Int to the power of [power].
  */

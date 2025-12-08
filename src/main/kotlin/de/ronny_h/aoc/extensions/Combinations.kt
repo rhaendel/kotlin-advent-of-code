@@ -17,6 +17,17 @@ fun <E> Iterable<E>.combinations() = sequence {
 }
 
 /**
+ * @return All pairwise combinations of list elements without the reflexive and symmetrical ones.
+ */
+fun <E> List<E>.symmetricalCombinations() = sequence {
+    forEachIndexed { i, a ->
+        for (j in i + 1..lastIndex) {
+            yield(a to get(j))
+        }
+    }
+}
+
+/**
  * @return All pairwise combinations of list elements of the [first] and the [second] list.
  */
 fun <A, B> combinationsOf(first: List<A>, second: List<B>) = sequence {
