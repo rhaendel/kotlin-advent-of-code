@@ -12,3 +12,6 @@ infix fun String.isAnagramOf(other: String): Boolean {
         it.value.size == otherChars[it.key]?.size
     }
 }
+
+fun String.substringBetween(startDelimiter: String, endDelimiter: String) =
+    substringAfter(startDelimiter).substringBefore(endDelimiter)

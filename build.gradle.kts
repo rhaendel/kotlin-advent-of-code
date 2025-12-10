@@ -10,6 +10,7 @@ repositories {
 dependencies {
     implementation(libs.kotlin.logging)
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.z3.turnkey)
     runtimeOnly(libs.logback.classic)
 
     testImplementation(libs.kotest.assertions.table)

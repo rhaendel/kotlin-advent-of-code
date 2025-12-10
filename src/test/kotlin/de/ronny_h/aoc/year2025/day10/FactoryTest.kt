@@ -6,7 +6,7 @@ import de.ronny_h.aoc.year2025.day10.LightState.ON
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class Day10Test : StringSpec({
+class FactoryTest : StringSpec({
 
     val input = """
         [.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
@@ -14,7 +14,7 @@ class Day10Test : StringSpec({
         [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}
     """.asList()
 
-    "parse" {
+    "machine descriptions can be parsed" {
         """
             [.##.] (3) (1,3) {3,5,4}
             [.#] (0,2,3,4) {7,5}
@@ -24,7 +24,7 @@ class Day10Test : StringSpec({
         )
     }
 
-    "contentEquals" {
+    "contentEquals checks equality of a MutableList and a List" {
         mutableListOf(1, 2).contentEquals(listOf(1, 2)) shouldBe true
         mutableListOf(1, 2).contentEquals(listOf(1, 2, 3)) shouldBe false
         mutableListOf(1, 2).contentEquals(listOf(1, 3)) shouldBe false
@@ -37,12 +37,18 @@ class Day10Test : StringSpec({
         Machine(descriptions[2], 5).configureIndicatorLights() shouldBe 2
     }
 
+    "configureJoltages" {
+        val descriptions = input.parseMachineDescriptions()
+        Machine(descriptions[0]).configureJoltages() shouldBe 10
+        Machine(descriptions[1]).configureJoltages() shouldBe 12
+        Machine(descriptions[2]).configureJoltages() shouldBe 11
+    }
+
     "part 1" {
-        Day10().part1(input) shouldBe 7
+        Factory().part1(input) shouldBe 7
     }
 
     "part 2" {
-        val input = listOf("")
-        Day10().part2(input) shouldBe 0
+        Factory().part2(input) shouldBe 33
     }
 })
