@@ -3,27 +3,29 @@ package de.ronny_h.aoc.year2025.day07
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.animation.gray
 import de.ronny_h.aoc.extensions.animation.lightGreen
-import de.ronny_h.aoc.extensions.animation.purpleBlue
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Direction.*
 import de.ronny_h.aoc.extensions.grids.SimpleCharGrid
 import java.awt.Color.white
+import java.awt.Color.yellow
 
 fun main() = Laboratories().run(1600, 8632253783011)
 
 class Laboratories : AdventOfCode<Long>(2025, 7) {
+
+    // find an animation at: /animations/2025-07_Laboratories.gif
     override fun part1(input: List<String>): Long {
         val diagram = TachyonManifoldDiagram(input)
 //        diagram.recorder = AnimationRecorder()
         val splitterCount = diagram.followTheBeam().splitterCount
         diagram.recorder?.saveTo(
-            "2025-07_laboratories-animation.gif",
+            "animations/$year-${paddedDay()}_${javaClass.simpleName}.gif",
             mapOf(
+                start to yellow,
                 emptySpace to gray,
                 splitter to lightGreen,
                 beam to white,
             ),
-            purpleBlue,
         )
         return splitterCount
     }
@@ -36,15 +38,16 @@ data class TachyonManifoldInfo(val splitterCount: Long, val numberOfTimeLines: L
         TachyonManifoldInfo(splitterCount + other.splitterCount, numberOfTimeLines + other.numberOfTimeLines)
 }
 
+private const val start = 'S'
 private const val emptySpace = '.'
 private const val splitter = '^'
 private const val beam = '|'
 private const val outOfMap = '#'
 
 class TachyonManifoldDiagram(input: List<String>) : SimpleCharGrid(input, outOfMap) {
-    private val start = find('S')
+    private val startLocation = find(start)
 
-    fun followTheBeam(): TachyonManifoldInfo = followTheBeam(start + SOUTH)
+    fun followTheBeam(): TachyonManifoldInfo = followTheBeam(startLocation + SOUTH)
 
     private val timelinesStartingAt = mutableMapOf<Coordinates, Long>()
 

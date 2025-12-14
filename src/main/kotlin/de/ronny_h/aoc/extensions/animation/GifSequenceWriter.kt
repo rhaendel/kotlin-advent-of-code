@@ -27,16 +27,17 @@ val darkGrey = Color(16, 16, 26)
 
 private const val scale = 1
 private const val fontSize = scale * 20
-private const val drawStartX = 3
 private const val rowHeight = fontSize + scale
 private const val colWidth = 3 / 5.0 * fontSize
+private const val drawStartX = 3
+private const val drawStartY = rowHeight - 2
 private const val timeBetweenFramesMS = 250
 private val font = Font(MONOSPACED, PLAIN, fontSize)
 
 fun List<String>.createImage(colors: Map<Char, Color>, background: Color): BufferedImage {
     val gifColors = colors.withDefault { LIGHT_GRAY }
     val width = 2 * drawStartX + (this.first().length * colWidth).toInt()
-    val height = size * rowHeight - scale * 13
+    val height = drawStartY + size * rowHeight - scale * 13
     val bufferedImage = BufferedImage(width, height, TYPE_INT_RGB)
     val graphics2D = bufferedImage.graphics as Graphics2D
     graphics2D.font = font
@@ -46,7 +47,7 @@ fun List<String>.createImage(colors: Map<Char, Color>, background: Color): Buffe
     forEachIndexed { rowNo, row ->
         row.forEachIndexed { colNo, char ->
             graphics2D.color = gifColors.getValue(char)
-            graphics2D.drawString("$char", (drawStartX + colNo * colWidth).toInt(), rowNo * rowHeight)
+            graphics2D.drawString("$char", (drawStartX + colNo * colWidth).toInt(), drawStartY + rowNo * rowHeight)
         }
     }
     return bufferedImage
