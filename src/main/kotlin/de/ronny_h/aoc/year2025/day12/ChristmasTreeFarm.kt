@@ -12,23 +12,26 @@ class ChristmasTreeFarm : AdventOfCode<Int>(2025, 12) {
         return presents.regions.count { PresentsSpace(it, presents.shapes).allShapesFit() }
     }
 
-    override fun part2(input: List<String>): Int {
-        return 0
-    }
+    override fun part2(input: List<String>): Int = 0
 }
 
 fun List<String>.parsePresents(): Presents {
     val chunks = split()
-    val shapes = chunks.dropLast(1).map { it.parseShape() }
-    val regions = chunks.last().map { it.parseRegion() }
+    val shapes = chunks.dropLast(1).map(List<String>::parseShape)
+    val regions = chunks.last().map(String::parseRegion)
     return Presents(shapes, regions)
 }
 
+// 0:
+// ###
+// ##.
+// ##.
 private fun List<String>.parseShape() = PresentShape(
     index = first().dropLast(1).toInt(),
     input = drop(1),
 )
 
+// 4x4: 0 0 0 0 2 0
 private fun String.parseRegion(): Region {
     val (dimensions, presents) = split(": ")
     val (width, length) = dimensions.split("x").map(String::toInt)
@@ -63,12 +66,11 @@ class PresentShape(private val index: Int, input: List<String>) : SimpleCharGrid
 
 class PresentsSpace(private val region: Region, private val shapes: List<PresentShape>) {
 
-    fun allShapesFit(): Boolean {
-        val presentsToAdd = region.presents.mapIndexed { i, times ->
-            if (times == 0) null else shapes[i] to times
-        }.filterNotNull()
-
-        return presentsToAdd.sumOf { (shape, times) -> times * shape.numberOfTiles } <= region.area
-    }
+    // Note that this is just an approximation producing an upper bound.
+    // Luckily this is enough to solve this year's last puzzle.
+    fun allShapesFit(): Boolean = region
+        .presents
+        .mapIndexed { i, times -> shapes[i] to times }
+        .sumOf { (shape, times) -> shape.numberOfTiles * times } <= region.area
 
 }
