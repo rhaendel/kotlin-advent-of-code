@@ -15,3 +15,10 @@ Iteratively, all accessible rolls of paper (those with fewer than four rolls of 
 are removed by a forklift.
 
 ![Printing Department animation](2025-04_PrintingDepartment.gif)
+
+### Year 2024, Day 20 - Race Condition, Part 1
+
+After following the (unique) path from start to goal, highlight the positions on that path in red that are starting
+positions for cheats of at most 2 picoseconds length saving at least 10 picoseconds.
+
+![Race Condition animation](2024-20_RaceCondition.gif)

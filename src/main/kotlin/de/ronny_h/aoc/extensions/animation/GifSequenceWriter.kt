@@ -21,9 +21,11 @@ import javax.imageio.stream.ImageOutputStream
 val green = Color(0, 153, 0)
 val lightGreen = Color(0, 186, 13)
 val purpleBlue = Color(15, 15, 35)
-val lightGrey = Color(204, 204, 204)
+val lightBlue = Color(0, 200, 255)
 val gray = Color(70, 70, 70)
+val lightGrey = Color(204, 204, 204)
 val darkGrey = Color(16, 16, 26)
+val yellow = Color(255, 255, 102)
 
 private const val scale = 1
 private const val fontSize = scale * 20
