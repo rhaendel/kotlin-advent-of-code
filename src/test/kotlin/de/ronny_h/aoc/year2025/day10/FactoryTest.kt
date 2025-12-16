@@ -32,9 +32,9 @@ class FactoryTest : StringSpec({
 
     "configureIndicatorLights" {
         val descriptions = input.parseMachineDescriptions()
-        Machine(descriptions[0], 5).configureIndicatorLights() shouldBe 2
-        Machine(descriptions[1], 5).configureIndicatorLights() shouldBe 3
-        Machine(descriptions[2], 5).configureIndicatorLights() shouldBe 2
+        Machine(descriptions[0]).configureIndicatorLights() shouldBe 2
+        Machine(descriptions[1]).configureIndicatorLights() shouldBe 3
+        Machine(descriptions[2]).configureIndicatorLights() shouldBe 2
     }
 
     "configureJoltages" {

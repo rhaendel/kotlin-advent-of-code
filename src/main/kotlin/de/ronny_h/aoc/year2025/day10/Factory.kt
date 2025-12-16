@@ -2,6 +2,7 @@ package de.ronny_h.aoc.year2025.day10
 
 import com.microsoft.z3.*
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.allSublistsOf
 import de.ronny_h.aoc.extensions.memoize
 import de.ronny_h.aoc.extensions.substringBetween
 import de.ronny_h.aoc.year2025.day10.LightState.OFF
@@ -49,33 +50,24 @@ enum class LightState {
     }
 }
 
-class Machine(private val description: MachineDescription, private val maxPressCount: Int = 7) {
+class Machine(private val description: MachineDescription) {
     private val buttons = description.wiringSchematics
 
     fun configureIndicatorLights(): Int {
         val indicatorLightsOff = List(description.indicatorLights.size) { OFF }
         val target = description.indicatorLights
 
-        data class RecursiveState(val state: List<LightState>, val buttonsToPress: List<Int>, val pressCount: Int)
-
-        lateinit var pressButtons: (RecursiveState) -> Int
-        pressButtons = { s ->
-            if (s.pressCount == maxPressCount) {
-                maxPressCount
+        return allSublistsOf(buttons).minOf { toPress ->
+            val newState = indicatorLightsOff.toMutableList()
+            toPress.forEach { button ->
+                button.forEach { newState[it] = newState[it].toggle() }
+            }
+            if (newState.contentEquals(target)) {
+                toPress.size
             } else {
-                val newState = s.state.toMutableList()
-                s.buttonsToPress.forEach { newState[it] = newState[it].toggle() }
-                if (newState.contentEquals(target)) {
-                    s.pressCount
-                } else {
-                    buttons.minOf { pressButtons(RecursiveState(newState.toList(), it, s.pressCount + 1)) }
-                }
+                Int.MAX_VALUE
             }
         }
-
-        val pressButtonsMemoized = pressButtons.memoize()
-
-        return buttons.minOf { pressButtonsMemoized(RecursiveState(indicatorLightsOff, it, 1)) }
     }
 
     /*
