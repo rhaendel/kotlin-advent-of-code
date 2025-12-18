@@ -27,8 +27,9 @@ const val LARGE_VALUE = MAX_VALUE / 2
  * @param start the start node
  * @param isGoal predicate deciding if a node is a goal
  * @param neighbors is a function that returns the list of neighbours for a given node.
- * @param d is the distance/cost function. d(m,n) provides the distance (or cost) to reach node n from node m.
- * @param h is the heuristic function. h(n) estimates the cost to reach goal from node n.
+ * @param d is the distance/cost function. `d(m,n)` provides the distance (or cost) to reach node `n` from node `m`.
+ * @param h is the heuristic function. `h(n)` estimates the cost to reach goal from node `n`. `h` must be admissible,
+ *        i.e. it never overestimates the cost of reaching the goal.
  */
 fun <N> aStar(
     start: N, isGoal: N.() -> Boolean, neighbors: (N) -> List<N>, d: (N, N) -> Int, h: (N) -> Int,

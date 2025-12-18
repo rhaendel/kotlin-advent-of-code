@@ -26,6 +26,7 @@ fun Long.toIntChecked(): Int {
     return this.toInt()
 }
 
+fun Int.squared() = this * this
 fun Long.squared() = this * this
 
 /**

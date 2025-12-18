@@ -77,6 +77,34 @@ class IntegralNumbersTest : StringSpec({
         }
     }
 
+    "The square of Ints" {
+        forAll(
+            row(0, 0),
+            row(-1, 1),
+            row(1, 1),
+            row(-100, 10_000),
+            row(100, 10_000),
+            row(-10_000, 100_000_000),
+            row(10_000, 100_000_000),
+        ) { a, result ->
+            a.squared() shouldBe result
+        }
+    }
+
+    "The square of Longs" {
+        forAll(
+            row(0L, 0L),
+            row(-1L, 1L),
+            row(1L, 1L),
+            row(-100L, 10_000L),
+            row(100L, 10_000L),
+            row(-1_000_000_000L, 1_000_000_000_000_000_000L),
+            row(1_000_000_000L, 1_000_000_000_000_000_000L),
+        ) { a, result ->
+            a.squared() shouldBe result
+        }
+    }
+
     "The power of Ints" {
         forAll(
             row(0, 0, 1),
