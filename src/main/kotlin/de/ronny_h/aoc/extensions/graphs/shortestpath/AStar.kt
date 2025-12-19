@@ -1,7 +1,6 @@
 package de.ronny_h.aoc.extensions.graphs.shortestpath
 
 import java.util.*
-import kotlin.Int.Companion.MAX_VALUE
 
 // NOTE: This A* implementation is a 1:1 equivalent in Kotlin to the pseudo code on the Wikipedia page
 //       https://en.wikipedia.org/wiki/A*_search_algorithm
@@ -20,7 +19,8 @@ private fun <N> reconstructPath(cameFrom: Map<N, N>, last: N): List<N> {
  * The maximum value for edge weights. In pseudocode of path-searching algorithms
  * this is typically denoted as infinity (= a value larger than all others).
  */
-const val LARGE_VALUE = MAX_VALUE / 2
+const val LARGE_VALUE = Int.MAX_VALUE / 2
+const val LARGE_DOUBLE_VALUE = Double.MAX_VALUE / 2
 
 /**
  * A* finds a path from `start` to `goal`.
@@ -34,10 +34,22 @@ const val LARGE_VALUE = MAX_VALUE / 2
 fun <N> aStar(
     start: N, isGoal: N.() -> Boolean, neighbors: (N) -> List<N>, d: (N, N) -> Int, h: (N) -> Int,
     printIt: (visited: Set<N>, current: N, additionalInfo: () -> String) -> Unit = { _, _, _ -> }
-): ShortestPath<N> {
+): ShortestPath<N> = aStarDouble(
+    start,
+    isGoal,
+    neighbors,
+    { from, to -> d(from, to).toDouble() },
+    { h(it).toDouble() },
+    printIt
+).toShortestPath()
+
+fun <N> aStarDouble(
+    start: N, isGoal: N.() -> Boolean, neighbors: (N) -> List<N>, d: (N, N) -> Double, h: (N) -> Double,
+    printIt: (visited: Set<N>, current: N, additionalInfo: () -> String) -> Unit = { _, _, _ -> }
+): ShortestPathDouble<N> {
     // For node n, fScore[n] := gScore[n] + h(n). fScore[n] represents our current best guess as to
     // how cheap a path could be from start to finish if it goes through n.
-    val fScore = mutableMapOf<N, Int>().withDefault { _ -> LARGE_VALUE } // map with default value of Infinity
+    val fScore = mutableMapOf<N, Double>().withDefault { _ -> LARGE_DOUBLE_VALUE } // map with default value of Infinity
 
     // The set of discovered nodes that may need to be (re-)expanded.
     // Initially, only the start node is known.
@@ -50,8 +62,8 @@ fun <N> aStar(
     val cameFrom = mutableMapOf<N, N>()
 
     // For node n, gScore[n] is the currently known cost of the cheapest path from start to n.
-    val gScore = mutableMapOf<N, Int>().withDefault { _ -> LARGE_VALUE } // map with default value of Infinity
-    gScore[start] = 0
+    val gScore = mutableMapOf<N, Double>().withDefault { _ -> LARGE_DOUBLE_VALUE } // map with default value of Infinity
+    gScore[start] = 0.0
 
     fScore[start] = h(start)
 
@@ -59,7 +71,7 @@ fun <N> aStar(
         // This operation can occur in O(Log(N)) time if openSet is a min-heap or a priority queue
         val current = openSet.peek()
         if (isGoal(current)) {
-            return ShortestPath(reconstructPath(cameFrom, current), gScore.getValue(current))
+            return ShortestPathDouble(reconstructPath(cameFrom, current), gScore.getValue(current))
         }
 
         openSet.remove(current)
@@ -77,7 +89,8 @@ fun <N> aStar(
                 }
             }
             printIt(cameFrom.keys, neighbor) {
-                "current: $current=${fScore[current]}, neighbor: $neighbor=${fScore[neighbor]}, open: " + openSet.joinToString { "$it=${fScore[it]}" }
+                "current: $current=${fScore[current]}, neighbor: $neighbor=${fScore[neighbor]}, open: " +
+                        openSet.take(5).joinToString { "$it=${fScore[it]}" }
             }
         }
     }

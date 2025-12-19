@@ -3,10 +3,12 @@ package de.ronny_h.aoc.year2025.day10
 import com.microsoft.z3.*
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.allSublistsOf
-import de.ronny_h.aoc.extensions.memoize
+import de.ronny_h.aoc.extensions.graphs.shortestpath.aStarDouble
+import de.ronny_h.aoc.extensions.numbers.squared
 import de.ronny_h.aoc.extensions.substringBetween
 import de.ronny_h.aoc.year2025.day10.LightState.OFF
 import de.ronny_h.aoc.year2025.day10.LightState.ON
+import kotlin.math.sqrt
 
 fun main() = Factory().run(481, 20142)
 
@@ -120,6 +122,61 @@ class Machine(private val description: MachineDescription) {
         val minimalTotalPresses = optimization.model.evaluate(totalPresses, false)
         check(minimalTotalPresses is IntNum)
         return minimalTotalPresses.int
+    }
+
+    /*
+        Alternative approach which is sufficient for the tests but does not terminate for the real input in reasonable
+        time:
+        Take 'all joltages zero' as the start and the target joltage levels as the goal in a graph with n-dimensional
+        nodes. Each dimension corresponds to a joltage counter.
+
+        Use the A-Star algorithm to search for the optimal path (the minimal sequence of button presses).
+     */
+    fun configureJoltagesUsingAStar(): Int {
+        val goal = description.joltage
+
+        // the maximum distance one button press can achieve is by increasing all values together:
+        // sqrt(1^2 + 1^2 + ... + 1^2)
+        val normVectorLength = sqrt(goal.size.toDouble())
+        val shortestPath = aStarDouble(
+            start = List(goal.size) { 0 },
+            isGoal = { this == goal },
+
+            // for given joltage levels, the possible button presses lead to the neighbours
+            neighbors = { currentJoltages ->
+                description.wiringSchematics.map { increasedByButton ->
+                    currentJoltages.mapIndexed { i, joltage ->
+                        if (i in increasedByButton) {
+                            if (joltage == goal[i]) {
+                                // this button press would overshoot -> filter it out
+                                Int.MAX_VALUE
+                            } else {
+                                joltage + 1
+                            }
+                        } else {
+                            joltage
+                        }
+                    }
+                }.filterNot { it.contains(Int.MAX_VALUE) }
+            },
+            d = { from, to ->
+                sqrt(
+                    from.mapIndexed { i, element -> (element - to[i]).squared() }.sum().toDouble()
+                ) / normVectorLength
+            },
+
+            // the euclidean distance to prefer buttons that move multiple joltage levels to the right direction,
+            // normalized by normVectorLength since the heuristic must be admissible (see aStar docs for details)
+            h = {
+                sqrt(
+                    it.mapIndexed { i, element -> (element - goal[i]).squared() }.sum().toDouble()
+                ) / normVectorLength
+            },
+//            printIt = { visited, current, additionalInfo -> println(additionalInfo()) }
+        )
+
+        // the path includes the start -> subtract it
+        return shortestPath.path.size - 1
     }
 }
 

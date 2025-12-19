@@ -54,6 +54,17 @@ class FactoryTest : StringSpec({
         }
     }
 
+    "configureJoltagesUsingAStar" {
+        val descriptions = input.parseMachineDescriptions()
+        forAll(
+            row(descriptions[0], 10),
+            row(descriptions[1], 12),
+            row(descriptions[2], 11),
+        ) { description, minPresses ->
+            Machine(description).configureJoltagesUsingAStar() shouldBe minPresses
+        }
+    }
+
     "part 1: the fewest button presses required to correctly configure the indicator lights" {
         Factory().part1(input) shouldBe 7
     }
