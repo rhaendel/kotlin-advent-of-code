@@ -4,6 +4,8 @@ import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.year2025.day10.LightState.OFF
 import de.ronny_h.aoc.year2025.day10.LightState.ON
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.data.forAll
+import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
 class FactoryTest : StringSpec({
@@ -32,23 +34,31 @@ class FactoryTest : StringSpec({
 
     "configureIndicatorLights" {
         val descriptions = input.parseMachineDescriptions()
-        Machine(descriptions[0]).configureIndicatorLights() shouldBe 2
-        Machine(descriptions[1]).configureIndicatorLights() shouldBe 3
-        Machine(descriptions[2]).configureIndicatorLights() shouldBe 2
+        forAll(
+            row(descriptions[0], 2),
+            row(descriptions[1], 3),
+            row(descriptions[2], 2),
+        ) { description, minPresses ->
+            Machine(description).configureIndicatorLights() shouldBe minPresses
+        }
     }
 
     "configureJoltages" {
         val descriptions = input.parseMachineDescriptions()
-        Machine(descriptions[0]).configureJoltages() shouldBe 10
-        Machine(descriptions[1]).configureJoltages() shouldBe 12
-        Machine(descriptions[2]).configureJoltages() shouldBe 11
+        forAll(
+            row(descriptions[0], 10),
+            row(descriptions[1], 12),
+            row(descriptions[2], 11),
+        ) { description, minPresses ->
+            Machine(description).configureJoltages() shouldBe minPresses
+        }
     }
 
-    "part 1" {
+    "part 1: the fewest button presses required to correctly configure the indicator lights" {
         Factory().part1(input) shouldBe 7
     }
 
-    "part 2" {
+    "part 2: the fewest button presses required to correctly configure the joltage level counters" {
         Factory().part2(input) shouldBe 33
     }
 })
