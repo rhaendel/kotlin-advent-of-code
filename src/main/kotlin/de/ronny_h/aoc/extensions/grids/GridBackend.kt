@@ -96,9 +96,11 @@ class ListGridBackend<T>(override val width: Int, override val height: Int, null
         get() = mapToSequence { x, y ->
             Coordinates(x, y) to get(x, y)
         }.toSet()
+
+    override fun toString(): String = "$width x $height $grid"
 }
 
-class MapGridBackend<T>(defaultValue: T) : GridBackend<T> {
+class MapGridBackend<T>(private val defaultValue: T) : GridBackend<T> {
     override val height: Int get() = maxY + 1 - minY
     override val width: Int get() = maxX + 1 - minX
     override var minX = Int.MAX_VALUE
@@ -162,6 +164,7 @@ class MapGridBackend<T>(defaultValue: T) : GridBackend<T> {
         if (maxX != other.maxX) return false
         if (minY != other.minY) return false
         if (maxY != other.maxY) return false
+        if (defaultValue != other.defaultValue) return false
         if (grid != other.grid) return false
 
         return true
@@ -173,8 +176,11 @@ class MapGridBackend<T>(defaultValue: T) : GridBackend<T> {
         result = 31 * result + minY
         result = 31 * result + maxY
         result = 31 * result + grid.hashCode()
+        result = 31 * result + defaultValue.hashCode()
         return result
     }
 
     override val entries: Set<Pair<Coordinates, T>> get() = grid.entries.map { it.key to it.value }.toSet()
+
+    override fun toString(): String = "$minX..$maxX x $minY..$maxY ${grid.values}, default: $defaultValue"
 }

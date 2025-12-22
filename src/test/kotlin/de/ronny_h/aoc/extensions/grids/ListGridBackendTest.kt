@@ -5,6 +5,7 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.data.forAll
 import io.kotest.data.row
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 class ListGridBackendTest : StringSpec({
 
@@ -91,5 +92,55 @@ class ListGridBackendTest : StringSpec({
             Coordinates(0, 0) to 0, Coordinates(0, 1) to 2,
             Coordinates(1, 0) to 1, Coordinates(1, 1) to 3
         )
+    }
+
+    "hashCode and equals of equal grids" {
+        val grid1: GridBackend<Char> = ListGridBackend(2, 2, '#')
+        grid1[0, 0] = '0'
+        grid1[1, 1] = '1'
+
+        val grid2: GridBackend<Char> = ListGridBackend(2, 2, '#')
+        grid2[0, 0] = '0'
+        grid2[1, 1] = '1'
+
+        grid1.hashCode() shouldBe grid2.hashCode()
+        (grid1 == grid2) shouldBe true
+        (grid2 == grid1) shouldBe true
+    }
+
+    "hashCode and equals of unequal grids" {
+        val grid1: GridBackend<Char> = ListGridBackend(2, 2, '#')
+        grid1[0, 0] = '0'
+        grid1[1, 1] = '1'
+
+        val grid2: GridBackend<Char> = ListGridBackend(2, 2, '#')
+        grid2[0, 0] = '0'
+        grid2[1, 1] = '2'
+
+        val grid3: GridBackend<Char> = ListGridBackend(3, 2, '#')
+        grid3[0, 0] = '0'
+        grid3[1, 1] = '1'
+
+        val grid4: GridBackend<Char> = ListGridBackend(2, 2, '.')
+        grid4[0, 0] = '0'
+        grid4[1, 1] = '1'
+
+        forAll(
+            row(grid1, grid2),
+            row(grid1, grid3),
+            row(grid1, grid4),
+            row(grid2, grid1),
+            row(grid2, grid3),
+            row(grid2, grid4),
+            row(grid3, grid1),
+            row(grid3, grid2),
+            row(grid3, grid4),
+            row(grid4, grid1),
+            row(grid4, grid2),
+            row(grid4, grid3),
+        ) { first, second ->
+            first.hashCode() shouldNotBe second.hashCode()
+            (first == second) shouldBe false
+        }
     }
 })
