@@ -270,4 +270,26 @@ abstract class Grid<T>(
         }
         return regionsCoordinates
     }
+
+    override fun hashCode(): Int {
+        var result = nullElement?.hashCode() ?: 0
+        result = 31 * result + (fallbackElement?.hashCode() ?: 0)
+        result = 31 * result + height
+        result = 31 * result + width
+        result = 31 * result + grid.hashCode()
+        return result
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Grid<*>) return false
+
+        if (nullElement != other.nullElement) return false
+        if (fallbackElement != other.fallbackElement) return false
+        if (height != other.height) return false
+        if (width != other.width) return false
+        if (grid != other.grid) return false
+
+        return true
+    }
 }

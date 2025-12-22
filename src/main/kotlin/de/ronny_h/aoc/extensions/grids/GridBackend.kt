@@ -74,6 +74,24 @@ class ListGridBackend<T>(override val width: Int, override val height: Int, null
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ListGridBackend<*>) return false
+
+        if (width != other.width) return false
+        if (height != other.height) return false
+        if (grid != other.grid) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = width
+        result = 31 * result + height
+        result = 31 * result + grid.hashCode()
+        return result
+    }
+
     override val entries: Set<Pair<Coordinates, T>>
         get() = mapToSequence { x, y ->
             Coordinates(x, y) to get(x, y)
@@ -134,6 +152,28 @@ class MapGridBackend<T>(defaultValue: T) : GridBackend<T> {
                 yield(transform(col, row))
             }
         }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is MapGridBackend<*>) return false
+
+        if (minX != other.minX) return false
+        if (maxX != other.maxX) return false
+        if (minY != other.minY) return false
+        if (maxY != other.maxY) return false
+        if (grid != other.grid) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = minX
+        result = 31 * result + maxX
+        result = 31 * result + minY
+        result = 31 * result + maxY
+        result = 31 * result + grid.hashCode()
+        return result
     }
 
     override val entries: Set<Pair<Coordinates, T>> get() = grid.entries.map { it.key to it.value }.toSet()
