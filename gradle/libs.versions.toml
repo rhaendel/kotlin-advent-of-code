@@ -4,7 +4,7 @@ kotlin = "2.2.21"
 kotlin-logging = "7.0.13"
 kotlinx-coroutines = "1.10.2"
 kover = "0.9.4"
-logback = "1.5.22"
+logback = "1.5.23"
 system-lambda = "1.2.1"
 z3-turnkey = "4.14.1"
 
