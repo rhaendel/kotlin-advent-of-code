@@ -118,9 +118,14 @@ class WristDevice(
     val operations =
         listOf(addr, addi, mulr, muli, banr, bani, borr, bori, setr, seti, gtir, gtri, gtrr, eqir, eqri, eqrr)
 
+    private var instructionPointer = 0
+
     fun runProgram(operations: List<(Int, Int, Int, MutableList<Int>) -> Unit>): Int {
-        program.forEach {
-            operations[it.opCode](it.a, it.b, it.c, registers)
+        while (instructionPointer in program.indices) {
+            with(program[instructionPointer]) {
+                operations[opCode](a, b, c, registers)
+            }
+            instructionPointer++
         }
         return registers[0]
     }
