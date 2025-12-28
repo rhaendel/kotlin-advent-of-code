@@ -49,7 +49,7 @@ class ChronalClassificationTest : StringSpec({
 
             7 3 2 0
         """.asList()
-        WristDevice(input).behaveLikeNumberOfOpcodes() shouldBe listOf(3)
+        WristDeviceAnalyzer(input).behaveLikeNumberOfOpcodes() shouldBe listOf(3)
     }
 
     "part 1: both of the given samples behave like three opcodes" {

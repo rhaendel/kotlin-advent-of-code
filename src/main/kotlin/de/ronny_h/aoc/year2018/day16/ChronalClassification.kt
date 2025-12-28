@@ -7,22 +7,65 @@ fun main() = ChronalClassification().run(531, 649)
 
 class ChronalClassification : AdventOfCode<Int>(2018, 16) {
     override fun part1(input: List<String>): Int {
-        val device = WristDevice(input)
-        return device.behaveLikeNumberOfOpcodes().filter { it > 2 }.size
+        val deviceAnalyzer = WristDeviceAnalyzer(input)
+        return deviceAnalyzer.behaveLikeNumberOfOpcodes().filter { it > 2 }.size
     }
 
     override fun part2(input: List<String>): Int {
-        val device = WristDevice(input)
-        val operations = device.deduceOpcodeMapping()
-        return device.runProgram(operations)
+        val deviceAnalyzer = WristDeviceAnalyzer(input)
+        val operations = deviceAnalyzer.deduceOpcodeMapping()
+        return deviceAnalyzer.device.runProgram(operations)
     }
 }
 
-class WristDevice(input: List<String>) {
+class WristDeviceAnalyzer(input: List<String>) {
     private val samples = input.parseCPUSamples()
     private val testProgram = input.parseTestProgram()
-    private val registers = mutableListOf(0, 0, 0, 0)
 
+    val device = WristDevice(testProgram)
+
+    fun behaveLikeNumberOfOpcodes() =
+        samples.map { sample -> device.operations.count { it.producesTheRightOutput(sample) } }
+
+    fun deduceOpcodeMapping(): List<(Int, Int, Int, MutableList<Int>) -> Unit> {
+        val samplesByOpcode = samples.groupBy { it.opcode }
+        val opCodesToOperationCandidates = buildList {
+            for (i in device.operations.indices) {
+                add(device.operations.filter { op ->
+                    samplesByOpcode.getValue(i).all { op.producesTheRightOutput(it) }
+                })
+            }
+        }
+
+        val opCodeMapping = MutableList<((Int, Int, Int, MutableList<Int>) -> Unit)?>(16) { null }
+        val alreadyMappedOperations = mutableSetOf<(Int, Int, Int, MutableList<Int>) -> Unit>()
+
+        while (alreadyMappedOperations.size < 16) {
+            opCodesToOperationCandidates.forEachIndexed { i, ops ->
+                val remainingOps = ops - alreadyMappedOperations
+                if (remainingOps.size == 1) {
+                    opCodeMapping[i] = remainingOps.first()
+                    alreadyMappedOperations.add(remainingOps.first())
+                }
+            }
+        }
+        check(opCodeMapping.all { it != null })
+        return opCodeMapping.filterNotNull().toList()
+    }
+
+    private fun ((Int, Int, Int, MutableList<Int>) -> Unit).producesTheRightOutput(
+        sample: CPUSample
+    ): Boolean {
+        val registers = sample.registersBefore.toMutableList()
+        this(sample.a, sample.b, sample.c, registers)
+        return registers == sample.registersAfter
+    }
+}
+
+class WristDevice(
+    private val program: List<ProgramStep>,
+    private val registers: MutableList<Int> = mutableListOf(0, 0, 0, 0),
+) {
     private val addr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
         registers[outC] = registers[inA] + registers[inB]
     }
@@ -72,48 +115,11 @@ class WristDevice(input: List<String>) {
         registers[outC] = if (registers[inA] == registers[inB]) 1 else 0
     }
 
-    private val operations =
+    val operations =
         listOf(addr, addi, mulr, muli, banr, bani, borr, bori, setr, seti, gtir, gtri, gtrr, eqir, eqri, eqrr)
 
-    fun behaveLikeNumberOfOpcodes() =
-        samples.map { sample -> operations.count { it.producesTheRightOutput(sample) } }
-
-    fun deduceOpcodeMapping(): List<(Int, Int, Int, MutableList<Int>) -> Unit> {
-        val samplesByOpcode = samples.groupBy { it.opcode }
-        val opCodesToOperationCandidates = buildList {
-            for (i in operations.indices) {
-                add(operations.filter { op ->
-                    samplesByOpcode.getValue(i).all { op.producesTheRightOutput(it) }
-                })
-            }
-        }
-
-        val opCodeMapping = MutableList<((Int, Int, Int, MutableList<Int>) -> Unit)?>(16) { null }
-        val alreadyMappedOperations = mutableSetOf<(Int, Int, Int, MutableList<Int>) -> Unit>()
-
-        while (alreadyMappedOperations.size < 16) {
-            opCodesToOperationCandidates.forEachIndexed { i, ops ->
-                val remainingOps = ops - alreadyMappedOperations
-                if (remainingOps.size == 1) {
-                    opCodeMapping[i] = remainingOps.first()
-                    alreadyMappedOperations.add(remainingOps.first())
-                }
-            }
-        }
-        check(opCodeMapping.all { it != null })
-        return opCodeMapping.filterNotNull().toList()
-    }
-
-    private fun ((Int, Int, Int, MutableList<Int>) -> Unit).producesTheRightOutput(
-        sample: CPUSample
-    ): Boolean {
-        val registers = sample.registersBefore.toMutableList()
-        this(sample.a, sample.b, sample.c, registers)
-        return registers == sample.registersAfter
-    }
-
     fun runProgram(operations: List<(Int, Int, Int, MutableList<Int>) -> Unit>): Int {
-        testProgram.forEach {
+        program.forEach {
             operations[it.opCode](it.a, it.b, it.c, registers)
         }
         return registers[0]
