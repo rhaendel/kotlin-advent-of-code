@@ -62,6 +62,8 @@ class WristDeviceAnalyzer(input: List<String>) {
 class WristDevice(
     private val program: List<ProgramStep>,
     private val registers: MutableList<Int> = mutableListOf(0, 0, 0, 0),
+    private val preOperation: (instructionPointer: Int, registers: MutableList<Int>) -> Unit = { _, _ -> },
+    private val postOperation: (instructionPointer: Int, registers: MutableList<Int>) -> Int = { ptr, _ -> ptr },
 ) {
     companion object {
         private val addr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
@@ -115,15 +117,37 @@ class WristDevice(
 
         val operations =
             listOf(addr, addi, mulr, muli, banr, bani, borr, bori, setr, seti, gtir, gtri, gtrr, eqir, eqri, eqrr)
+
+        val operationNames =
+            listOf(
+                "addr",
+                "addi",
+                "mulr",
+                "muli",
+                "banr",
+                "bani",
+                "borr",
+                "bori",
+                "setr",
+                "seti",
+                "gtir",
+                "gtri",
+                "gtrr",
+                "eqir",
+                "eqri",
+                "eqrr",
+            )
     }
 
     private var instructionPointer = 0
 
     fun runProgram(operations: List<(Int, Int, Int, MutableList<Int>) -> Unit>): Int {
         while (instructionPointer in program.indices) {
+            preOperation(instructionPointer, registers)
             with(program[instructionPointer]) {
                 operations[opCode](a, b, c, registers)
             }
+            instructionPointer = postOperation(instructionPointer, registers)
             instructionPointer++
         }
         return registers[0]
