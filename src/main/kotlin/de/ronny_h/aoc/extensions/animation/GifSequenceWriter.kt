@@ -6,8 +6,7 @@ import java.awt.Font
 import java.awt.Font.MONOSPACED
 import java.awt.Font.PLAIN
 import java.awt.Graphics2D
-import java.awt.RenderingHints.KEY_TEXT_ANTIALIASING
-import java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+import java.awt.RenderingHints.*
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImage.TYPE_INT_RGB
 import java.awt.image.RenderedImage
@@ -18,14 +17,17 @@ import javax.imageio.metadata.IIOMetadataNode
 import javax.imageio.stream.FileImageOutputStream
 import javax.imageio.stream.ImageOutputStream
 
+val darkGray = Color(16, 16, 26)
+val gray = Color(70, 70, 70)
 val green = Color(0, 153, 0)
+val lightBlue = Color(0, 200, 255)
+val lightBrown = Color(155, 113, 91)
+val lightGray = Color(204, 204, 204)
 val lightGreen = Color(0, 186, 13)
 val purpleBlue = Color(15, 15, 35)
-val lightBlue = Color(0, 200, 255)
-val gray = Color(70, 70, 70)
-val lightGrey = Color(204, 204, 204)
-val darkGrey = Color(16, 16, 26)
 val yellow = Color(255, 255, 102)
+
+const val timeBetweenFramesMSDefault = 250
 
 private const val scale = 1
 private const val fontSize = scale * 20
@@ -33,7 +35,6 @@ private const val rowHeight = fontSize + scale
 private const val colWidth = 3 / 5.0 * fontSize
 private const val drawStartX = 3
 private const val drawStartY = rowHeight - 2
-private const val timeBetweenFramesMS = 250
 private val font = Font(MONOSPACED, PLAIN, fontSize)
 
 fun List<String>.createImage(colors: Map<Char, Color>, background: Color): BufferedImage {
@@ -44,6 +45,9 @@ fun List<String>.createImage(colors: Map<Char, Color>, background: Color): Buffe
     val graphics2D = bufferedImage.graphics as Graphics2D
     graphics2D.font = font
     graphics2D.setRenderingHint(KEY_TEXT_ANTIALIASING, VALUE_TEXT_ANTIALIAS_ON)
+    graphics2D.setRenderingHint(KEY_INTERPOLATION, VALUE_INTERPOLATION_BILINEAR)
+    graphics2D.setRenderingHint(KEY_RENDERING, VALUE_RENDER_QUALITY)
+    graphics2D.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON)
     graphics2D.background = background
     graphics2D.clearRect(0, 0, width, height)
     forEachIndexed { rowNo, row ->
@@ -130,7 +134,7 @@ class GifSequenceWriter(
     }
 }
 
-fun List<BufferedImage>.writeToGifFile(file: File) {
+fun List<BufferedImage>.writeToGifFile(file: File, timeBetweenFramesMS: Int = timeBetweenFramesMSDefault) {
     FileImageOutputStream(file).use { out ->
         GifSequenceWriter(out, first().type, timeBetweenFramesMS, true).use { gifWriter ->
             forEach { image ->

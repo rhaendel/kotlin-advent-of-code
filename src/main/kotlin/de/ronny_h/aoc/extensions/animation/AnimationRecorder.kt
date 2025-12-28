@@ -51,10 +51,15 @@ class AnimationRecorder(private val compact: Boolean = false) {
      * Saves the recorded frames sequence to an animated GIF file named [fileName]. If specified, colors are mapped
      * according to [colors] and the background gets colored in [background] color.
      */
-    fun saveTo(fileName: String, colors: Map<Char, Color> = emptyMap(), background: Color = purpleBlue) {
+    fun saveTo(
+        fileName: String,
+        colors: Map<Char, Color> = emptyMap(),
+        background: Color = purpleBlue,
+        timeBetweenFramesMS: Int = timeBetweenFramesMSDefault,
+    ) {
         frames
             .map { it.createImage(colors, background) }
-            .writeToGifFile(File(fileName))
+            .writeToGifFile(File(fileName), timeBetweenFramesMS)
         logger.info { "An animation was saved to: $fileName" }
     }
 }

@@ -28,7 +28,7 @@ class RaceCondition : AdventOfCode<Int>(2024, 20) {
             mapOf(
                 START to green,
                 GOAL to yellow,
-                WALL to lightGrey,
+                WALL to lightGray,
                 EMPTY to gray,
                 VISITED to lightBlue,
                 SHORTCUT_START to red,

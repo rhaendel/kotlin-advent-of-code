@@ -22,3 +22,12 @@ After following the (unique) path from start to goal, highlight the positions on
 positions for cheats of at most 2 picoseconds length saving at least 10 picoseconds.
 
 ![Race Condition animation](2024-20_RaceCondition.gif)
+
+### Year 2018, Day 18 - Settlers of the North Pole, Part 2
+
+The lumber collection area is 50 acres by 50 acres; each acre can be either open ground (`.`), trees (`|`), or a
+lumberyard (`#`). Each minute, the landscape changes according to three rules - similar
+to [Conway's Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life). In part two, the big puzzle input
+results in a loop:
+
+![Settlers of the North Pole](2018-18_SettlersOfTheNorthPole.gif)

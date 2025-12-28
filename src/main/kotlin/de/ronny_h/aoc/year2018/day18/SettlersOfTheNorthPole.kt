@@ -68,9 +68,22 @@ class LumberAcre(height: Int, width: Int) : Grid<Char>(height, width, OUTSIDE) {
         val toBeFilledWithCycles = totalMinutes - cycleStart
         val remainder = toBeFilledWithCycles % cycleLength
         val neededIterations = cycleStart + cycleLength - remainder
-        return (1..neededIterations).fold(this) { acc, _ ->
+//        val animationRecorder = AnimationRecorder()
+        val result = (1..neededIterations).fold(this) { acc, _ ->
+//            animationRecorder.record(acc.toString())
             acc.changeAMinute()
         }
+//        animationRecorder.record(result.toString())
+//        animationRecorder.saveTo(
+//            "animations/2018-18_SettlersOfTheNorthPole.gif",
+//            colors = mapOf(
+//                OPEN to gray,
+//                TREE to lightGreen,
+//                LUMBER to lightBrown,
+//            ),
+//            timeBetweenFramesMS = 125,
+//        )
+        return result
     }
 
     fun totalResourceValue(): Int {
