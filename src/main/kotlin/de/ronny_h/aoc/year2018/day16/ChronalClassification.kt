@@ -14,24 +14,21 @@ class ChronalClassification : AdventOfCode<Int>(2018, 16) {
     override fun part2(input: List<String>): Int {
         val deviceAnalyzer = WristDeviceAnalyzer(input)
         val operations = deviceAnalyzer.deduceOpcodeMapping()
-        return deviceAnalyzer.device.runProgram(operations)
+        return WristDevice(input.parseTestProgram()).runProgram(operations)
     }
 }
 
 class WristDeviceAnalyzer(input: List<String>) {
     private val samples = input.parseCPUSamples()
-    private val testProgram = input.parseTestProgram()
-
-    val device = WristDevice(testProgram)
 
     fun behaveLikeNumberOfOpcodes() =
-        samples.map { sample -> device.operations.count { it.producesTheRightOutput(sample) } }
+        samples.map { sample -> WristDevice.operations.count { it.producesTheRightOutput(sample) } }
 
     fun deduceOpcodeMapping(): List<(Int, Int, Int, MutableList<Int>) -> Unit> {
         val samplesByOpcode = samples.groupBy { it.opcode }
         val opCodesToOperationCandidates = buildList {
-            for (i in device.operations.indices) {
-                add(device.operations.filter { op ->
+            for (i in WristDevice.operations.indices) {
+                add(WristDevice.operations.filter { op ->
                     samplesByOpcode.getValue(i).all { op.producesTheRightOutput(it) }
                 })
             }
@@ -66,57 +63,59 @@ class WristDevice(
     private val program: List<ProgramStep>,
     private val registers: MutableList<Int> = mutableListOf(0, 0, 0, 0),
 ) {
-    private val addr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA] + registers[inB]
-    }
-    private val addi = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA] + inB
-    }
-    private val mulr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA] * registers[inB]
-    }
-    private val muli = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA] * inB
-    }
-    private val banr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA] and registers[inB]
-    }
-    private val bani = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA] and inB
-    }
-    private val borr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA] or registers[inB]
-    }
-    private val bori = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA] or inB
-    }
-    private val setr = { inA: Int, _: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = registers[inA]
-    }
-    private val seti = { inA: Int, _: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = inA
-    }
-    private val gtir = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = if (inA > registers[inB]) 1 else 0
-    }
-    private val gtri = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = if (registers[inA] > inB) 1 else 0
-    }
-    private val gtrr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = if (registers[inA] > registers[inB]) 1 else 0
-    }
-    private val eqir = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = if (inA == registers[inB]) 1 else 0
-    }
-    private val eqri = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = if (registers[inA] == inB) 1 else 0
-    }
-    private val eqrr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
-        registers[outC] = if (registers[inA] == registers[inB]) 1 else 0
-    }
+    companion object {
+        private val addr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA] + registers[inB]
+        }
+        private val addi = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA] + inB
+        }
+        private val mulr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA] * registers[inB]
+        }
+        private val muli = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA] * inB
+        }
+        private val banr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA] and registers[inB]
+        }
+        private val bani = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA] and inB
+        }
+        private val borr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA] or registers[inB]
+        }
+        private val bori = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA] or inB
+        }
+        private val setr = { inA: Int, _: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = registers[inA]
+        }
+        private val seti = { inA: Int, _: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = inA
+        }
+        private val gtir = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = if (inA > registers[inB]) 1 else 0
+        }
+        private val gtri = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = if (registers[inA] > inB) 1 else 0
+        }
+        private val gtrr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = if (registers[inA] > registers[inB]) 1 else 0
+        }
+        private val eqir = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = if (inA == registers[inB]) 1 else 0
+        }
+        private val eqri = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = if (registers[inA] == inB) 1 else 0
+        }
+        private val eqrr = { inA: Int, inB: Int, outC: Int, registers: MutableList<Int> ->
+            registers[outC] = if (registers[inA] == registers[inB]) 1 else 0
+        }
 
-    val operations =
-        listOf(addr, addi, mulr, muli, banr, bani, borr, bori, setr, seti, gtir, gtri, gtrr, eqir, eqri, eqrr)
+        val operations =
+            listOf(addr, addi, mulr, muli, banr, bani, borr, bori, setr, seti, gtir, gtri, gtrr, eqir, eqri, eqrr)
+    }
 
     private var instructionPointer = 0
 
