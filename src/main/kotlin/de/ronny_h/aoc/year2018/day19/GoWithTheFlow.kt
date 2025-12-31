@@ -48,37 +48,21 @@ class WristDeviceWithFlowControl(input: List<String>, registerZeroInitValue: Int
 
 class HardCodedWristDevice {
 
-    fun one(r5: Int): Int {
+    fun function(input: Int): Int {
         var result = 0
-        var r3 = 1
-        do {
-            var r1 = 1
-            do {
-                if (r3 * r1 == r5) {
-                    result += r3
+
+        for (i in 1..input) {
+            for (j in 1..input) {
+                if (i * j == input) {
+                    result += i
                 }
-                r1++
-            } while (r1 <= r5)
-            r3++
-        } while (r3 <= r5)
+            }
+        }
+
         return result
     }
 
-    fun partOne(isPartOne: Boolean = true): Int {
-        var r5 = 2 * 2 * 19 * 11 + (5 * 22 + 18) // 964
-        println("r5: $r5")
+    fun partOne(): Int = function(964)
 
-        if (isPartOne) {
-            return one(r5)
-        }
-
-        val toAdd = (27 * 28 + 29) * 30 * 14 * 32 // 10550400
-        println("toAdd: $toAdd")
-        r5 += toAdd
-        return one(r5)
-    }
-
-    fun partTwo(): Int {
-        return partOne(false)
-    }
+    fun partTwo(): Int = function(964 + 10550400)
 }
