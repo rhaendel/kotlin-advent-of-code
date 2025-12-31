@@ -40,6 +40,10 @@ class GoWithTheFlowTest : StringSpec({
         GoWithTheFlow().part1(input) shouldBe 6
     }
 
+    "part 1: the content of register 0 after running the program with the hard-coded device, derived from the real puzzle input" {
+        HardCodedWristDevice().partOne() shouldBe 1694
+    }
+
     "part 2: the content of register 0 after running the program with initial value 1 in register 0" {
         GoWithTheFlow().part2(input) shouldBe 6
     }
