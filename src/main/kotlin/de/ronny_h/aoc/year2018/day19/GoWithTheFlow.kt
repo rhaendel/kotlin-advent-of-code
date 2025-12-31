@@ -4,7 +4,7 @@ import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.year2018.day16.ProgramStep
 import de.ronny_h.aoc.year2018.day16.WristDevice
 
-fun main() = GoWithTheFlow().run(1694, 0)
+fun main() = GoWithTheFlow().run(1694, 18964204)
 
 class GoWithTheFlow : AdventOfCode<Int>(2018, 19) {
 
@@ -47,22 +47,12 @@ class WristDeviceWithFlowControl(input: List<String>, registerZeroInitValue: Int
 }
 
 class HardCodedWristDevice {
-
-    fun function(input: Int): Int {
-        var result = 0
-
-        for (i in 1..input) {
-            for (j in 1..input) {
-                if (i * j == input) {
-                    result += i
-                }
-            }
+    private fun sumOfDividers(input: Int): Int =
+        (1..input).fold(0) { acc, i ->
+            if (input % i == 0) acc + i else acc
         }
 
-        return result
-    }
+    fun partOne(): Int = sumOfDividers(964)
 
-    fun partOne(): Int = function(964)
-
-    fun partTwo(): Int = function(964 + 10550400)
+    fun partTwo(): Int = sumOfDividers(964 + 10550400)
 }

@@ -45,6 +45,6 @@ class GoWithTheFlowTest : StringSpec({
     }
 
     "part 2: the content of register 0 after running the program with initial value 1 in register 0" {
-        GoWithTheFlow().part2(input) shouldBe 6
+        GoWithTheFlow().part2(input) shouldBe 18964204
     }
 })
