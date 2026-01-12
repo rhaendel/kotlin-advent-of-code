@@ -25,7 +25,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build koverLog koverXmlReport
       - name: Test Report
-        uses: dorny/test-reporter@v2.3.0
+        uses: dorny/test-reporter@v2.5.0
         if: ${{ !cancelled() }}  # run this step even if a previous step failed
         with:
           name: JUnit Tests
