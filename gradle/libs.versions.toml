@@ -1,6 +1,6 @@
 [versions]
 kotest = "6.1.2"
-kotlin = "2.3.0"
+kotlin = "2.3.10"
 kotlin-logging = "7.0.14"
 kotlinx-coroutines = "1.10.2"
 kover = "0.9.5"
