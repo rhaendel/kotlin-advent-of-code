@@ -21,7 +21,7 @@ jobs:
           distribution: 'temurin'
           java-version: 21
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
       - name: Build with Gradle
         run: ./gradlew build koverLog koverXmlReport
       - name: Test Report
