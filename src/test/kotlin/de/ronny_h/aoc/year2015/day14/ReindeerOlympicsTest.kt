@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year2015.day14
 
-import io.kotest.core.spec.style.StringSpec
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 
-class ReindeerOlympicsTest : StringSpec({
+val ReindeerOlympicsTest by testSuite {
 
     val input = listOf(
         "Comet can fly 14 km/s for 10 seconds, but then must rest for 127 seconds.",
@@ -14,15 +14,15 @@ class ReindeerOlympicsTest : StringSpec({
         Reindeer(16, 11, 162),
     )
 
-    "input can be parsed" {
+    test("input can be parsed") {
         input.parse() shouldBe parsedInput
     }
 
-    "part 1: max Reindeer distance in 1000 seconds" {
+    test("part 1: max Reindeer distance in 1000 seconds") {
         parsedInput.maxReindeerDistanceIn(1000) shouldBe 1120
     }
 
-    "part 2: points of the winner in 1000 seconds" {
+    test("part 2: points of the winner in 1000 seconds") {
         parsedInput.pointsOfWinnerIn(1000) shouldBe 689
     }
-})
+}

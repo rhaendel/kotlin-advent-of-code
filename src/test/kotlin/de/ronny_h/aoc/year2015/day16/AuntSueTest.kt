@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year2015.day16
 
-import io.kotest.core.spec.style.StringSpec
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 
-class AuntSueTest : StringSpec({
+val AuntSueTest by testSuite {
 
     val input = listOf(
         "Sue 1: cars: 9, akitas: 3, goldfish: 0",
@@ -13,7 +13,7 @@ class AuntSueTest : StringSpec({
         "Sue 5: cats: 7, trees: 0, vizslas: 1",
     )
 
-    "Sues can be parsed" {
+    test("Sues can be parsed") {
         input.parseSues() shouldBe listOf(
             Sue(1, mapOf("cars" to 9, "akitas" to 3, "goldfish" to 0)),
             Sue(2, mapOf("akitas" to 9, "children" to 3, "samoyeds" to 9)),
@@ -23,11 +23,11 @@ class AuntSueTest : StringSpec({
         )
     }
 
-    "part 1: The sue that matches all given attributes" {
+    test("part 1: The sue that matches all given attributes") {
         AuntSue().part1(input) shouldBe 3
     }
 
-    "part 2: The sue that matches all given attributes respecting the outdated retroencabulator" {
+    test("part 2: The sue that matches all given attributes respecting the outdated retroencabulator") {
         AuntSue().part2(input) shouldBe 4
     }
-})
+}

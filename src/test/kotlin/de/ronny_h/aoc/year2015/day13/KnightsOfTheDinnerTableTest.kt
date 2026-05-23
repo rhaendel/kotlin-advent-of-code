@@ -1,11 +1,9 @@
 package de.ronny_h.aoc.year2015.day13
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 
-class KnightsOfTheDinnerTableTest : StringSpec({
+val KnightsOfTheDinnerTableTest by testSuite {
 
     val input = listOf(
         "Alice would gain 54 happiness units by sitting next to Bob.",
@@ -22,26 +20,24 @@ class KnightsOfTheDinnerTableTest : StringSpec({
         "David would gain 41 happiness units by sitting next to Carol.",
     )
 
-    "input can be parsed" {
-        forAll(
-            row(
-                "Alice would gain 54 happiness units by sitting next to Bob.",
-                HappinessPotential("Alice", "Bob", 54)
-            ),
-            row(
-                "Alice would lose 79 happiness units by sitting next to Carol.",
-                HappinessPotential("Alice", "Carol", -79)
-            ),
-        ) { sentence, expected ->
-            listOf(sentence).parse() shouldBe listOf(expected)
+    testSuite("input can be parsed") {
+        mapOf(
+            "Alice would gain 54 happiness units by sitting next to Bob." to
+            HappinessPotential("Alice", "Bob", 54),
+            "Alice would lose 79 happiness units by sitting next to Carol." to
+            HappinessPotential("Alice", "Carol", -79),
+        ).forEach { (sentence, expected) ->
+            test("$sentence, $expected") {
+                listOf(sentence).parse() shouldBe listOf(expected)
+            }
         }
     }
 
-    "part 1: the optimal total change in happiness" {
+    test("part 1: the optimal total change in happiness") {
         KnightsOfTheDinnerTable().part1(input) shouldBe 330
     }
 
-    "part 2: the optimal total change in happiness, myself included" {
+    test("part 2: the optimal total change in happiness, myself included") {
         KnightsOfTheDinnerTable().part2(input) shouldBe 286
     }
-})
+}

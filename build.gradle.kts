@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.testballoon)
 }
 
 repositories {
@@ -16,6 +17,8 @@ dependencies {
     testImplementation(libs.kotest.assertions.table)
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.system.lambda)
+    testImplementation(libs.testballoon)
+    testImplementation(libs.testballoon.kotest.assertions)
 }
 
 java {
