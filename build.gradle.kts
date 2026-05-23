@@ -16,7 +16,6 @@ dependencies {
     testImplementation(libs.kotest.assertions.table)
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.system.lambda)
-    testRuntimeOnly(libs.logback.classic)
 }
 
 java {
