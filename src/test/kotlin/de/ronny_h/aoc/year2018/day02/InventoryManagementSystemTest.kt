@@ -1,14 +1,12 @@
 package de.ronny_h.aoc.year2018.day02
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
-class InventoryManagementSystemTest : StringSpec({
+val InventoryManagementSystemTest by testSuite {
 
-    "part 1: the checksum (product of number of letters appearing twice and 3 times exactly)" {
+    test("part 1: the checksum (product of number of letters appearing twice and 3 times exactly)") {
         val input = """
             abcdef
             bababc
@@ -22,7 +20,7 @@ class InventoryManagementSystemTest : StringSpec({
         InventoryManagementSystem().part1(input) shouldBe "12"
     }
 
-    "part 2: the common letters between the two correct box IDs" {
+    test("part 2: the common letters between the two correct box IDs") {
         val input = """
             abcde
             fghij
@@ -35,33 +33,41 @@ class InventoryManagementSystemTest : StringSpec({
         InventoryManagementSystem().part2(input) shouldBe "fgij"
     }
 
-    "The Levenshtein distance" {
-        forAll(
-            row("", "", 0),
-            row("", "a", 1),
-            row("a", "", 1),
-            row("abc", "abc", 0),
-            row("abc", "a_c", 1),
-            row("abc", "xyz", 3),
-            row("abc", "abcxyz", 3),
-        ) { a, b, distance ->
-            lev(a, b) shouldBe distance
+    data class Row(val a: String, val b: String, val distance: Int)
+
+    testSuite("The Levenshtein distance") {
+        listOf(
+            Row("", "", 0),
+            Row("", "a", 1),
+            Row("a", "", 1),
+            Row("abc", "abc", 0),
+            Row("abc", "a_c", 1),
+            Row("abc", "xyz", 3),
+            Row("abc", "abcxyz", 3),
+        ).forEach { (a, b, distance) ->
+            test("$a, $b, $distance") {
+                lev(a, b) shouldBe distance
+            }
         }
     }
 
-    "The Levenshtein distance with an upper bound" {
-        forAll(
-            row("", "", 1, 0),
-            row("", "a", 1, 1),
-            row("a", "", 1, 1),
-            row("abc", "abc", 1, 0),
-            row("abc", "a_c", 1, 1),
-            row("abc", "axbyc", 1, 2),
-            row("abc", "axbycz", 1, 2),
-            row("abc", "xyz", 1, 2),
-            row("abc", "abcxyz", 1, 3),
-        ) { a, b, maxDistance, distance ->
-            lev(a, b, maxDistance) shouldBe distance
+    data class R(val a: String, val b: String, val maxDistance: Int, val distance: Int)
+
+    testSuite("The Levenshtein distance with an upper bound") {
+        listOf(
+            R("", "", 1, 0),
+            R("", "a", 1, 1),
+            R("a", "", 1, 1),
+            R("abc", "abc", 1, 0),
+            R("abc", "a_c", 1, 1),
+            R("abc", "axbyc", 1, 2),
+            R("abc", "axbycz", 1, 2),
+            R("abc", "xyz", 1, 2),
+            R("abc", "abcxyz", 1, 3),
+        ).forEach { (a, b, maxDistance, distance) ->
+            test("$a, $b, $maxDistance") {
+                lev(a, b, maxDistance) shouldBe distance
+            }
         }
     }
-})
+}

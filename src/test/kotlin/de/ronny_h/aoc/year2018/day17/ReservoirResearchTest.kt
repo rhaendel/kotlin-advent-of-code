@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2018.day17
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class ReservoirResearchTest : StringSpec({
+val ReservoirResearchTest by testSuite {
 
     val input = """
         x=495, y=2..7
@@ -17,7 +17,7 @@ class ReservoirResearchTest : StringSpec({
         y=13, x=498..504
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         val expectedSlice = """
             ......+.......
             ............#.
@@ -37,7 +37,7 @@ class ReservoirResearchTest : StringSpec({
         VerticalSliceOfGround(input).toString(1) shouldBe expectedSlice
     }
 
-    "let the water flow according to the puzzle's example" {
+    test("let the water flow according to the puzzle's example") {
         val expectedSlice = """
             ......+.......
             ......|.....#.
@@ -60,7 +60,7 @@ class ReservoirResearchTest : StringSpec({
         slice.toString(1) shouldBe expectedSlice
     }
 
-    "overflow within a bin" {
+    test("overflow within a bin") {
         val input = """
             x=498, y=2..6
             x=505, y=2..6
@@ -92,7 +92,7 @@ class ReservoirResearchTest : StringSpec({
         slice.toString(1) shouldBe expectedFlooded
     }
 
-    "plateau within a bin" {
+    test("plateau within a bin") {
         val input = """
             x=496, y=2..6
             x=503, y=2..6
@@ -125,7 +125,7 @@ class ReservoirResearchTest : StringSpec({
         slice.toString(1) shouldBe expectedFlooded
     }
 
-    "two springs into one bin" {
+    test("two springs into one bin") {
         val input = """
             x=500, y=2..2
             x=499, y=5..7
@@ -159,11 +159,11 @@ class ReservoirResearchTest : StringSpec({
         slice.toString(1) shouldBe expectedFlooded
     }
 
-    "part 1: the number of tiles the water can reach" {
+    test("part 1: the number of tiles the water can reach") {
         ReservoirResearch().part1(input) shouldBe 57
     }
 
-    "part 2: the number of tiles with resting water" {
+    test("part 2: the number of tiles with resting water") {
         ReservoirResearch().part2(input) shouldBe 29
     }
-})
+}
