@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2024.day13
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class ClawContraptionTest : StringSpec({
+val ClawContraptionTest by testSuite {
     val input = """
         Button A: X+94, Y+34
         Button B: X+22, Y+67
@@ -23,11 +23,11 @@ class ClawContraptionTest : StringSpec({
         Prize: X=18641, Y=10279
     """.asList()
 
-    "part 1: The fewest tokens to spend to win all possible prizes" {
+    test("part 1: The fewest tokens to spend to win all possible prizes") {
         ClawContraption().part1(input) shouldBe 480
     }
 
-    "part 2: The fewest tokens to spend to win all possible prizes with corrected prize" {
+    test("part 2: The fewest tokens to spend to win all possible prizes with corrected prize") {
         ClawContraption().part2(input) shouldBe 875318608908
     }
-})
+}

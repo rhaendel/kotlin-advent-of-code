@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.year2024.day05
 
-import io.kotest.core.spec.style.StringSpec
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 
-class PrintQueueTest : StringSpec({
+val PrintQueueTest by testSuite {
     val smallInput = listOf(
         "1|2", "2|3", "3|4", "4|5",
         "",
@@ -17,19 +17,19 @@ class PrintQueueTest : StringSpec({
         "75,97,47,61,53", "61,13,29", "97,13,75,29,47",
     )
 
-    "part 1, small input: The sum of the middle page number from correctly-ordered updates" {
+    test("part 1, small input: The sum of the middle page number from correctly-ordered updates") {
         PrintQueue().part1(smallInput) shouldBe 5
     }
 
-    "part 1, medium input: The sum of the middle page number from correctly-ordered updates" {
+    test("part 1, medium input: The sum of the middle page number from correctly-ordered updates") {
         PrintQueue().part1(mediumInput) shouldBe 143
     }
 
-    "part 2, small input: The sum of the middle page number from incorrectly-ordered, but now sorted updates" {
+    test("part 2, small input: The sum of the middle page number from incorrectly-ordered, but now sorted updates") {
         PrintQueue().part2(smallInput) shouldBe 2
     }
 
-    "part 2, medium input: The sum of the middle page number from incorrectly-ordered, but now sorted updates" {
+    test("part 2, medium input: The sum of the middle page number from incorrectly-ordered, but now sorted updates") {
         PrintQueue().part2(mediumInput) shouldBe 123
     }
-})
+}

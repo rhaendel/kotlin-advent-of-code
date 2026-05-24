@@ -1,12 +1,11 @@
 package de.ronny_h.aoc.year2024.day09
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.shouldBe
 
-class DiskFragmenterTest : StringSpec({
+val DiskFragmenterTest by testSuite {
     val verySmallInput = """
         1234
     """.asList()
@@ -40,23 +39,25 @@ class DiskFragmenterTest : StringSpec({
         8531598542503280571
     """.asList()
 
-    "part 1: Compacted hard drive's filesystem checksum" {
-        forAll(
-            row(verySmallInput, 6),
-            row(smallInput1, 60),
-            row(mediumInput1, 1928),
-        ) { input, result ->
-            DiskFragmenter().part1(input) shouldBe result
-        }
+    testSuite(
+        "part 1: Compacted hard drive's filesystem checksum",
+        mapOf(
+            verySmallInput to 6,
+            smallInput1 to 60,
+            mediumInput1 to 1928,
+        ),
+    ) { input, result ->
+        DiskFragmenter().part1(input) shouldBe result
     }
 
-    "part 2: Compacted hard drive's filesystem checksum" {
-        forAll(
-            row(smallInput2, 20),
-            row(mediumInput1, 2858),
-            row(mediumInput2, 7309),
-        ) { input, result ->
-            DiskFragmenter().part2(input) shouldBe result
-        }
+    testSuite(
+        "part 2: Compacted hard drive's filesystem checksum",
+        mapOf(
+            smallInput2 to 20,
+            mediumInput1 to 2858,
+            mediumInput2 to 7309,
+        ),
+    ) { input, result ->
+        DiskFragmenter().part2(input) shouldBe result
     }
-})
+}
