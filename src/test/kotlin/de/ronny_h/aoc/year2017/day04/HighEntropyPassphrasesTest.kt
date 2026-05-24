@@ -1,31 +1,33 @@
 package de.ronny_h.aoc.year2017.day04
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 
-class HighEntropyPassphrasesTest : StringSpec({
+val HighEntropyPassphrasesTest by testSuite {
 
-    "part 1: the example: passphrases without repeating words are valid" {
-        forAll(
-            row("aa bb cc dd ee", 1),
-            row("aa bb cc dd aa", 0),
-            row("aa bb cc dd aaa", 1),
-        ) { passphrase, numberOfValidPhrases ->
-            HighEntropyPassphrases().part1(listOf(passphrase)) shouldBe numberOfValidPhrases
+    testSuite("part 1: the example: passphrases without repeating words are valid") {
+        mapOf(
+            "aa bb cc dd ee" to 1,
+            "aa bb cc dd aa" to 0,
+            "aa bb cc dd aaa" to 1,
+        ).forEach { (passphrase, numberOfValidPhrases) ->
+            test("$passphrase, $numberOfValidPhrases") {
+                HighEntropyPassphrases().part1(listOf(passphrase)) shouldBe numberOfValidPhrases
+            }
         }
     }
 
-    "part 2: the example: passphrases without anagrams are valid" {
-        forAll(
-            row("a ab abc abd abf abj", 1),
-            row("abcde fghij", 1),
-            row("abcde xyz ecdab", 0),
-            row("iiii oiii ooii oooi oooo", 1),
-            row("oiii ioii iioi iiio", 0),
-        ) { passphrase, numberOfValidPhrases ->
-            HighEntropyPassphrases().part2(listOf(passphrase)) shouldBe numberOfValidPhrases
+    testSuite("part 2: the example: passphrases without anagrams are valid") {
+        mapOf(
+            "a ab abc abd abf abj" to 1,
+            "abcde fghij" to 1,
+            "abcde xyz ecdab" to 0,
+            "iiii oiii ooii oooi oooo" to 1,
+            "oiii ioii iioi iiio" to 0,
+        ).forEach { (passphrase, numberOfValidPhrases) ->
+            test("$passphrase, $numberOfValidPhrases") {
+                HighEntropyPassphrases().part2(listOf(passphrase)) shouldBe numberOfValidPhrases
+            }
         }
     }
-})
+}

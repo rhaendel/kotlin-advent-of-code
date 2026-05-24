@@ -1,56 +1,62 @@
 package de.ronny_h.aoc.year2017.day11
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.year2017.day11.HexagonalGrid.Direction.*
 import de.ronny_h.aoc.year2017.day11.HexagonalGrid.Hextile
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
-class HexEdTest : StringSpec({
+val HexEdTest by testSuite {
 
-    "input can be parsed" {
-        forAll(
-            row("n", listOf(NORTH)),
-            row("ne", listOf(NORTH_EAST)),
-            row("se", listOf(SOUTH_EAST)),
-            row("s", listOf(SOUTH)),
-            row("sw", listOf(SOUTH_WEST)),
-            row("nw", listOf(NORTH_WEST)),
-            row("nw,s,sw", listOf(NORTH_WEST, SOUTH, SOUTH_WEST)),
-        ) { input, expected ->
-            input.parseDirections() shouldBe expected
-        }
-    }
-
-    "go in directions leads to target hextile" {
-        forAll(
-            row("ne,ne,ne", Hextile(-3, 3)),
-            row("ne,ne,sw,sw", Hextile(0, 0)),
-            row("ne,ne,s,s", Hextile(2, 2)),
-            row("se,sw,se,sw,sw", Hextile(5, -1)),
-        ) { directions, hextile ->
-            val hexGrid = HexagonalGrid()
-            directions.parseDirections().forEach { hexGrid.goInDirection(it) }
-            hexGrid.currentPosition shouldBe hextile
-        }
-    }
-
-    "only valid hextiles can be created" {
-        forAll(
-            row(1, 0),
-            row(0, 1),
-            row(11, 10),
-        ) { row, col ->
-            shouldThrow<IllegalStateException> {
-                Hextile(row, col)
+    testSuite("input can be parsed") {
+        mapOf(
+            "n" to listOf(NORTH),
+            "ne" to listOf(NORTH_EAST),
+            "se" to listOf(SOUTH_EAST),
+            "s" to listOf(SOUTH),
+            "sw" to listOf(SOUTH_WEST),
+            "nw" to listOf(NORTH_WEST),
+            "nw,s,sw" to listOf(NORTH_WEST, SOUTH, SOUTH_WEST),
+        ).forEach { (input, expected) ->
+            test("$input, $expected") {
+                input.parseDirections() shouldBe expected
             }
         }
     }
 
-    "hextile distances" {
-        forAll(
+    testSuite("go in directions leads to target hextile") {
+        mapOf(
+            "ne,ne,ne" to Hextile(-3,  3),
+            "ne,ne,sw,sw" to Hextile(0,  0),
+            "ne,ne,s,s" to Hextile(2,  2),
+            "se,sw,se,sw,sw" to  Hextile(5,  -1),
+        ).forEach { (directions, hextile) ->
+            test("$directions, $hextile") {
+                val hexGrid = HexagonalGrid()
+                directions.parseDirections().forEach { hexGrid.goInDirection(it) }
+                hexGrid.currentPosition shouldBe hextile
+            }
+        }
+    }
+
+    testSuite("only valid hextiles can be created") {
+        mapOf(
+            1 to 0,
+            0 to 1,
+            11 to 10,
+        ).forEach { (row, col) ->
+            test("$row, $col") {
+                shouldThrow<IllegalStateException> {
+                    Hextile(row, col)
+                }
+            }
+        }
+    }
+
+    data class row(val first: Hextile, val second: Hextile, val distance: Int)
+
+    testSuite("hextile distances") {
+        listOf(
             row(Hextile(0, 0), Hextile(0, 0), 0),
             row(Hextile(0, 0), Hextile(2, 0), 1),
             row(Hextile(0, 0), Hextile(10, 0), 5),
@@ -61,32 +67,38 @@ class HexEdTest : StringSpec({
             row(Hextile(0, 0), Hextile(3, 3), 3),
             row(Hextile(-3, -3), Hextile(0, 0), 3),
             row(Hextile(-3, -3), Hextile(3, 3), 6),
-        ) { first, second, distance ->
-            first distanceTo second shouldBe distance
+        ).forEach { (first, second, distance) ->
+            test("$first, $second, $distance") {
+                first distanceTo second shouldBe distance
+            }
         }
     }
 
-    "part 1: the fewest number of steps to reach the target hextile" {
-        forAll(
-            row("ne,ne,ne", 3),
-            row("ne,ne,sw,sw", 0),
-            row("ne,ne,s,s", 2),
-            row("se,sw,se,sw,sw", 3),
-        ) { directions, distance ->
-            val input = listOf(directions)
-            HexEd().part1(input) shouldBe distance
+    testSuite("part 1: the fewest number of steps to reach the target hextile") {
+        mapOf(
+            "ne,ne,ne" to 3,
+            "ne,ne,sw,sw" to 0,
+            "ne,ne,s,s" to 2,
+            "se,sw,se,sw,sw" to 3,
+        ).forEach { (directions, distance) ->
+            test("$directions, $distance") {
+                val input = listOf(directions)
+                HexEd().part1(input) shouldBe distance
+            }
         }
     }
 
-    "part 2: the furthest steps away on the path" {
-        forAll(
-            row("ne,ne,ne", 3),
-            row("ne,ne,sw,sw", 2),
-            row("ne,ne,s,s", 2),
-            row("se,sw,se,sw,sw", 3),
-        ) { directions, distance ->
-            val input = listOf(directions)
-            HexEd().part2(input) shouldBe distance
+    testSuite("part 2: the furthest steps away on the path") {
+        mapOf(
+            "ne,ne,ne" to 3,
+            "ne,ne,sw,sw" to 2,
+            "ne,ne,s,s" to 2,
+            "se,sw,se,sw,sw" to 3,
+        ).forEach { (directions, distance) ->
+            test("$directions, $distance") {
+                val input = listOf(directions)
+                HexEd().part2(input) shouldBe distance
+            }
         }
     }
-})
+}

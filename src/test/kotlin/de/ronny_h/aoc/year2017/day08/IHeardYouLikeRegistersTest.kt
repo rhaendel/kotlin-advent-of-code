@@ -1,13 +1,13 @@
 package de.ronny_h.aoc.year2017.day08
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.year2017.day08.Condition.*
 import de.ronny_h.aoc.year2017.day08.Operation.Decrease
 import de.ronny_h.aoc.year2017.day08.Operation.Increase
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class IHeardYouLikeRegistersTest : StringSpec({
+val IHeardYouLikeRegistersTest by testSuite {
 
     val input = """
         b inc 5 if a > 1
@@ -16,7 +16,7 @@ class IHeardYouLikeRegistersTest : StringSpec({
         c inc -20 if c == 10
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         input.parseInstructions() shouldBe listOf(
             Instruction("b", Increase, 5, "a", GreaterThan, 1),
             Instruction("a", Increase, 1, "b", LessThan, 5),
@@ -25,11 +25,11 @@ class IHeardYouLikeRegistersTest : StringSpec({
         )
     }
 
-    "part 1: the largest value in any register after completing the instructions" {
+    test("part 1: the largest value in any register after completing the instructions") {
         IHeardYouLikeRegisters().part1(input) shouldBe 1
     }
 
-    "part 2: the highest value held in any register during this process" {
+    test("part 2: the highest value held in any register during this process") {
         IHeardYouLikeRegisters().part2(input) shouldBe 10
     }
-})
+}

@@ -60,12 +60,12 @@ val OpeningTheTuringLockTest by testSuite {
         offset shouldBe -7
     }
 
-    data class row(val registers: Map<Register, UInt>, val offset: Int, val expectedJump: Int)
+    data class Row(val registers: Map<Register, UInt>, val offset: Int, val expectedJump: Int)
 
     testSuite("jie jumps only if the register is even") {
         listOf(
-            row(mapOf(A to 4u), -7, -7),
-            row(mapOf(A to 3u), -7, 1),
+            Row(mapOf(A to 4u), -7, -7),
+            Row(mapOf(A to 3u), -7, 1),
         ).forEach { (registers, offset, expectedJump) ->
             test("$registers, $offset, $expectedJump") {
                 val oldA = registers.getValue(A)
@@ -79,9 +79,9 @@ val OpeningTheTuringLockTest by testSuite {
 
     testSuite("jio jumps only if the register is one") {
         listOf(
-            row(mapOf(A to 4u), -7, 1),
-            row(mapOf(A to 3u), -7, 1),
-            row(mapOf(A to 1u), -7, -7),
+            Row(mapOf(A to 4u), -7, 1),
+            Row(mapOf(A to 3u), -7, 1),
+            Row(mapOf(A to 1u), -7, -7),
         ).forEach { (registers, offset, expectedJump) ->
             test("$registers, $offset, $expectedJump") {
                 val oldA = registers.getValue(A)

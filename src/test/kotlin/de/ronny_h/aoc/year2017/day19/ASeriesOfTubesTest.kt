@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.year2017.day19
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.extensions.grids.Coordinates
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class ASeriesOfTubesTest : StringSpec({
+val ASeriesOfTubesTest by testSuite {
 
     val input = """
         #     |          
@@ -16,15 +16,15 @@ class ASeriesOfTubesTest : StringSpec({
         #     +B-+  +--+ 
     """.trimMargin("#").asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         RoutingDiagram(input).findStartCoordinates() shouldBe Coordinates(4, 0)
     }
 
-    "part 1: the letters on the path from the beginning to the end" {
+    test("part 1: the letters on the path from the beginning to the end") {
         ASeriesOfTubes().part1(input) shouldBe "ABCDEF"
     }
 
-    "part 2: the package takes a total of 38 steps" {
+    test("part 2: the package takes a total of 38 steps") {
         ASeriesOfTubes().part2(input) shouldBe "38"
     }
-})
+}

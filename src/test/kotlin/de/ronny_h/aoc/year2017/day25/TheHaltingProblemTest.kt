@@ -1,12 +1,12 @@
 package de.ronny_h.aoc.year2017.day25
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.year2017.day25.TapeDirection.LEFT
 import de.ronny_h.aoc.year2017.day25.TapeDirection.RIGHT
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class TheHaltingProblemTest : StringSpec({
+val TheHaltingProblemTest by testSuite {
 
     val input = """
         Begin in state A.
@@ -33,7 +33,7 @@ class TheHaltingProblemTest : StringSpec({
             - Continue with state A.
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         input.parseTuringMachineConfiguration() shouldBe TuringMachineConfiguration(
             "A", 6, listOf(
                 Rule("A", 0, 1, RIGHT, "B"),
@@ -44,11 +44,11 @@ class TheHaltingProblemTest : StringSpec({
         )
     }
 
-    "part 1: the diagnostic checksum after running the blueprint" {
+    test("part 1: the diagnostic checksum after running the blueprint") {
         TheHaltingProblem().part1(input) shouldBe 3
     }
 
-    "part 2 does nothing" {
+    test("part 2 does nothing") {
         TheHaltingProblem().part2(input) shouldBe 0
     }
-})
+}

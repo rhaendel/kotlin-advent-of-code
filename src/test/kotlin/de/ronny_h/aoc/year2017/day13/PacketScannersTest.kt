@@ -1,12 +1,10 @@
 package de.ronny_h.aoc.year2017.day13
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
-class PacketScannersTest : StringSpec({
+val PacketScannersTest by testSuite {
 
     val input = """
         0: 3
@@ -15,7 +13,7 @@ class PacketScannersTest : StringSpec({
         6: 4
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         input.parseFirewallConfig() shouldBe listOf(
             ScanningArea(0, 3),
             ScanningArea(1, 2),
@@ -24,38 +22,42 @@ class PacketScannersTest : StringSpec({
         )
     }
 
-    "scanner is on top of the layer in the specific picosecond" {
-        forAll(
-            row(ScanningArea(0, 3), 0, true),
-            row(ScanningArea(1, 2), 0, true),
-            row(ScanningArea(4, 4), 0, true),
-            row(ScanningArea(6, 4), 0, true),
-            row(ScanningArea(0, 3), 1, false),
-            row(ScanningArea(1, 2), 1, false),
-            row(ScanningArea(4, 4), 1, false),
-            row(ScanningArea(6, 4), 1, false),
-            row(ScanningArea(0, 3), 2, false),
-            row(ScanningArea(1, 2), 2, true),
-            row(ScanningArea(4, 4), 2, false),
-            row(ScanningArea(6, 4), 2, false),
-            row(ScanningArea(0, 3), 3, false),
-            row(ScanningArea(1, 2), 3, false),
-            row(ScanningArea(4, 4), 3, false),
-            row(ScanningArea(6, 4), 3, false),
-            row(ScanningArea(0, 3), 4, true),
-            row(ScanningArea(1, 2), 4, true),
-            row(ScanningArea(4, 4), 4, false),
-            row(ScanningArea(6, 4), 4, false),
-        ) { layer, ps, expected ->
-            layer.isScannerOnTopInPicosecond(ps) shouldBe expected
+    data class Row(val layer: ScanningArea, val ps: Int, val expected: Boolean)
+
+    testSuite("scanner is on top of the layer in the specific picosecond") {
+        listOf(
+            Row(ScanningArea(0, 3), 0, true),
+            Row(ScanningArea(1, 2), 0, true),
+            Row(ScanningArea(4, 4), 0, true),
+            Row(ScanningArea(6, 4), 0, true),
+            Row(ScanningArea(0, 3), 1, false),
+            Row(ScanningArea(1, 2), 1, false),
+            Row(ScanningArea(4, 4), 1, false),
+            Row(ScanningArea(6, 4), 1, false),
+            Row(ScanningArea(0, 3), 2, false),
+            Row(ScanningArea(1, 2), 2, true),
+            Row(ScanningArea(4, 4), 2, false),
+            Row(ScanningArea(6, 4), 2, false),
+            Row(ScanningArea(0, 3), 3, false),
+            Row(ScanningArea(1, 2), 3, false),
+            Row(ScanningArea(4, 4), 3, false),
+            Row(ScanningArea(6, 4), 3, false),
+            Row(ScanningArea(0, 3), 4, true),
+            Row(ScanningArea(1, 2), 4, true),
+            Row(ScanningArea(4, 4), 4, false),
+            Row(ScanningArea(6, 4), 4, false),
+        ).forEach { (layer, ps, expected) ->
+            test("$layer, $ps, $expected") {
+                layer.isScannerOnTopInPicosecond(ps) shouldBe expected
+            }
         }
     }
 
-    "part 1: the severity of the example trip" {
+    test("part 1: the severity of the example trip") {
         PacketScanners().part1(input) shouldBe 24
     }
 
-    "part 2: the fewest number of picoseconds to delay to get through safely" {
+    test("part 2: the fewest number of picoseconds to delay to get through safely") {
         PacketScanners().part2(input) shouldBe 10
     }
-})
+}
