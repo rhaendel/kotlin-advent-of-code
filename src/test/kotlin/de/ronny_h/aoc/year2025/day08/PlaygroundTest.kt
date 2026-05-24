@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.year2025.day08
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.extensions.threedim.Vector
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class PlaygroundTest : StringSpec({
+val PlaygroundTest by testSuite {
 
     val input = """
         162,817,812
@@ -30,7 +30,7 @@ class PlaygroundTest : StringSpec({
         425,690,689
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         """
             162,817,812
             57,618,57
@@ -43,7 +43,7 @@ class PlaygroundTest : StringSpec({
         )
     }
 
-    "pairwiseDistances" {
+    test("pairwiseDistances") {
         listOf(
             Vector(0, 0, 0),
             Vector(1, 0, 0),
@@ -64,11 +64,11 @@ class PlaygroundTest : StringSpec({
         )
     }
 
-    "part 1" {
+    test("part 1") {
         JunctionBoxConnector(input).connectShortest(10) shouldBe 40
     }
 
-    "part 2" {
+    test("part 2") {
         Playground().part2(input) shouldBe 25272
     }
-})
+}

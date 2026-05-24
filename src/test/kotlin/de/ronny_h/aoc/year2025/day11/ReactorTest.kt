@@ -1,12 +1,12 @@
 package de.ronny_h.aoc.year2025.day11
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class ReactorTest : StringSpec({
+val ReactorTest by testSuite {
 
-    "parse devices" {
+    test("parse devices") {
         """
             aaa: you hhh
             you: bbb ccc
@@ -16,7 +16,7 @@ class ReactorTest : StringSpec({
         )
     }
 
-    "part 1: the number of paths to out" {
+    test("part 1: the number of paths to out") {
         val input = """
             aaa: you hhh
             you: bbb ccc
@@ -32,7 +32,7 @@ class ReactorTest : StringSpec({
         Reactor().part1(input) shouldBe 5
     }
 
-    "part 2: exactly one straight path" {
+    test("part 2: exactly one straight path") {
         val input = """
             svr: aaa
             aaa: dac
@@ -43,7 +43,7 @@ class ReactorTest : StringSpec({
         Reactor().part2(input) shouldBe 1
     }
 
-    "part 2: exactly one path with a bypass right" {
+    test("part 2: exactly one path with a bypass right") {
         val input = """
             svr: aaa
             aaa: dac bya
@@ -55,7 +55,7 @@ class ReactorTest : StringSpec({
         Reactor().part2(input) shouldBe 1
     }
 
-    "part 2: exactly one path with a bypass left" {
+    test("part 2: exactly one path with a bypass left") {
         val input = """
             svr: aaa
             aaa: bya dac
@@ -67,7 +67,7 @@ class ReactorTest : StringSpec({
         Reactor().part2(input) shouldBe 1
     }
 
-    "part 2: 2 paths above fft and dac" {
+    test("part 2: 2 paths above fft and dac") {
         val input = """
             svr: aaa bbb
             aaa: dac
@@ -79,7 +79,7 @@ class ReactorTest : StringSpec({
         Reactor().part2(input) shouldBe 2
     }
 
-    "part 2: 2 paths below fft and dac" {
+    test("part 2: 2 paths below fft and dac") {
         val input = """
             svr: aaa
             aaa: dac
@@ -92,7 +92,7 @@ class ReactorTest : StringSpec({
         Reactor().part2(input) shouldBe 2
     }
 
-    "part 2: 2 paths between fft and dac" {
+    test("part 2: 2 paths between fft and dac") {
         val input = """
             svr: aaa
             aaa: dac
@@ -105,7 +105,7 @@ class ReactorTest : StringSpec({
         Reactor().part2(input) shouldBe 2
     }
 
-    "part 2: the number of paths from svr to out visiting ffd and dac" {
+    test("part 2: the number of paths from svr to out visiting ffd and dac") {
         val input = """
             svr: aaa bbb
             aaa: fft
@@ -123,4 +123,4 @@ class ReactorTest : StringSpec({
         """.asList()
         Reactor().part2(input) shouldBe 2
     }
-})
+}

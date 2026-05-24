@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2025.day06
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class TrashCompactorTest : StringSpec({
+val TrashCompactorTest by testSuite {
 
     val input = """
         123 328  51 64 
@@ -13,7 +13,7 @@ class TrashCompactorTest : StringSpec({
         *   +   *   +  
     """.asList()
 
-    "problems can be parsed vertically" {
+    test("problems can be parsed vertically") {
         """
         123 328
          45 64 
@@ -25,7 +25,7 @@ class TrashCompactorTest : StringSpec({
         )
     }
 
-    "problems can be parsed by column right to left" {
+    test("problems can be parsed by column right to left") {
         input.parseProblemsByColumnsRightToLeft() shouldBe listOf(
             Problem(listOf(4, 431, 623), add),
             Problem(listOf(175, 581, 32), multiply),
@@ -34,11 +34,11 @@ class TrashCompactorTest : StringSpec({
         )
     }
 
-    "part 1: the total of the answers to the problems parsed vertically" {
+    test("part 1: the total of the answers to the problems parsed vertically") {
         TrashCompactor().part1(input) shouldBe 4277556
     }
 
-    "part 2: the total of the answers to the problems parsed by column right to left" {
+    test("part 2: the total of the answers to the problems parsed by column right to left") {
         TrashCompactor().part2(input) shouldBe 3263827
     }
-})
+}

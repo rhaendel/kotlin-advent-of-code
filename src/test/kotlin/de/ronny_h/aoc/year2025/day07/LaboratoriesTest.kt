@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2025.day07
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class LaboratoriesTest : StringSpec({
+val LaboratoriesTest by testSuite {
 
     val input = """
         .......S.......
@@ -25,11 +25,11 @@ class LaboratoriesTest : StringSpec({
         ...............
     """.asList()
 
-    "part 1" {
+    test("part 1") {
         Laboratories().part1(input) shouldBe 21
     }
 
-    "part 2" {
+    test("part 2") {
         Laboratories().part2(input) shouldBe 40
     }
-})
+}

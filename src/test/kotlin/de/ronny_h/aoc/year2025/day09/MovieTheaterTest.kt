@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.year2025.day09
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.extensions.grids.Coordinates
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class MovieTheaterTest : StringSpec({
+val MovieTheaterTest by testSuite {
 
     val input = """
         7,1
@@ -18,7 +18,7 @@ class MovieTheaterTest : StringSpec({
         7,3
     """.asList()
 
-    "input can be parsed to tiles" {
+    test("input can be parsed to tiles") {
         """
             7,1
             11,1
@@ -31,11 +31,11 @@ class MovieTheaterTest : StringSpec({
 
     }
 
-    "part 1: the largest area of any rectangle one can make" {
+    test("part 1: the largest area of any rectangle one can make") {
         MovieTheater().part1(input) shouldBe 50
     }
 
-    "part 2: the largest area of any rectangle one can make using only red and green tiles" {
+    test("part 2: the largest area of any rectangle one can make using only red and green tiles") {
         MovieTheater().part2(input) shouldBe 24
     }
-})
+}
