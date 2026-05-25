@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.3.21"
-kotlin-logging = "8.0.02"
+kotlin-logging = "8.0.03"
 kotlinx-coroutines = "1.11.0"
 kover = "0.9.8"
 logback = "1.5.32"
