@@ -1,5 +1,4 @@
 [versions]
-kotest = "6.1.11"
 kotlin = "2.3.21"
 kotlin-logging = "8.0.02"
 kotlinx-coroutines = "1.11.0"
@@ -10,8 +9,6 @@ testballoon = "1.0.0-K2.3.20"
 z3-turnkey = "4.14.1"
 
 [libraries]
-kotest-assertions-table = { module = "io.kotest:kotest-assertions-table", version.ref = "kotest" }
-kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotlin-logging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "kotlin-logging" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }

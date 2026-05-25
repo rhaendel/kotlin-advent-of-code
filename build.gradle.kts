@@ -14,8 +14,6 @@ dependencies {
     implementation(libs.z3.turnkey)
     runtimeOnly(libs.logback.classic)
 
-    testImplementation(libs.kotest.assertions.table)
-    testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.system.lambda)
     testImplementation(libs.testballoon)
     testImplementation(libs.testballoon.kotest.assertions)
