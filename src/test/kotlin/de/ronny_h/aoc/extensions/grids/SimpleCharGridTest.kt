@@ -1,17 +1,16 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import de.ronny_h.aoc.extensions.grids.Coordinates as C
 
-class SimpleCharGridTest : StringSpec({
+val SimpleCharGridTest by testSuite {
 
-    "in a grid with a unique shortest path that path is found" {
+    test("in a grid with a unique shortest path that path is found") {
         val grid = SimpleCharGrid(listOf("12", "34"))
         val shortestPaths = listOf(ShortestPath(listOf(C(0, 0), C(1, 0)), 1))
         grid.shortestPaths(C(0, 0), C(1, 0)) shouldBe shortestPaths
@@ -22,7 +21,7 @@ class SimpleCharGridTest : StringSpec({
         ) shouldBe shortestPaths
     }
 
-    "in a small grid with multiple shortest paths all paths are found" {
+    test("in a small grid with multiple shortest paths all paths are found") {
         SimpleCharGrid(listOf("12", "34")).shortestPaths(C(0, 0), C(1, 1)) shouldBe
                 listOf(
                     ShortestPath(listOf(C(0, 0), C(1, 0), C(1, 1)), 2),
@@ -30,7 +29,7 @@ class SimpleCharGridTest : StringSpec({
                 )
     }
 
-    "in a slightly larger grid with multiple shortest paths all paths are found" {
+    test("in a slightly larger grid with multiple shortest paths all paths are found") {
         SimpleCharGrid(listOf("123", "456", "789")).shortestPaths(
             C(0, 0),
             C(2, 2)
@@ -93,7 +92,7 @@ class SimpleCharGridTest : StringSpec({
                 )
     }
 
-    "in a non-rectangular grid with multiple shortest paths all paths are found" {
+    test("in a non-rectangular grid with multiple shortest paths all paths are found") {
         SimpleCharGrid(listOf("#12", "345"), '#').shortestPaths(
             C(1, 0),
             C(2, 1)
@@ -104,7 +103,7 @@ class SimpleCharGridTest : StringSpec({
                 )
     }
 
-    "obstacles are not part of the shortest path" {
+    test("obstacles are not part of the shortest path") {
         val grid = SimpleCharGrid(listOf("0#2", "3#5", "678"), '#')
         val expected = listOf(
             ShortestPath(
@@ -122,7 +121,7 @@ class SimpleCharGridTest : StringSpec({
         grid.shortestPaths(C(0, 0), listOf(C(2, 0))) shouldBe expected
     }
 
-    "customized obstacles are not part of the shortest path" {
+    test("customized obstacles are not part of the shortest path") {
         val grid = SimpleCharGrid(listOf("0X2", "3#5", "678"), '#')
         val expected = listOf(
             ShortestPath(
@@ -148,7 +147,7 @@ class SimpleCharGridTest : StringSpec({
         ) shouldBe expected
     }
 
-    "the Dijkstra implementation finds the shortest path to all goals" {
+    test("the Dijkstra implementation finds the shortest path to all goals") {
         val input = """
             1##2
             3456
@@ -179,7 +178,7 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
-    "the Dijkstra implementation stopAfterMinimalPathsAreFound if that option is set" {
+    test("the Dijkstra implementation stopAfterMinimalPathsAreFound if that option is set") {
         val input = """
             SoG
             o.o
@@ -211,7 +210,7 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
-    "the Dijkstra implementation ignores unreachable goals" {
+    test("the Dijkstra implementation ignores unreachable goals") {
         val input = """
             1#2
             3#4
@@ -224,9 +223,12 @@ class SimpleCharGridTest : StringSpec({
             ) shouldBe listOf(ShortestPath(listOf(C(0, 0), C(0, 1), C(0, 2)), 2))
     }
 
-    "the Dijkstra implementation takes the 'reading order' as vertex precedence" {
-        forAll(
-            row(
+    data class Row(val input: String, val start: C, val goal: C, val path: List<C>)
+
+    testSuite(
+        "the Dijkstra implementation takes the 'reading order' as vertex precedence",
+        listOf(
+            Row(
                 """
                         Sooo
                         ...o
@@ -239,7 +241,7 @@ class SimpleCharGridTest : StringSpec({
                     C(3, 1), C(3, 2), C(3, 3),
                 ),
             ),
-            row(
+            Row(
                 """
                         .ooG
                         #o..
@@ -252,20 +254,20 @@ class SimpleCharGridTest : StringSpec({
                     C(1, 0), C(2, 0), C(3, 0),
                 )
             ),
-        ) { input, start, goal, path ->
-            SimpleCharGrid(input.asList())
-                .shortestPaths(
-                    start = start,
-                    goals = listOf(goal)
-                ) shouldBe listOf(
-                ShortestPath(
-                    path, 6
-                ),
-            )
-        }
+        )
+    ) { (input, start, goal, path) ->
+        SimpleCharGrid(input.asList())
+            .shortestPaths(
+                start = start,
+                goals = listOf(goal)
+            ) shouldBe listOf(
+            ShortestPath(
+                path, 6
+            ),
+        )
     }
 
-    "cluster regions of same char with a single region" {
+    test("cluster regions of same char with a single region") {
         val input = """
             xx
         """.asList()
@@ -274,7 +276,7 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
-    "cluster regions of same char with two regions" {
+    test("cluster regions of same char with two regions") {
         val input = """
             ..xx
             ..xx
@@ -285,7 +287,7 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
-    "cluster regions of same char with four regions" {
+    test("cluster regions of same char with four regions") {
         val input = """
             ..xx
             oo__
@@ -298,7 +300,7 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
-    "cluster one region of a single, specified char" {
+    test("cluster one region of a single, specified char") {
         val input = """
             ..x..
             .xxx.
@@ -312,7 +314,7 @@ class SimpleCharGridTest : StringSpec({
         )
     }
 
-    "cluster regions with no region matching the specified char" {
+    test("cluster regions with no region matching the specified char") {
         val input = """
             ..x..
             .xxx.
@@ -320,4 +322,4 @@ class SimpleCharGridTest : StringSpec({
         """.asList()
         SimpleCharGrid(input).clusterRegions('o') shouldBe emptyList()
     }
-})
+}

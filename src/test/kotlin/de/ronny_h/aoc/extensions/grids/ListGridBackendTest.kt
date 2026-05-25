@@ -1,31 +1,31 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
-class ListGridBackendTest : StringSpec({
+val ListGridBackendTest by testSuite {
 
-    "get returns the existing element: the one that's set or the fallback element" {
+    testSuite("get returns the existing element: the one that's set or the fallback element") {
         val grid: GridBackend<Char> = ListGridBackend(2, 2, '#')
         grid[0, 0] = '0'
         grid[Coordinates(1, 1)] = '1'
 
-        forAll(
-            row(0, 0, '0'),
-            row(0, 1, '#'),
-            row(1, 0, '#'),
-            row(1, 1, '1'),
-        ) { x, y, expected ->
-            grid[x, y] shouldBe expected
-            grid[Coordinates(x, y)] shouldBe expected
+        listOf(
+            Triple(0, 0, '0'),
+            Triple(0, 1, '#'),
+            Triple(1, 0, '#'),
+            Triple(1, 1, '1'),
+        ).forEach { (x, y, expected) ->
+            test("$x, $y, $expected") {
+                grid[x, y] shouldBe expected
+                grid[Coordinates(x, y)] shouldBe expected
+            }
         }
     }
 
-    "get for non existing element throws an Exception" {
+    test("get for non existing element throws an Exception") {
         val grid: GridBackend<Char> = ListGridBackend(2, 2, '#')
 
         shouldThrow<IndexOutOfBoundsException> {
@@ -33,25 +33,27 @@ class ListGridBackendTest : StringSpec({
         }
     }
 
-    "getOrNull returns null for non existing elements" {
+    testSuite("getOrNull returns null for non existing elements") {
         val grid: GridBackend<Char> = ListGridBackend(2, 2, '#')
         grid[0, 0] = '0'
         grid[Coordinates(1, 1)] = '1'
 
-        forAll(
-            row(0, 0, '0'),
-            row(0, 1, '#'),
-            row(1, 0, '#'),
-            row(1, 1, '1'),
-            row(2, 0, null),
-            row(0, 2, null),
-        ) { x, y, expected ->
-            grid.getOrNull(x, y) shouldBe expected
-            grid.getOrNull(Coordinates(x, y)) shouldBe expected
+        listOf(
+            Triple(0, 0, '0'),
+            Triple(0, 1, '#'),
+            Triple(1, 0, '#'),
+            Triple(1, 1, '1'),
+            Triple(2, 0, null),
+            Triple(0, 2, null),
+        ).forEach { (x, y, expected) ->
+            test("$x, $y, $expected") {
+                grid.getOrNull(x, y) shouldBe expected
+                grid.getOrNull(Coordinates(x, y)) shouldBe expected
+            }
         }
     }
 
-    "subGridAt returns a list of lists for the specified section" {
+    test("subGridAt returns a list of lists for the specified section") {
         val grid: GridBackend<Char> = ListGridBackend(3, 3, '#')
         grid[0, 0] = '0'
         grid[Coordinates(1, 1)] = '1'
@@ -63,7 +65,7 @@ class ListGridBackendTest : StringSpec({
         )
     }
 
-    "mapToSequence transforms each grid coordinates row by row" {
+    test("mapToSequence transforms each grid coordinates row by row") {
         val grid = ListGridBackend(2, 2, 0)
         grid[1, 0] = 1
         grid[0, 1] = 2
@@ -74,7 +76,7 @@ class ListGridBackendTest : StringSpec({
         }.toList() shouldBe listOf("0", "1", "2", "3")
     }
 
-    "min and max indices are consistent with width and height" {
+    test("min and max indices are consistent with width and height") {
         val grid = ListGridBackend(2, 3, 0)
         grid.minX shouldBe 0
         grid.minY shouldBe 0
@@ -82,7 +84,7 @@ class ListGridBackendTest : StringSpec({
         grid.maxY shouldBe 2
     }
 
-    "entries returns a set containing all, dense grid entries" {
+    test("entries returns a set containing all, dense grid entries") {
         val grid = ListGridBackend(2, 2, 0)
         grid[1, 0] = 1
         grid[0, 1] = 2
@@ -94,7 +96,7 @@ class ListGridBackendTest : StringSpec({
         )
     }
 
-    "hashCode and equals of equal grids" {
+    test("hashCode and equals of equal grids") {
         val grid1: GridBackend<Char> = ListGridBackend(2, 2, '#')
         grid1[0, 0] = '0'
         grid1[1, 1] = '1'
@@ -108,7 +110,7 @@ class ListGridBackendTest : StringSpec({
         (grid2 == grid1) shouldBe true
     }
 
-    "hashCode and equals of unequal grids" {
+    testSuite("hashCode and equals of unequal grids") {
         val grid1: GridBackend<Char> = ListGridBackend(2, 2, '#')
         grid1[0, 0] = '0'
         grid1[1, 1] = '1'
@@ -125,22 +127,16 @@ class ListGridBackendTest : StringSpec({
         grid4[0, 0] = '0'
         grid4[1, 1] = '1'
 
-        forAll(
-            row(grid1, grid2),
-            row(grid1, grid3),
-            row(grid1, grid4),
-            row(grid2, grid1),
-            row(grid2, grid3),
-            row(grid2, grid4),
-            row(grid3, grid1),
-            row(grid3, grid2),
-            row(grid3, grid4),
-            row(grid4, grid1),
-            row(grid4, grid2),
-            row(grid4, grid3),
-        ) { first, second ->
-            first.hashCode() shouldNotBe second.hashCode()
-            (first == second) shouldBe false
+        val grids = listOf(grid1, grid2, grid3, grid4).withIndex()
+
+        for ((i, first) in grids) {
+            for ((j, second) in grids) {
+                if (i == j) continue
+                test("$i, $j") {
+                    first.hashCode() shouldNotBe second.hashCode()
+                    (first == second) shouldBe false
+                }
+            }
         }
     }
-})
+}

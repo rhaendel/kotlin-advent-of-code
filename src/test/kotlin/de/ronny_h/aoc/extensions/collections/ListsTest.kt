@@ -1,94 +1,97 @@
 package de.ronny_h.aoc.extensions.collections
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.infix.testBalloon.framework.core.testSuite
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.shouldBe
 
-class ListsTest : StringSpec({
-    "split an empty list" {
+val ListsTest by testSuite {
+    test("split an empty list") {
         listOf<String>().split("") shouldBe listOf()
     }
 
-    "split a list with only a single block" {
+    test("split a list with only a single block") {
         listOf("a", "b").split("") shouldBe listOf(listOf("a", "b"))
     }
 
-    "split a list with multiple blocks" {
+    test("split a list with multiple blocks") {
         listOf("a", "b", "", "c", "d").split("") shouldBe listOf(listOf("a", "b"), listOf("c", "d"))
     }
 
-    "split a list with multiple blocks and consecutive delimiting lines" {
+    test("split a list with multiple blocks and consecutive delimiting lines") {
         listOf("a", "b", "", "", "", "c", "d").split("") shouldBe listOf(listOf("a", "b"), listOf("c", "d"))
     }
 
-    "split a list with multiple blocks using the default delimiter" {
+    test("split a list with multiple blocks using the default delimiter") {
         listOf("a", "b", "", "c", "d").split() shouldBe listOf(listOf("a", "b"), listOf("c", "d"))
     }
 
-    "split a list with multiple blocks using a non-empty delimiter" {
+    test("split a list with multiple blocks using a non-empty delimiter") {
         listOf("a", "b", "---", "c", "d").split("---") shouldBe listOf(listOf("a", "b"), listOf("c", "d"))
     }
 
-    "split a list with multiple blocks ending with the delimiter line" {
+    test("split a list with multiple blocks ending with the delimiter line") {
         listOf("a", "b", "", "c", "d", "").split("") shouldBe listOf(listOf("a", "b"), listOf("c", "d"))
     }
 
-    "filterMaxBy an empty list returns an empty list" {
+    test("filterMaxBy an empty list returns an empty list") {
         emptyList<String>().filterMaxBy(String::length) shouldBe emptyList()
     }
 
-    "filterMaxBy with a unique max returns exactly that" {
+    test("filterMaxBy with a unique max returns exactly that") {
         listOf("1", "123", "12").filterMaxBy(String::length) shouldBe listOf("123")
     }
 
-    "filterMaxBy with more than one max element returns all max elements" {
+    test("filterMaxBy with more than one max element returns all max elements") {
         listOf("1", "123", "321").filterMaxBy(String::length) shouldBe listOf("123", "321")
     }
 
-    "filterMinBy" {
-        forAll(
-            row(emptyList(), emptyList()),
-            row(listOf(1, 2, 3), listOf(1)),
-            row(listOf(1, 2, 1), listOf(1, 1)),
-        ) { list, minimums ->
-            list.filterMinBy { it } shouldBe minimums
-        }
+    testSuite(
+        "filterMinBy",
+        mapOf(
+            emptyList<Int>() to emptyList(),
+            listOf(1, 2, 3) to listOf(1),
+            listOf(1, 2, 1) to listOf(1, 1),
+        )
+    ) { list, minimums ->
+        list.filterMinBy { it } shouldBe minimums
     }
 
-    "minByUniqueOrNull" {
-        forAll(
-            row(listOf(1), 1),
-            row(listOf(1, 2, 3), 1),
-            row(listOf(2, 1, 3), 1),
-            row(listOf(2, 2, 1, 3), 1),
-            row(emptyList(), null),
-            row(listOf(1, 1, 3), null),
-        ) { list, expected ->
-            list.minByUniqueOrNull { it } shouldBe expected
-        }
+    testSuite(
+        "minByUniqueOrNull",
+        mapOf(
+            listOf(1) to 1,
+            listOf(1, 2, 3) to 1,
+            listOf(2, 1, 3) to 1,
+            listOf(2, 2, 1, 3) to 1,
+            emptyList<Int>() to null,
+            listOf(1, 1, 3) to null,
+        )
+    ) { list, expected ->
+        list.minByUniqueOrNull { it } shouldBe expected
     }
 
-    "allUniqueBy" {
-        forAll(
-            row(emptyList(), true),
-            row(listOf(1, 2, 3), true),
-            row(listOf(1, 1, 3), false),
-        ) { list, unique ->
-            list.allUniqueBy { it } shouldBe unique
-        }
+    testSuite(
+        "allUniqueBy",
+        mapOf(
+            emptyList<Int>() to true,
+            listOf(1, 2, 3) to true,
+            listOf(1, 1, 3) to false,
+        )
+    ) { list, unique ->
+        list.allUniqueBy { it } shouldBe unique
     }
 
-    "firstDuplicate" {
-        forAll(
-            row(emptyList(), null),
-            row(listOf(1), null),
-            row(listOf(1, 2), null),
-            row(listOf(1, 2, 2), 2),
-            row(listOf(1, 2, 2, 3, 3), 2),
-            row(listOf(1, 3, 3, 2, 2), 3),
-        ) { list, element ->
-            list.firstDuplicate { it } shouldBe element
-        }
+    testSuite(
+        "firstDuplicate",
+        mapOf(
+            emptyList<Int>() to null,
+            listOf(1) to null,
+            listOf(1, 2) to null,
+            listOf(1, 2, 2) to 2,
+            listOf(1, 2, 2, 3, 3) to 2,
+            listOf(1, 3, 3, 2, 2) to 3,
+        )
+    ) { list, element ->
+        list.firstDuplicate { it } shouldBe element
     }
-})
+}

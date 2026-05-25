@@ -1,12 +1,12 @@
 package de.ronny_h.aoc.year2018.day07
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.year2018.day07.TheSumOfItsParts.Companion.createDependencyGraph
 import de.ronny_h.aoc.year2018.day07.TheSumOfItsParts.Companion.simulateSteps
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class TheSumOfItsPartsTest : StringSpec({
+val TheSumOfItsPartsTest by testSuite {
 
     val input = """
         Step C must be finished before step A can begin.
@@ -18,7 +18,7 @@ class TheSumOfItsPartsTest : StringSpec({
         Step F must be finished before step E can begin.
     """.asList()
 
-    "Input can be parsed" {
+    test("Input can be parsed") {
         input.parseSteps() shouldBe listOf(
             "C" to "A",
             "C" to "F",
@@ -30,15 +30,15 @@ class TheSumOfItsPartsTest : StringSpec({
         )
     }
 
-    "part 1: the order the steps in the instructions should be completed" {
+    test("part 1: the order the steps in the instructions should be completed") {
         TheSumOfItsParts().part1(input) shouldBe "CABDFE"
     }
 
-    "simulate steps with two workers" {
+    test("simulate steps with two workers") {
         input.createDependencyGraph().simulateSteps(2, 0) shouldBe "15"
     }
 
-    "part 2: the number of seconds it takes with 5 workers" {
+    test("part 2: the number of seconds it takes with 5 workers") {
         TheSumOfItsParts().part2(input) shouldBe "253"
     }
-})
+}

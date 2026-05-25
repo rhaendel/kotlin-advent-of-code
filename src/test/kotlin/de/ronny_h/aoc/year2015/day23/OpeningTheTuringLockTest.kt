@@ -1,18 +1,16 @@
 package de.ronny_h.aoc.year2015.day23
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.year2015.day23.Instruction.*
 import de.ronny_h.aoc.year2015.day23.Instruction.Companion.instructionOf
 import de.ronny_h.aoc.year2015.day23.Register.A
 import de.ronny_h.aoc.year2015.day23.Register.B
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
-class OpeningTheTuringLockTest : StringSpec({
+val OpeningTheTuringLockTest by testSuite {
 
-    "input can be parsed" {
+    test("input can be parsed") {
         """
             hlf a
             tpl b
@@ -30,7 +28,7 @@ class OpeningTheTuringLockTest : StringSpec({
         )
     }
 
-    "hlf sets register to half its current value" {
+    test("hlf sets register to half its current value") {
         val registers = mutableMapOf(A to 4u)
         val offset = instructionOf("hlf", "a").executeWith(registers)
 
@@ -38,7 +36,7 @@ class OpeningTheTuringLockTest : StringSpec({
         offset shouldBe 1
     }
 
-    "tpl sets register to triple its current value" {
+    test("tpl sets register to triple its current value") {
         val registers = mutableMapOf(A to 4u)
         val offset = instructionOf("tpl", "a").executeWith(registers)
 
@@ -46,7 +44,7 @@ class OpeningTheTuringLockTest : StringSpec({
         offset shouldBe 1
     }
 
-    "inc increments the register by 1" {
+    test("inc increments the register by 1") {
         val registers = mutableMapOf(A to 4u)
         val offset = instructionOf("inc", "a").executeWith(registers)
 
@@ -54,7 +52,7 @@ class OpeningTheTuringLockTest : StringSpec({
         offset shouldBe 1
     }
 
-    "jmp jumps by the given offset" {
+    test("jmp jumps by the given offset") {
         val registers = mutableMapOf(A to 4u)
         val offset = instructionOf("jmp", "-7").executeWith(registers)
 
@@ -62,34 +60,40 @@ class OpeningTheTuringLockTest : StringSpec({
         offset shouldBe -7
     }
 
-    "jie jumps only if the register is even" {
-        forAll(
-            row(mutableMapOf(A to 4u), -7, -7),
-            row(mutableMapOf(A to 3u), -7, 1),
-        ) { registers, offset, expectedJump ->
-            val oldA = registers.getValue(A)
-            val jump = instructionOf("jie", "a, $offset").executeWith(registers)
+    data class Row(val registers: Map<Register, UInt>, val offset: Int, val expectedJump: Int)
 
-            registers.getValue(A) shouldBe oldA
-            jump shouldBe expectedJump
+    testSuite("jie jumps only if the register is even") {
+        listOf(
+            Row(mapOf(A to 4u), -7, -7),
+            Row(mapOf(A to 3u), -7, 1),
+        ).forEach { (registers, offset, expectedJump) ->
+            test("$registers, $offset, $expectedJump") {
+                val oldA = registers.getValue(A)
+                val jump = instructionOf("jie", "a, $offset").executeWith(registers.toMutableMap())
+
+                registers.getValue(A) shouldBe oldA
+                jump shouldBe expectedJump
+            }
         }
     }
 
-    "jio jumps only if the register is one" {
-        forAll(
-            row(mutableMapOf(A to 4u), -7, 1),
-            row(mutableMapOf(A to 3u), -7, 1),
-            row(mutableMapOf(A to 1u), -7, -7),
-        ) { registers, offset, expectedJump ->
-            val oldA = registers.getValue(A)
-            val jump = instructionOf("jio", "a, $offset").executeWith(registers)
+    testSuite("jio jumps only if the register is one") {
+        listOf(
+            Row(mapOf(A to 4u), -7, 1),
+            Row(mapOf(A to 3u), -7, 1),
+            Row(mapOf(A to 1u), -7, -7),
+        ).forEach { (registers, offset, expectedJump) ->
+            test("$registers, $offset, $expectedJump") {
+                val oldA = registers.getValue(A)
+                val jump = instructionOf("jio", "a, $offset").executeWith(registers.toMutableMap())
 
-            registers.getValue(A) shouldBe oldA
-            jump shouldBe expectedJump
+                registers.getValue(A) shouldBe oldA
+                jump shouldBe expectedJump
+            }
         }
     }
 
-    "part 1: the example program sets b to 2" {
+    test("part 1: the example program sets b to 2") {
         val input = """
             inc b
             jio b, +2
@@ -99,7 +103,7 @@ class OpeningTheTuringLockTest : StringSpec({
         OpeningTheTuringLock().part1(input) shouldBe 2
     }
 
-    "part 2: the example program sets b to 1 when a is initialized with 1" {
+    test("part 2: the example program sets b to 1 when a is initialized with 1") {
         val input = """
             inc a
             jio a, +2
@@ -108,4 +112,4 @@ class OpeningTheTuringLockTest : StringSpec({
         """.asList()
         OpeningTheTuringLock().part2(input) shouldBe 1
     }
-})
+}

@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.extensions.graphs.shortestpath
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 typealias At = Coordinates
@@ -20,29 +20,29 @@ data class Node(val position: At, val id: Long = nextId) {
 }
 
 
-class ShortestPathTest : StringSpec({
+val ShortestPathTest by testSuite {
 
-    "Node ids are generated consecutively" {
+    test("Node ids are generated consecutively") {
         Node(At(0, 0)).id shouldBe Node(At(0, 0)).id - 1
     }
 
-    "The manhattan distance of nodes with identical coordinates is 0" {
+    test("The manhattan distance of nodes with identical coordinates is 0") {
         At(7, 11) taxiDistanceTo At(7, 11) shouldBe 0
     }
 
-    "The manhattan distance of nodes in the same row equals the difference of columns" {
+    test("The manhattan distance of nodes in the same row equals the difference of columns") {
         At(7, 0) taxiDistanceTo At(7, 11) shouldBe 11
     }
 
-    "The manhattan distance of nodes in the same column equals the difference of rows" {
+    test("The manhattan distance of nodes in the same column equals the difference of rows") {
         At(0, 11) taxiDistanceTo At(7, 11) shouldBe 7
     }
 
-    "The manhattan distance of nodes is the sum of the differences of rows and columns" {
+    test("The manhattan distance of nodes is the sum of the differences of rows and columns") {
         At(0, 0) taxiDistanceTo At(7, 11) shouldBe (7 + 11)
     }
 
-    "The shortest path between 2 nodes in a Graph containing only one edge between them is that edge" {
+    test("The shortest path between 2 nodes in a Graph containing only one edge between them is that edge") {
         val start = Node(At(0, 0))
         val goal = Node(At(1, 1))
         val neighbours: (Node) -> List<Node> = { n ->
@@ -71,7 +71,7 @@ class ShortestPathTest : StringSpec({
         )
     }
 
-    "With 2 different nodes between start and goal, the shorter path is taken" {
+    test("With 2 different nodes between start and goal, the shorter path is taken") {
         // start -> a -> goal
         //      \       /
         //       -> b ->
@@ -104,7 +104,7 @@ class ShortestPathTest : StringSpec({
                 listOf(ShortestPath(listOf(start, a, goal), 10))
     }
 
-    "When direct distance from start to goal is longer, the path through a third node is taken" {
+    test("When direct distance from start to goal is longer, the path through a third node is taken") {
         // start -------> goal
         //      \       /
         //       -> a ->
@@ -132,7 +132,7 @@ class ShortestPathTest : StringSpec({
                 listOf(ShortestPath(listOf(start, a, goal), 9))
     }
 
-    "The shortest path in a not directed graph is found" {
+    test("The shortest path in a not directed graph is found") {
         // start -------- goal
         //      \       /
         //       -- a --
@@ -164,7 +164,7 @@ class ShortestPathTest : StringSpec({
                 listOf(ShortestPath(listOf(start, a, goal), 9))
     }
 
-    "Distances of 0 can be taken and nodes with same coordinates don't cause problems" {
+    test("Distances of 0 can be taken and nodes with same coordinates don't cause problems") {
         // start ---------------> goal
         //      \              /
         //       -> a -0-> b ->
@@ -197,7 +197,7 @@ class ShortestPathTest : StringSpec({
                 listOf(ShortestPath(listOf(start, a, b, goal), 9))
     }
 
-    "When there is no path at all, aStarAllPaths and dijkstra return an empty list" {
+    test("When there is no path at all, aStarAllPaths and dijkstra return an empty list") {
         val start = Node(At(0, 0))
         val goal = Node(At(0, 10))
 
@@ -209,4 +209,4 @@ class ShortestPathTest : StringSpec({
 
         shouldThrow<IllegalStateException> { aStar(start, goal::positionEquals, { emptyList() }, d, h) }
     }
-})
+}

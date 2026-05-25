@@ -1,12 +1,12 @@
 package de.ronny_h.aoc.year2018.day13
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class MineCartMadnessTest : StringSpec({
+val MineCartMadnessTest by testSuite {
 
-    "part 1: the location of the first crash" {
+    test("part 1: the location of the first crash") {
         val input = """
         /->-\        
         |   |  /----\
@@ -19,7 +19,7 @@ class MineCartMadnessTest : StringSpec({
         MineCartMadness().part1(input) shouldBe "7,3"
     }
 
-    "part 2: the location of the last cart" {
+    test("part 2: the location of the last cart") {
         val input = """
             />-<\  
             |   |  
@@ -31,4 +31,4 @@ class MineCartMadnessTest : StringSpec({
           """.asList()
         MineCartMadness().part2(input) shouldBe "6,4"
     }
-})
+}

@@ -1,14 +1,14 @@
 package de.ronny_h.aoc.year2017.day23
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.year2017.day18.Instruction.*
 import de.ronny_h.aoc.year2017.day18.Value.Number
 import de.ronny_h.aoc.year2017.day18.Value.Register
 import de.ronny_h.aoc.year2017.day18.parseInstructions
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class CoprocessorConflagrationTest : StringSpec({
+val CoprocessorConflagrationTest by testSuite {
 
     val input = """
         set h 7
@@ -18,7 +18,7 @@ class CoprocessorConflagrationTest : StringSpec({
         sub c -1
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         input.parseInstructions(null, null) shouldBe listOf(
             SetValue("h", Number(7)),
             JumpIfNotZero(Register("b"), Number(2)),
@@ -28,11 +28,11 @@ class CoprocessorConflagrationTest : StringSpec({
         )
     }
 
-    "part 1: there should be 1 multiplication executed in the test input" {
+    test("part 1: there should be 1 multiplication executed in the test input") {
         CoprocessorConflagration().part1(input) shouldBe 1
     }
 
-    "part 2: the number of non-prime numbers between 106700 and 123700 in steps of 17" {
+    test("part 2: the number of non-prime numbers between 106700 and 123700 in steps of 17") {
         CoprocessorConflagration().part2(input) shouldBe 905
     }
-})
+}

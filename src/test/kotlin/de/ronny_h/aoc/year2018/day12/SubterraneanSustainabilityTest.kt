@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.year2018.day12
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
-class SubterraneanSustainabilityTest : StringSpec({
+val SubterraneanSustainabilityTest by testSuite {
 
     val input = """
         initial state: #..#.#..##......###...###
@@ -26,16 +26,16 @@ class SubterraneanSustainabilityTest : StringSpec({
         ####. => #
     """.asList()
 
-    "the first generation of the sample input" {
+    test("the first generation of the sample input") {
         GameOfPlants(input, 20).nextGeneration()
             .joinToString("") shouldContain "...#...#....#.....#..#..#..#..........."
     }
 
-    "part 1: the sum of the numbers of plant-containing pots after the 20th generation" {
+    test("part 1: the sum of the numbers of plant-containing pots after the 20th generation") {
         SubterraneanSustainability().part1(input) shouldBe 325
     }
 
-    "part 2 the sum of the numbers of plant-containing pots after the 50000000000th generation" {
+    test("part 2 the sum of the numbers of plant-containing pots after the 50000000000th generation") {
         SubterraneanSustainability().part2(input) shouldBe 999999999374L
     }
-})
+}

@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.year2018.day10
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.extensions.grids.Coordinates
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class TheStarsAlignTest : StringSpec({
+val TheStarsAlignTest by testSuite {
 
     val input = """
         position=< 9,  1> velocity=< 0,  2>
@@ -46,25 +46,25 @@ class TheStarsAlignTest : StringSpec({
             position=< 7,  0> velocity=<-1,  0>
         """.asList()
 
-    "Input can be parsed" {
+    test("Input can be parsed") {
         StarAlignmentGrid.of(smallInput).stars shouldBe listOf(
             Star(Coordinates(9, 1), Coordinates(0, 2)),
             Star(Coordinates(7, 0), Coordinates(-1, 0)),
         )
     }
 
-    "Star movements can be calculated" {
+    test("Star movements can be calculated") {
         StarAlignmentGrid.of(smallInput).move().stars shouldBe listOf(
             Star(Coordinates(9, 3), Coordinates(0, 2)),
             Star(Coordinates(6, 0), Coordinates(-1, 0)),
         )
     }
 
-    "part 1: For the sample input, a message can be seen after 3 iterations" {
+    test("part 1: For the sample input, a message can be seen after 3 iterations") {
         TheStarsAlign().part1(input) shouldBe 3
     }
 
-    "part 2: For the sample input, the Elves have to wait 3 seconds" {
+    test("part 2: For the sample input, the Elves have to wait 3 seconds") {
         TheStarsAlign().part2(input) shouldBe 3
     }
-})
+}

@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2024.day14
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class RestroomRedoubtTest : StringSpec({
+val RestroomRedoubtTest by testSuite {
     val input = """
         p=0,4 v=3,-3
         p=6,3 v=-1,-3
@@ -20,11 +20,11 @@ class RestroomRedoubtTest : StringSpec({
         p=9,5 v=-3,-3
     """.asList()
 
-    "part 1: The safety factor after 100 seconds with a small room" {
+    test("part 1: The safety factor after 100 seconds with a small room") {
         RestroomRedoubt().part1Small(input) shouldBe 12
     }
 
-    "part 1: The safety factor after 100 seconds" {
+    test("part 1: The safety factor after 100 seconds") {
         RestroomRedoubt().part1(input) shouldBe 21
     }
-})
+}

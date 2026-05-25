@@ -1,14 +1,13 @@
 package de.ronny_h.aoc.year2025.day10
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
+import de.ronny_h.aoc.testballoon.test
 import de.ronny_h.aoc.year2025.day10.LightState.OFF
 import de.ronny_h.aoc.year2025.day10.LightState.ON
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 
-class FactoryTest : StringSpec({
+val FactoryTest by testSuite {
 
     val input = """
         [.##.] (3) (1,3) (2) (2,3) (0,2) (0,1) {3,5,4,7}
@@ -16,7 +15,7 @@ class FactoryTest : StringSpec({
         [.###.#] (0,1,2,3,4) (0,3,4) (0,1,2,4,5) (1,2) {10,11,11,5,10,5}
     """.asList()
 
-    "machine descriptions can be parsed" {
+    test("machine descriptions can be parsed") {
         """
             [.##.] (3) (1,3) {3,5,4}
             [.#] (0,2,3,4) {7,5}
@@ -26,39 +25,43 @@ class FactoryTest : StringSpec({
         )
     }
 
-    "contentEquals checks equality of a MutableList and a List" {
+    test("contentEquals checks equality of a MutableList and a List") {
         mutableListOf(1, 2).contentEquals(listOf(1, 2)) shouldBe true
         mutableListOf(1, 2).contentEquals(listOf(1, 2, 3)) shouldBe false
         mutableListOf(1, 2).contentEquals(listOf(1, 3)) shouldBe false
     }
 
-    "configureIndicatorLights" {
+    testSuite("configureIndicatorLights") {
         val descriptions = input.parseMachineDescriptions()
-        forAll(
-            row(descriptions[0], 2),
-            row(descriptions[1], 3),
-            row(descriptions[2], 2),
+        test(
+            mapOf(
+                descriptions[0] to 2,
+                descriptions[1] to 3,
+                descriptions[2] to 2,
+            )
         ) { description, minPresses ->
             Machine(description).configureIndicatorLights() shouldBe minPresses
         }
     }
 
-    "configureJoltages" {
+    testSuite("configureJoltages") {
         val descriptions = input.parseMachineDescriptions()
-        forAll(
-            row(descriptions[0], 10),
-            row(descriptions[1], 12),
-            row(descriptions[2], 11),
+        test(
+            mapOf(
+                descriptions[0] to 10,
+                descriptions[1] to 12,
+                descriptions[2] to 11,
+            )
         ) { description, minPresses ->
             Machine(description).configureJoltages() shouldBe minPresses
         }
     }
 
-    "part 1: the fewest button presses required to correctly configure the indicator lights" {
+    test("part 1: the fewest button presses required to correctly configure the indicator lights") {
         Factory().part1(input) shouldBe 7
     }
 
-    "part 2: the fewest button presses required to correctly configure the joltage level counters" {
+    test("part 2: the fewest button presses required to correctly configure the joltage level counters") {
         Factory().part2(input) shouldBe 33
     }
-})
+}

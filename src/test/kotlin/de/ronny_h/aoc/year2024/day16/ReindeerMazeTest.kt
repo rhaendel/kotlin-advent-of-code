@@ -1,12 +1,11 @@
 package de.ronny_h.aoc.year2024.day16
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.shouldBe
 
-class ReindeerMazeTest : StringSpec({
+val ReindeerMazeTest by testSuite {
     val smallInput1 = """
         ###############
         #.......#....E#
@@ -44,21 +43,23 @@ class ReindeerMazeTest : StringSpec({
         #################
     """.asList()
 
-    "part 1: The lowest score a Reindeer could possibly get" {
-        forAll(
-            row(smallInput1, 7036),
-            row(smallInput2, 11048),
-        ) { input, result ->
-            ReindeerMaze().part1(input) shouldBe result
-        }
+    testSuite(
+        "part 1: The lowest score a Reindeer could possibly get",
+        mapOf(
+            smallInput1 to 7036,
+            smallInput2 to 11048,
+        ),
+    ) { input, result ->
+        ReindeerMaze().part1(input) shouldBe result
     }
 
-    "part 2: Number of tiles that are part of at least one of the best paths" {
-        forAll(
-            row(smallInput1, 45),
-            row(smallInput2, 64),
-        ) { input, result ->
-            ReindeerMaze().part2(input) shouldBe result
-        }
+    testSuite(
+        "part 2: Number of tiles that are part of at least one of the best paths",
+        mapOf(
+            smallInput1 to 45,
+            smallInput2 to 64,
+        ),
+    ) { input, result ->
+        ReindeerMaze().part2(input) shouldBe result
     }
-})
+}

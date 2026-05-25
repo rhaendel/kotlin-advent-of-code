@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.year2018.day04
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.year2018.day04.GuardEvent.*
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class ReposeRecordTest : StringSpec({
+val ReposeRecordTest by testSuite {
 
     val input = """
         [1518-11-01 00:00] Guard #10 begins shift
@@ -27,7 +27,7 @@ class ReposeRecordTest : StringSpec({
         [1518-11-05 00:55] wakes up
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         input.parseRecords() shouldBe listOf(
             GuardDutyRecord("1518-11-01 00:00", 10, BEGIN_SHIFT),
             GuardDutyRecord("1518-11-01 00:05", 10, FALL_ASLEEP),
@@ -49,7 +49,7 @@ class ReposeRecordTest : StringSpec({
         )
     }
 
-    "input gets sorted by timestamp" {
+    test("input gets sorted by timestamp") {
         """
             [1518-11-01 00:25] wakes up
             [1518-11-01 00:05] falls asleep
@@ -64,11 +64,11 @@ class ReposeRecordTest : StringSpec({
         )
     }
 
-    "part 1: the guard's id who slept most, multiplied by the minute he slept most" {
+    test("part 1: the guard's id who slept most, multiplied by the minute he slept most") {
         ReposeRecord().part1(input) shouldBe 240
     }
 
-    "part 2: the guard's id who sleeps most frequently in the same minute, multiplied by that minute" {
+    test("part 2: the guard's id who sleeps most frequently in the same minute, multiplied by that minute") {
         ReposeRecord().part2(input) shouldBe 4455
     }
-})
+}

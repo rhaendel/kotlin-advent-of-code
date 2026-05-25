@@ -1,12 +1,11 @@
 package de.ronny_h.aoc.year2024.day15
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.shouldBe
 
-class WarehouseWoesTest : StringSpec({
+val WarehouseWoesTest by testSuite {
     val smallInput1 = """
         ########
         #..O.O.#
@@ -54,21 +53,23 @@ class WarehouseWoesTest : StringSpec({
         v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^
     """.asList()
 
-    "part 1: Total calibration result of possibly true equations" {
-        forAll(
-            row(smallInput1, 2028),
-            row(mediumInput, 10092),
-        ) { input, result ->
-            WarehouseWoes().part1(input) shouldBe result
-        }
+    testSuite(
+        "part 1: Total calibration result of possibly true equations",
+        mapOf(
+            smallInput1 to 2028,
+            mediumInput to 10092,
+        ),
+    ) { input, result ->
+        WarehouseWoes().part1(input) shouldBe result
     }
 
-    "part 2: Total calibration result of possibly true equations" {
-        forAll(
-            row(smallInput2, 618),
-            row(mediumInput, 9021),
-        ) { input, result ->
-            WarehouseWoes().part2(input) shouldBe result
-        }
+    testSuite(
+        "part 2: Total calibration result of possibly true equations",
+        mapOf(
+            smallInput2 to 618,
+            mediumInput to 9021,
+        ),
+    ) { input, result ->
+        WarehouseWoes().part2(input) shouldBe result
     }
-})
+}

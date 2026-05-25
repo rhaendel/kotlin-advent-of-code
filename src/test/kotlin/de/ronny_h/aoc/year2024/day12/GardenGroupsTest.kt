@@ -1,12 +1,11 @@
 package de.ronny_h.aoc.year2024.day12
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.shouldBe
 
-class GardenGroupsTest : StringSpec({
+val GardenGroupsTest by testSuite {
     val smallInput = """
         AAAA
         BBCD
@@ -48,25 +47,28 @@ class GardenGroupsTest : StringSpec({
         AAAAAA
     """.asList()
 
-    "part 1: The total price of fencing all regions" {
-        forAll(
-            row(smallInput, 140),
-            row(mediumInput1, 772),
-            row(mediumInput2, 1930),
-        ) { input, result ->
-            GardenGroups().part1(input) shouldBe result
-        }
+    testSuite(
+        "part 1: The total price of fencing all regions",
+        mapOf(
+            smallInput to 140,
+            mediumInput1 to 772,
+            mediumInput2 to 1930,
+        ),
+    ) { input, result ->
+        GardenGroups().part1(input) shouldBe result
     }
 
-    "part 2: The total price of fencing all regions with a bulk discount" {
-        forAll(
-            row(smallInput, 80),
-            row(mediumInput1, 436),
-            row(mediumInput2, 1206),
-            row(mediumInput3, 236),
-            row(mediumInput4, 368),
-        ) { input, result ->
-            GardenGroups().part2(input) shouldBe result
-        }
+
+    testSuite(
+        "part 2: The total price of fencing all regions with a bulk discount",
+        mapOf(
+            smallInput to 80,
+            mediumInput1 to 436,
+            mediumInput2 to 1206,
+            mediumInput3 to 236,
+            mediumInput4 to 368,
+        ),
+    ) { input, result ->
+        GardenGroups().part2(input) shouldBe result
     }
-})
+}

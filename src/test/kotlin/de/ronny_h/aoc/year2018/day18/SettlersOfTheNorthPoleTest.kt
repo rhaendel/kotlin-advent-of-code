@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2018.day18
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class SettlersOfTheNorthPoleTest : StringSpec({
+val SettlersOfTheNorthPoleTest by testSuite {
 
     val input = """
         .#.#...|#.
@@ -19,7 +19,7 @@ class SettlersOfTheNorthPoleTest : StringSpec({
         ...#.|..|.
     """.asList()
 
-    "the acre after 1 minute" {
+    test("the acre after 1 minute") {
         val expected = """
             .......##.
             ......|###
@@ -36,7 +36,7 @@ class SettlersOfTheNorthPoleTest : StringSpec({
         LumberAcre(input).changeAMinute() shouldBe LumberAcre(expected)
     }
 
-    "the acre after 10 minutes" {
+    test("the acre after 10 minutes") {
         val expected = """
             .||##.....
             ||###.....
@@ -53,11 +53,11 @@ class SettlersOfTheNorthPoleTest : StringSpec({
         LumberAcre(input).afterTenMinutes() shouldBe LumberAcre(expected)
     }
 
-    "part 1: the total resource value of the lumber collection area after 10 minutes" {
+    test("part 1: the total resource value of the lumber collection area after 10 minutes") {
         SettlersOfTheNorthPole().part1(input) shouldBe 1147
     }
 
-    "part 2" {
+    test("part 2") {
         SettlersOfTheNorthPole().part2(input) shouldBe 0
     }
-})
+}

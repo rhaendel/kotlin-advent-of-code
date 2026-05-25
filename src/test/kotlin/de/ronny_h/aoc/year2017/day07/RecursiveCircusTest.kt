@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2017.day07
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class RecursiveCircusTest : StringSpec({
+val RecursiveCircusTest by testSuite {
 
     val input = """
         pbga (66)
@@ -22,7 +22,7 @@ class RecursiveCircusTest : StringSpec({
         cntj (57)
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         input.parsePrograms() shouldBe listOf(
             Program("pbga", 66),
             Program("xhth", 57),
@@ -40,11 +40,11 @@ class RecursiveCircusTest : StringSpec({
         )
     }
 
-    "part 1: the name of the bottom program" {
+    test("part 1: the name of the bottom program") {
         RecursiveCircus().part1(input) shouldBe "tknk"
     }
 
-    "part 2: the right weight of exactly one program with the wrong weight" {
+    test("part 2: the right weight of exactly one program with the wrong weight") {
         RecursiveCircus().part2(input) shouldBe "60"
     }
-})
+}

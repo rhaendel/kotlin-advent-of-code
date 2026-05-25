@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2018.day01
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class ChronalCalibrationTest : StringSpec({
+val ChronalCalibrationTest by testSuite {
 
     val input = """
         +1
@@ -13,11 +13,11 @@ class ChronalCalibrationTest : StringSpec({
         +1
     """.asList()
 
-    "part 1: the resulting frequency after all of the changes in frequency have been applied" {
+    test("part 1: the resulting frequency after all of the changes in frequency have been applied") {
         ChronalCalibration().part1(input) shouldBe 3
     }
 
-    "part 2: the first frequency the device reaches twice" {
+    test("part 2: the first frequency the device reaches twice") {
         ChronalCalibration().part2(input) shouldBe 2
     }
-})
+}

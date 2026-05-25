@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.testballoon)
 }
 
 repositories {
@@ -13,10 +14,9 @@ dependencies {
     implementation(libs.z3.turnkey)
     runtimeOnly(libs.logback.classic)
 
-    testImplementation(libs.kotest.assertions.table)
-    testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.system.lambda)
-    testRuntimeOnly(libs.logback.classic)
+    testImplementation(libs.testballoon)
+    testImplementation(libs.testballoon.kotest.assertions)
 }
 
 java {

@@ -1,15 +1,12 @@
 package de.ronny_h.aoc.year2024.day24
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import de.ronny_h.aoc.year2024.day24.CrossedWires.And
-import de.ronny_h.aoc.year2024.day24.CrossedWires.Or
-import de.ronny_h.aoc.year2024.day24.CrossedWires.Xor
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.ronny_h.aoc.testballoon.test
+import de.ronny_h.aoc.year2024.day24.CrossedWires.*
 import io.kotest.matchers.shouldBe
 
-class CrossedWiresTest : StringSpec({
+val CrossedWiresTest by testSuite {
 
     val verySmallInput = """
         y01: 1
@@ -80,34 +77,36 @@ class CrossedWiresTest : StringSpec({
         tnw OR pbm -> gnj
     """.asList()
 
-    "wires can be parsed" {
+    test("wires can be parsed") {
         CrossedWires().parseWires(verySmallInput) shouldBe listOf(Wire("y01", true), Wire("y02", false))
     }
 
-    "gates can be parsed" {
+    test("gates can be parsed") {
         CrossedWires().parseGates(verySmallInput) shouldBe listOf(
-                Gate("x00", "y00", And(), "z00"),
-                Gate("x01", "y01", Xor(), "z01"),
-            )
+            Gate("x00", "y00", And(), "z00"),
+            Gate("x01", "y01", Xor(), "z01"),
+        )
     }
 
-    "single gates can be simulated" {
+    testSuite("single gates can be simulated") {
         val inWires = mapOf("x00" to Wire("x00", true), "y00" to Wire("y00", false))
 
-        forAll(
-            row(And(), false),
-            row(Or(), true),
-            row(Xor(), true),
+        test(
+            mapOf(
+                And() to false,
+                Or() to true,
+                Xor() to true,
+            )
         ) { operation, result ->
             Gate("x00", "y00", operation, "z00").simulateWith(inWires) shouldBe Wire("z00", result)
         }
     }
 
-    "part1 small: The decimal number output on the wires starting with z" {
+    test("part1 small: The decimal number output on the wires starting with z") {
         CrossedWires().part1(smallInput) shouldBe "4"
     }
 
-    "part1: The decimal number output on the wires starting with z" {
+    test("part1: The decimal number output on the wires starting with z") {
         CrossedWires().part1(input) shouldBe "2024"
     }
-})
+}

@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2017.day24
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class ElectromagneticMoatTest : StringSpec({
+val ElectromagneticMoatTest by testSuite {
 
     val input = """
         0/2
@@ -17,7 +17,7 @@ class ElectromagneticMoatTest : StringSpec({
         9/10
     """.asList()
 
-    "components can be parsed" {
+    test("components can be parsed") {
         input.parseComponents() shouldBe listOf(
             Component(0, 2),
             Component(2, 2),
@@ -30,11 +30,11 @@ class ElectromagneticMoatTest : StringSpec({
         )
     }
 
-    "part 1: the strongest bridge's strength is 31" {
+    test("part 1: the strongest bridge's strength is 31") {
         ElectromagneticMoat().part1(input) shouldBe 31
     }
 
-    "part 2: the longest bridge's strength is 19" {
+    test("part 2: the longest bridge's strength is 19") {
         ElectromagneticMoat().part2(input) shouldBe 19
     }
-})
+}

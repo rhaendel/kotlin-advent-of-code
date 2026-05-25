@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.year2018.day19
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
 import de.ronny_h.aoc.year2018.day16.ProgramStep
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class GoWithTheFlowTest : StringSpec({
+val GoWithTheFlowTest by testSuite {
 
     val input = """
         #ip 0
@@ -18,7 +18,7 @@ class GoWithTheFlowTest : StringSpec({
         seti 9 0 5
     """.asList()
 
-    "input can be parsed" {
+    test("input can be parsed") {
         val input = """
             #ip 0
             seti 5 0 1
@@ -36,15 +36,15 @@ class GoWithTheFlowTest : StringSpec({
         )
     }
 
-    "part 1: the content of register 0 after running the program" {
+    test("part 1: the content of register 0 after running the program") {
         GoWithTheFlow().part1(input) shouldBe 6
     }
 
-    "part 1: the content of register 0 after running the program with the hard-coded device, derived from the real puzzle input" {
+    test("part 1: the content of register 0 after running the program with the hard-coded device, derived from the real puzzle input") {
         HardCodedWristDevice().partOne() shouldBe 1694
     }
 
-    "part 2: the content of register 0 after running the program with initial value 1 in register 0" {
+    test("part 2: the content of register 0 after running the program with initial value 1 in register 0") {
         GoWithTheFlow().part2(input) shouldBe 18964204
     }
-})
+}

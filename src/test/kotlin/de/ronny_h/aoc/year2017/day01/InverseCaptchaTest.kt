@@ -1,32 +1,34 @@
 package de.ronny_h.aoc.year2017.day01
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 
-class InverseCaptchaTest : StringSpec({
+val InverseCaptchaTest by testSuite {
 
-    "part 1: all the examples given" {
-        forAll(
-            row("1122", 3),
-            row("1111", 4),
-            row("1234", 0),
-            row("91212129", 9),
-        ) { sequence, sum ->
-            InverseCaptcha().part1(listOf(sequence)) shouldBe sum
+    testSuite("part 1: all the examples given") {
+        mapOf(
+            "1122" to 3,
+            "1111" to 4,
+            "1234" to 0,
+            "91212129" to 9,
+        ).forEach { (sequence, sum) ->
+            test("$sequence, $sum") {
+                InverseCaptcha().part1(listOf(sequence)) shouldBe sum
+            }
         }
     }
 
-    "part 2: all the examples given" {
-        forAll(
-            row("1212", 6),
-            row("1221", 0),
-            row("123425", 4),
-            row("123123", 12),
-            row("12131415", 4),
-        ) { sequence, sum ->
-            InverseCaptcha().part2(listOf(sequence)) shouldBe sum
+    testSuite("part 2: all the examples given") {
+        mapOf(
+            "1212" to 6,
+            "1221" to 0,
+            "123425" to 4,
+            "123123" to 12,
+            "12131415" to 4,
+        ).forEach { (sequence, sum) ->
+            test("$sequence, $sum") {
+                InverseCaptcha().part2(listOf(sequence)) shouldBe sum
+            }
         }
     }
-})
+}

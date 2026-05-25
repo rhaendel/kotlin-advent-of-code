@@ -1,10 +1,10 @@
 package de.ronny_h.aoc.year2024.day04
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-class CeresSearchTest : StringSpec({
+val CeresSearchTest by testSuite {
     val smallInput1 = """
         ..X.......
         .SAMX....S
@@ -42,19 +42,19 @@ class CeresSearchTest : StringSpec({
         ..........
     """.asList()
 
-    "part 1 - small input 1 contains XMAS five times" {
+    test("part 1 - small input 1 contains XMAS five times") {
         CeresSearch().part1(smallInput1) shouldBe 5
     }
 
-    "part 1 - medium input 1 contains XMAS 18 times" {
+    test("part 1 - medium input 1 contains XMAS 18 times") {
         CeresSearch().part1(mediumInput1) shouldBe 18
     }
 
-    "part 2 - small input 2 contains MAS in the form of an X once" {
+    test("part 2 - small input 2 contains MAS in the form of an X once") {
         CeresSearch().part2(smallInput2) shouldBe 1
     }
 
-    "part 2 - medium input 2 contains MAS in the form of an X 9 times" {
+    test("part 2 - medium input 2 contains MAS in the form of an X 9 times") {
         CeresSearch().part2(mediumInput2) shouldBe 9
     }
-})
+}

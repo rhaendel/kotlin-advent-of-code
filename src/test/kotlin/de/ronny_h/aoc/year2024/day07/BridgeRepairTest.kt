@@ -1,12 +1,11 @@
 package de.ronny_h.aoc.year2024.day07
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.shouldBe
 
-class BridgeRepairTest : StringSpec({
+val BridgeRepairTest by testSuite {
     val smallInput1 = """
         190: 10 19
         3267: 81 40 27
@@ -29,21 +28,23 @@ class BridgeRepairTest : StringSpec({
         192: 17 8 14
     """.asList()
 
-    "part 1: Total calibration result of possibly true equations" {
-        forAll(
-            row(smallInput1, 3749),
-            row(mediumInput, 3749),
-        ) { input, result ->
-            BridgeRepair().part1(input) shouldBe result
-        }
+    testSuite(
+        "part 1: Total calibration result of possibly true equations",
+        mapOf(
+            smallInput1 to 3749,
+            mediumInput to 3749,
+        ),
+    ) { input, result ->
+        BridgeRepair().part1(input) shouldBe result
     }
 
-    "part 2: Total calibration result of possibly true equations including elephant hiding spots" {
-        forAll(
-            row(smallInput2, 7638),
-            row(mediumInput, 11387),
-        ) { input, result ->
-            BridgeRepair().part2(input) shouldBe result
-        }
+    testSuite(
+        "part 2: Total calibration result of possibly true equations including elephant hiding spots",
+        mapOf(
+            smallInput2 to 7638,
+            mediumInput to 11387,
+        ),
+    ) { input, result ->
+        BridgeRepair().part2(input) shouldBe result
     }
-})
+}
