@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.extensions
 
-import io.kotest.core.spec.style.StringSpec
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 
-class MemoizeTest : StringSpec({
+val MemoizeTest by testSuite {
 
-    "memoize does not change the result" {
+    test("memoize does not change the result") {
         val someFun: (Int) -> Int = { it: Int ->
             it + it
         }
@@ -16,12 +16,12 @@ class MemoizeTest : StringSpec({
         }
     }
 
-    "recursive use of memoize does not change the result" {
+    test("recursive use of memoize does not change the result") {
         lateinit var fib: (Int) -> Long
         fib = { n: Int ->
             when (n) {
                 1, 2 -> 1L
-                else -> fib(n-1) + fib(n-2)
+                else -> fib(n - 1) + fib(n - 2)
             }
         }
         val fibMemoized: (Int) -> Long = fib.memoize()
@@ -30,4 +30,4 @@ class MemoizeTest : StringSpec({
             fibMemoized(i) shouldBe fib(i)
         }
     }
-})
+}

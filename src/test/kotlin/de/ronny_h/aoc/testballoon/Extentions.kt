@@ -17,9 +17,22 @@ fun <K, V> TestSuiteScope.testSuite(
     values: Map<K, V>,
     action: suspend Test.ExecutionScope.(K, V) -> Unit,
 ) = testSuite(name) {
-    values.forEach { (k, v) ->
-        test("$k, $v") {
-            action(k, v)
-        }
+    test(values, action)
+}
+
+fun <T> TestSuiteScope.test(
+    values: Collection<T>,
+    action: suspend Test.ExecutionScope.(T) -> Unit,
+) = values.forEach {
+    test(it.toString()) {
+        action(it)
     }
+}
+
+fun <T> TestSuiteScope.testSuite(
+    name: String,
+    values: Collection<T>,
+    action: suspend Test.ExecutionScope.(T) -> Unit,
+) = testSuite(name) {
+    test(values, action)
 }

@@ -1,11 +1,11 @@
 package de.ronny_h.aoc.extensions.graphs
 
-import io.kotest.core.spec.style.StringSpec
+import de.infix.testBalloon.framework.core.testSuite
 import io.kotest.matchers.shouldBe
 
-class TravelingSalesmanTest : StringSpec({
+val TravelingSalesmanTest by testSuite {
 
-    "TSP for a complete round-trip on a graph with 4 nodes" {
+    test("TSP for a complete round-trip on a graph with 4 nodes") {
         val adj = listOf(
             listOf(0, 10, 15, 20),
             listOf(10, 0, 35, 25),
@@ -19,7 +19,7 @@ class TravelingSalesmanTest : StringSpec({
         shortestPath.path shouldBe listOf(0, 1, 3, 2, 0)
     }
 
-    "convert a map of a single distance to an adjacency matrix" {
+    test("convert a map of a single distance to an adjacency matrix") {
         val distances = listOf(Edge("A", "B", 1))
         val expectedAdjacencyMatrix = listOf(
             listOf(0, 1),
@@ -28,7 +28,7 @@ class TravelingSalesmanTest : StringSpec({
         distances.toAdjacencyMatrix() shouldBe (distances to AdjacencyMatrix(listOf("A", "B"), expectedAdjacencyMatrix))
     }
 
-    "convert a map of multiple distances to an adjacency matrix" {
+    test("convert a map of multiple distances to an adjacency matrix") {
         val distances = listOf(Edge("A", "B", 1), Edge("B", "C", 2))
         val expectedAdjacencyMatrix = listOf(
             listOf(0, 1, MAX_WEIGHT),
@@ -41,7 +41,7 @@ class TravelingSalesmanTest : StringSpec({
         ))
     }
 
-    "convert a map of multiple distances to an adjacency matrix symmetrically" {
+    test("convert a map of multiple distances to an adjacency matrix symmetrically") {
         val distances = listOf(Edge("A", "B", 1), Edge("B", "C", 2))
         val expectedAdjacencyMatrix = listOf(
             listOf(0, 1, MAX_WEIGHT),
@@ -54,7 +54,7 @@ class TravelingSalesmanTest : StringSpec({
         ))
     }
 
-    "when providing a nullNode, synthetic edges of length 0 are added" {
+    test("when providing a nullNode, synthetic edges of length 0 are added") {
         val distances = listOf(Edge("A", "B", 1), Edge("B", "C", 2))
 
         val syntheticEdges = listOf(
@@ -76,4 +76,4 @@ class TravelingSalesmanTest : StringSpec({
             expectedAdjacencyMatrix
         ))
     }
-})
+}

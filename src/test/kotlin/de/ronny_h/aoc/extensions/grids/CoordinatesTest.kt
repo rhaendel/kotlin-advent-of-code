@@ -1,63 +1,66 @@
 package de.ronny_h.aoc.extensions.grids
 
+import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.grids.Direction.*
 import de.ronny_h.aoc.extensions.grids.Turn.*
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.shouldBe
 
-class CoordinatesTest : StringSpec({
+val CoordinatesTest by testSuite {
 
-    "Coordinates are added" {
-        forAll(
-            row(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
-            row(Coordinates(0, 0), Coordinates(1, 1), Coordinates(1, 1)),
-            row(Coordinates(2, 1), Coordinates(4, 3), Coordinates(6, 4)),
-        ) { first, second, result ->
-            first + second shouldBe result
-        }
+    testSuite(
+        "Coordinates are added",
+        listOf(
+            Triple(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
+            Triple(Coordinates(0, 0), Coordinates(1, 1), Coordinates(1, 1)),
+            Triple(Coordinates(2, 1), Coordinates(4, 3), Coordinates(6, 4)),
+        )
+    ) { (first, second, result) ->
+        first + second shouldBe result
     }
 
-    "Coordinates are subtracted" {
-        forAll(
-            row(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
-            row(Coordinates(0, 0), Coordinates(1, 1), Coordinates(-1, -1)),
-            row(Coordinates(5, 3), Coordinates(1, 2), Coordinates(4, 1)),
-        ) { first, second, result ->
-            first - second shouldBe result
-        }
+    testSuite(
+        "Coordinates are subtracted",
+        listOf(
+            Triple(Coordinates(1, 1), Coordinates(0, 0), Coordinates(1, 1)),
+            Triple(Coordinates(0, 0), Coordinates(1, 1), Coordinates(-1, -1)),
+            Triple(Coordinates(5, 3), Coordinates(1, 2), Coordinates(4, 1)),
+        )
+    ) { (first, second, result) ->
+        first - second shouldBe result
     }
 
-    "Multiplication with a scalar" {
-        forAll(
-            row(0, Coordinates(7, 5), Coordinates(0, 0)),
-            row(7, Coordinates(0, 0), Coordinates(0, 0)),
-            row(3, Coordinates(7, 5), Coordinates(21, 15)),
-            row(-3, Coordinates(7, 5), Coordinates(-21, -15)),
-        ) { scalar, coordinates, result ->
-            scalar * coordinates shouldBe result
-            coordinates * scalar shouldBe result
-        }
+    testSuite(
+        "Multiplication with a scalar",
+        listOf(
+            Triple(0, Coordinates(7, 5), Coordinates(0, 0)),
+            Triple(7, Coordinates(0, 0), Coordinates(0, 0)),
+            Triple(3, Coordinates(7, 5), Coordinates(21, 15)),
+            Triple(-3, Coordinates(7, 5), Coordinates(-21, -15)),
+        )
+    ) { (scalar, coordinates, result) ->
+        scalar * coordinates shouldBe result
+        coordinates * scalar shouldBe result
     }
 
-    "Coordinates of ZERO" {
+    test("Coordinates of ZERO") {
         Coordinates.ZERO shouldBe Coordinates(0, 0)
     }
 
-    "Add a direction" {
-        forAll(
-            row(Coordinates(5, 5), NORTH, Coordinates(5, 4)),
-            row(Coordinates(5, 5), SOUTH, Coordinates(5, 6)),
-            row(Coordinates(5, 5), EAST, Coordinates(6, 5)),
-            row(Coordinates(5, 5), WEST, Coordinates(4, 5)),
-        ) { coordinates, direction, result ->
-            coordinates + direction shouldBe result
-        }
+    testSuite(
+        "Add a direction",
+        listOf(
+            Triple(Coordinates(5, 5), NORTH, Coordinates(5, 4)),
+            Triple(Coordinates(5, 5), SOUTH, Coordinates(5, 6)),
+            Triple(Coordinates(5, 5), EAST, Coordinates(6, 5)),
+            Triple(Coordinates(5, 5), WEST, Coordinates(4, 5)),
+        )
+    ) { (coordinates, direction, result) ->
+        coordinates + direction shouldBe result
     }
 
-    "Neighbours" {
+    test("Neighbours") {
         Coordinates(5, 5).neighbours() shouldContainAll listOf(
             Coordinates(5, 4),
             Coordinates(5, 6),
@@ -66,7 +69,7 @@ class CoordinatesTest : StringSpec({
         )
     }
 
-    "Neighbours including diagonals" {
+    test("Neighbours including diagonals") {
         Coordinates(5, 5).neighboursIncludingDiagonals() shouldContainAll listOf(
             Coordinates(5, 4),
             Coordinates(5, 6),
@@ -79,7 +82,7 @@ class CoordinatesTest : StringSpec({
         )
     }
 
-    "Directed neighbours" {
+    test("Directed neighbours") {
         Coordinates(5, 5).directedNeighbours() shouldContainAll listOf(
             NORTH to Coordinates(5, 4),
             SOUTH to Coordinates(5, 6),
@@ -88,48 +91,47 @@ class CoordinatesTest : StringSpec({
         )
     }
 
-    "Coordinates are comparable and can be sorted" {
-        forAll(
-            row(listOf(Coordinates.ZERO), listOf(Coordinates.ZERO)),
-            row(listOf(Coordinates(0, 1), Coordinates.ZERO), listOf(Coordinates.ZERO, Coordinates(0, 1))),
-            row(
-                listOf(Coordinates(1, 1), Coordinates(0, 1), Coordinates.ZERO),
-                listOf(Coordinates.ZERO, Coordinates(0, 1), Coordinates(1, 1))
-            ),
-        ) { list, sorted ->
-            list.sorted() shouldBe sorted
-        }
+    testSuite(
+        "Coordinates are comparable and can be sorted",
+        mapOf(
+            listOf(Coordinates.ZERO) to listOf(Coordinates.ZERO),
+            listOf(Coordinates(0, 1), Coordinates.ZERO) to listOf(Coordinates.ZERO, Coordinates(0, 1)),
+            listOf(Coordinates(1, 1), Coordinates(0, 1), Coordinates.ZERO) to
+                    listOf(Coordinates.ZERO, Coordinates(0, 1), Coordinates(1, 1))
+        ),
+    ) { list, sorted ->
+        list.sorted() shouldBe sorted
     }
 
-    "Direction turnRight() turns right" {
+    test("Direction turnRight() turns right") {
         NORTH.turnRight() shouldBe EAST
         EAST.turnRight() shouldBe SOUTH
         SOUTH.turnRight() shouldBe WEST
         WEST.turnRight() shouldBe NORTH
     }
 
-    "Direction turnLeft() turns left" {
+    test("Direction turnLeft() turns left") {
         NORTH.turnLeft() shouldBe WEST
         EAST.turnLeft() shouldBe NORTH
         SOUTH.turnLeft() shouldBe EAST
         WEST.turnLeft() shouldBe SOUTH
     }
 
-    "Direction reverse() does a u-turn" {
+    test("Direction reverse() does a u-turn") {
         NORTH.reverse() shouldBe SOUTH
         EAST.reverse() shouldBe WEST
         SOUTH.reverse() shouldBe NORTH
         WEST.reverse() shouldBe EAST
     }
 
-    "asChar gives a graphical representation" {
+    test("asChar gives a graphical representation") {
         NORTH.asChar() shouldBe '↑'
         EAST.asChar() shouldBe '→'
         SOUTH.asChar() shouldBe '↓'
         WEST.asChar() shouldBe '←'
     }
 
-    "A Direction's orientation is checked right" {
+    test("A Direction's orientation is checked right") {
         NORTH.isVertical() shouldBe true
         NORTH.isHorizontal() shouldBe false
         SOUTH.isVertical() shouldBe true
@@ -141,7 +143,7 @@ class CoordinatesTest : StringSpec({
         WEST.isHorizontal() shouldBe true
     }
 
-    "Opposite directions" {
+    test("Opposite directions") {
         NORTH.isOpposite(SOUTH) shouldBe true
         SOUTH.isOpposite(NORTH) shouldBe true
         EAST.isOpposite(WEST) shouldBe true
@@ -153,36 +155,37 @@ class CoordinatesTest : StringSpec({
         WEST.isOpposite(SOUTH) shouldBe false
     }
 
-    "Difference between directions" {
+    test("Difference between directions") {
         NORTH - NORTH shouldBe 0
         NORTH - EAST shouldBe 1
         NORTH - SOUTH shouldBe 2
         NORTH - WEST shouldBe 1
     }
 
-    "toString returns the abbreviation letter" {
+    test("toString returns the abbreviation letter") {
         NORTH.toString() shouldBe "N"
         SOUTH.toString() shouldBe "S"
         EAST.toString() shouldBe "E"
         WEST.toString() shouldBe "W"
     }
 
-    "turning unsing Turns" {
-        forAll(
-            row(NORTH, STRAIGHT, NORTH),
-            row(NORTH, LEFT, WEST),
-            row(NORTH, RIGHT, EAST),
-            row(SOUTH, STRAIGHT, SOUTH),
-            row(SOUTH, LEFT, EAST),
-            row(SOUTH, RIGHT, WEST),
-            row(EAST, STRAIGHT, EAST),
-            row(EAST, LEFT, NORTH),
-            row(EAST, RIGHT, SOUTH),
-            row(WEST, STRAIGHT, WEST),
-            row(WEST, LEFT, SOUTH),
-            row(WEST, RIGHT, NORTH),
-        ) { direction, turn, newDirection ->
-            direction.turn(turn) shouldBe newDirection
-        }
+    testSuite(
+        "turning unsing Turns",
+        listOf(
+            Triple(NORTH, STRAIGHT, NORTH),
+            Triple(NORTH, LEFT, WEST),
+            Triple(NORTH, RIGHT, EAST),
+            Triple(SOUTH, STRAIGHT, SOUTH),
+            Triple(SOUTH, LEFT, EAST),
+            Triple(SOUTH, RIGHT, WEST),
+            Triple(EAST, STRAIGHT, EAST),
+            Triple(EAST, LEFT, NORTH),
+            Triple(EAST, RIGHT, SOUTH),
+            Triple(WEST, STRAIGHT, WEST),
+            Triple(WEST, LEFT, SOUTH),
+            Triple(WEST, RIGHT, NORTH),
+        )
+    ) { (direction, turn, newDirection) ->
+        direction.turn(turn) shouldBe newDirection
     }
-})
+}

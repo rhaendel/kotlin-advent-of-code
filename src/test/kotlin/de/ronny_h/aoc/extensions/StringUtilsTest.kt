@@ -1,21 +1,20 @@
 package de.ronny_h.aoc.extensions
 
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.data.forAll
-import io.kotest.data.row
+import de.infix.testBalloon.framework.core.testSuite
+import de.ronny_h.aoc.testballoon.testSuite
 import io.kotest.matchers.shouldBe
 
-class StringUtilsTest : StringSpec({
+val StringUtilsTest by testSuite {
 
-    "asList with a one-line String returns that String" {
+    test("asList with a one-line String returns that String") {
         "line one".asList() shouldBe listOf("line one")
     }
 
-    "asList with an empty String returns a list containing an empty String" {
+    test("asList with an empty String returns a list containing an empty String") {
         "".asList() shouldBe listOf("")
     }
 
-    "asList converts a multiline String to a list of Strings with trimmed margin" {
+    test("asList converts a multiline String to a list of Strings with trimmed margin") {
         """
             line one
             line two
@@ -23,7 +22,7 @@ class StringUtilsTest : StringSpec({
         """.asList() shouldBe listOf("line one", "line two", "line three")
     }
 
-    "asList preserves empty lines" {
+    test("asList preserves empty lines") {
         """
             line one
 
@@ -33,7 +32,7 @@ class StringUtilsTest : StringSpec({
         """.asList() shouldBe listOf("line one", "", "line two", "line three", "")
     }
 
-    "asList does not trim single lines" {
+    test("asList does not trim single lines") {
         """
             line one
             line two   
@@ -41,17 +40,20 @@ class StringUtilsTest : StringSpec({
         """.asList() shouldBe listOf("line one", "line two   ", "line three")
     }
 
-    "isAnagramOf" {
-        forAll(
-            row("a", "a", true),
-            row("a", "aa", false),
-            row("a", "ab", false),
-            row("ab", "ba", true),
-            row("ab", "ac", false),
-            row("abcdefg", "gfedcba", true),
-            row("abcddddefg", "gdfdedcdba", true),
-        ) { word1, word2, isAnagram ->
-            word1 isAnagramOf word2 shouldBe isAnagram
-        }
+    data class Row(val word1: String, val word2: String, val isAnagram: Boolean)
+
+    testSuite(
+        "isAnagramOf",
+        listOf(
+            Row("a", "a", true),
+            Row("a", "aa", false),
+            Row("a", "ab", false),
+            Row("ab", "ba", true),
+            Row("ab", "ac", false),
+            Row("abcdefg", "gfedcba", true),
+            Row("abcddddefg", "gdfdedcdba", true),
+        ),
+    ) { (word1, word2, isAnagram) ->
+        word1 isAnagramOf word2 shouldBe isAnagram
     }
-})
+}
