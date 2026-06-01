@@ -103,6 +103,18 @@ val CoordinatesTest by testSuite {
         list.sorted() shouldBe sorted
     }
 
+    testSuite(
+        "Direction can be created with the companion function",
+        listOf(
+            'N' to NORTH,
+            'S' to SOUTH,
+            'E' to EAST,
+            'W' to WEST,
+        )
+    ) { (char, direction) ->
+        Direction.of(char) shouldBe direction
+    }
+
     test("Direction turnRight() turns right") {
         NORTH.turnRight() shouldBe EAST
         EAST.turnRight() shouldBe SOUTH

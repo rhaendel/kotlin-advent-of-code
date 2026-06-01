@@ -55,6 +55,16 @@ enum class Direction(val x: Int, val y: Int) {
     WEST(-1, 0),
     ;
 
+    companion object {
+        fun of(c: Char) = when (c) {
+            'N' -> NORTH
+            'E' -> EAST
+            'S' -> SOUTH
+            'W' -> WEST
+            else -> error("invalid direction: $c")
+        }
+    }
+
     fun turnRight() = when (this) {
         NORTH -> EAST
         EAST -> SOUTH
