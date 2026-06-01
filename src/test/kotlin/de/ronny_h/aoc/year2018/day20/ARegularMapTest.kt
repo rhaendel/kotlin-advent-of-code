@@ -19,8 +19,11 @@ val ARegularMapTest by testSuite {
         }
     }
 
-    test("part 2") {
-        val input = listOf("")
-        ARegularMap().part2(input) shouldBe 0
+    test("part 2: The number of rooms with shortest path at least") {
+        ARegularMap().part2(listOf("^WNE$")) shouldBe 0
+
+        val project = BaseConstructionProject("WNE")
+        project.longestPathToFurthestDoor()
+        project.countPathsHavingAtLeastDoors(2) shouldBe 2
     }
 }

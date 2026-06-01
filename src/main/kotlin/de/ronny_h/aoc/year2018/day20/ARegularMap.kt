@@ -4,23 +4,28 @@ import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Direction
 
-fun main() = ARegularMap().run(3046, 0)
+fun main() = ARegularMap().run(3046, 8545)
 
 class ARegularMap : AdventOfCode<Int>(2018, 20) {
     override fun part1(input: List<String>): Int {
-        val regex = input.single()
-        require(regex.startsWith("^"))
-        require(regex.endsWith("$"))
-
-        return BaseConstructionProject(regex.substring(1, regex.length - 1)).longestPathToFurthestDoor()
+        return BaseConstructionProject(regexFrom(input)).longestPathToFurthestDoor()
     }
 
     override fun part2(input: List<String>): Int {
-        return 0
+        val project = BaseConstructionProject(regexFrom(input))
+        project.longestPathToFurthestDoor()
+        return project.countPathsHavingAtLeastDoors(1000)
+    }
+
+    private fun regexFrom(input: List<String>): String {
+        val regex = input.single()
+        require(regex.startsWith("^"))
+        require(regex.endsWith("$"))
+        return regex.substring(1, regex.length - 1)
     }
 }
 
-private class BaseConstructionProject(private val regex: String) {
+class BaseConstructionProject(private val regex: String) {
     private val shortestDistances = mutableMapOf<Coordinates, Int>()
 
     private data class RecursiveResult(val position: Coordinates, val branchLength: Int, val index: Int)
@@ -78,4 +83,6 @@ private class BaseConstructionProject(private val regex: String) {
     }
 
     fun longestPathToFurthestDoor() = longestPathToFurthestDoor(Coordinates(0, 0), 0, 0).branchLength
+
+    fun countPathsHavingAtLeastDoors(min: Int) = shortestDistances.count { it.value >= min }
 }
