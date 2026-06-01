@@ -10,7 +10,7 @@ In this repository, rhaendel is about to provide solutions for the puzzles using
 
 ## It's all about Learning
 
-I started this repository in december 2024 using the [Advent of Code Kotlin Template][template] delivered by JetBrains.
+I started this repository in December 2024 using the [Advent of Code Kotlin Template][template] delivered by JetBrains.
 Since I solved all the puzzles of year 2024, I continued with the first ones, the year 2015, and restructured the
 project iteratively.
 
@@ -22,7 +22,7 @@ Over the time, a small library of helping functions, classes and algorithms keep
 [extensions](src/main/kotlin/de/ronny_h/aoc/extensions) package. I try keeping a good test coverage especially there.
 
 While I'm trying to learn and improve my [idiomatic Kotlin](https://kotlinlang.org/docs/idioms.html), I don't stick to
-that. I try to us a programming style matching to the problem. Sometimes that's more functional, sometimes it's object
+that. I try to us a programming style matching to the problem. Sometimes that's more functional, sometimes it's object-
 oriented or even procedural if that's more expressive in a situation.
 
 ## File Template
@@ -32,15 +32,26 @@ There is a file template for IntelliJ IDEA that creates...
 * A new source file containing a main function and an initial implementation of
   [`AdventOfCode`](src/main/kotlin/de/ronny_h/aoc/AdventOfCode.kt)
 * An empty text file in [resources](src/main/resources) for the day's puzzle input
-* A test class in the test source set containing assertions for part one and two
+* A test class in the test source set containing assertions for part one and two using
+  * [TestBalloon](https://github.com/infix-de/testBalloon/) test framework and
+  * [Kotest matchers](https://kotest.io/docs/assertions/core-matchers.html)
 
-**Using the template in IntelliJ IDEA**
+### Using the template in IntelliJ IDEA
 
-Preparation: In _Settings... > Editor > File and Code Templates_, set the _Scheme_ to `Project`.
+**Preparation:**
 
-Usage: In the the [source directory](src)'s context menu, choose:
+In _Settings... > Editor > File and Code Templates_, set the _Scheme_ to `Project`.
 
-_New > Advent of Code_
+**Usage:**
+
+* In the [source directory](src)'s context menu, choose:
+
+  _New > Advent of Code_
+* Enter the _day_ (2 digits) and the _year_ (4 digits).
+
+**Hint:**
+
+The tests run with Gradle out-of-the-box. To run them in IntelliJ IDEA, use the [TestBalloon Plugin](https://plugins.jetbrains.com/plugin/27749-testballoon).
 
 ## Kotlin Resources
 
