@@ -30,38 +30,26 @@ class BaseConstructionProject(private val regex: String) {
 
     private data class State(val position: Coordinates, val distance: Int, val index: Int)
 
-    private fun shortestPathToFurthestRoom(
-        entryPosition: Coordinates,
-        distanceSoFar: Int,
-        index: Int,
-    ): State {
+    private fun shortestPathToFurthestRoom(entryPosition: Coordinates, distanceSoFar: Int, index: Int): State {
         var s = State(entryPosition, 0, index)
 
         while (s.index < regex.length) {
             s = when (val char = regex[s.index]) {
                 '(' -> {
-                    val (branchPosition, branchLength, lastReadIndex) = shortestPathToFurthestRoom(
-                        s.position,
-                        s.distance + distanceSoFar,
-                        s.index + 1
-                    )
-                    State(branchPosition, s.distance + branchLength, lastReadIndex + 1)
+                    val branch = shortestPathToFurthestRoom(s.position, s.distance + distanceSoFar, s.index + 1)
+                    State(branch.position, s.distance + branch.distance, branch.index + 1)
                 }
 
                 ')' -> return s
                 '|' -> {
-                    val (branchPosition, branchLength, lastReadIndex) = shortestPathToFurthestRoom(
-                        entryPosition,
-                        distanceSoFar,
-                        s.index + 1
-                    )
-                    return if (branchLength == 0) {
+                    val branch = shortestPathToFurthestRoom(entryPosition, distanceSoFar, s.index + 1)
+                    return if (branch.distance == 0) {
                         // empty option: |)
-                        State(entryPosition, 0, lastReadIndex)
-                    } else if (branchLength > s.distance) {
-                        State(branchPosition, branchLength, lastReadIndex)
+                        State(entryPosition, 0, branch.index)
+                    } else if (branch.distance > s.distance) {
+                        branch
                     } else {
-                        State(s.position, s.distance, lastReadIndex)
+                        State(s.position, s.distance, branch.index)
                     }
                 }
 
