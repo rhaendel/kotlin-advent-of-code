@@ -8,12 +8,12 @@ fun main() = ARegularMap().run(3046, 8545)
 
 class ARegularMap : AdventOfCode<Int>(2018, 20) {
     override fun part1(input: List<String>): Int {
-        return BaseConstructionProject(regexFrom(input)).longestPathToFurthestDoor()
+        return BaseConstructionProject(regexFrom(input)).shortestPathToFurthestRoom()
     }
 
     override fun part2(input: List<String>): Int {
         val project = BaseConstructionProject(regexFrom(input))
-        project.longestPathToFurthestDoor()
+        project.shortestPathToFurthestRoom()
         return project.countPathsHavingAtLeastDoors(1000)
     }
 
@@ -28,61 +28,52 @@ class ARegularMap : AdventOfCode<Int>(2018, 20) {
 class BaseConstructionProject(private val regex: String) {
     private val shortestDistances = mutableMapOf<Coordinates, Int>()
 
-    private data class RecursiveResult(val position: Coordinates, val branchLength: Int, val index: Int)
+    private data class State(val position: Coordinates, val distance: Int, val index: Int)
 
-    private fun longestPathToFurthestDoor(
+    private fun shortestPathToFurthestRoom(
         entryPosition: Coordinates,
+        distanceSoFar: Int,
         index: Int,
-        distanceSoFar: Int
-    ): RecursiveResult {
-        var distance = 0
-        var position = entryPosition
-        var i = index
+    ): State {
+        var s = State(entryPosition, 0, index)
 
-        while (i < regex.length) {
-            val char = regex[i]
-            position = when (char) {
+        while (s.index < regex.length) {
+            s = when (val char = regex[s.index]) {
                 '(' -> {
-                    val (branchPosition, branchLength, lastReadIndex) = longestPathToFurthestDoor(
-                        position,
-                        i + 1,
-                        distanceSoFar + distance
+                    val (branchPosition, branchLength, lastReadIndex) = shortestPathToFurthestRoom(
+                        s.position,
+                        s.distance + distanceSoFar,
+                        s.index + 1
                     )
-                    distance += branchLength
-                    i = lastReadIndex + 1
-                    branchPosition
+                    State(branchPosition, s.distance + branchLength, lastReadIndex + 1)
                 }
 
-                ')' -> return RecursiveResult(position, distance, i)
+                ')' -> return s
                 '|' -> {
-                    val (branchPosition, branchLength, lastReadIndex) = longestPathToFurthestDoor(
+                    val (branchPosition, branchLength, lastReadIndex) = shortestPathToFurthestRoom(
                         entryPosition,
-                        i + 1,
-                        distanceSoFar
+                        distanceSoFar,
+                        s.index + 1
                     )
                     return if (branchLength == 0) {
                         // empty option: |)
-                        RecursiveResult(entryPosition, 0, lastReadIndex)
-                    } else if (branchLength > distance) {
-                        RecursiveResult(branchPosition, branchLength, lastReadIndex)
+                        State(entryPosition, 0, lastReadIndex)
+                    } else if (branchLength > s.distance) {
+                        State(branchPosition, branchLength, lastReadIndex)
                     } else {
-                        RecursiveResult(position, distance, lastReadIndex)
+                        State(s.position, s.distance, lastReadIndex)
                     }
                 }
 
-                else -> {
-                    distance++
-                    i++
-                    position + Direction.of(char)
-                }
+                else -> State(s.position + Direction.of(char), s.distance + 1, s.index + 1)
             }
-            shortestDistances.computeIfAbsent(position) { distance + distanceSoFar }
+            shortestDistances.computeIfAbsent(s.position) { s.distance + distanceSoFar }
         }
 
-        return RecursiveResult(position, distance, regex.length)
+        return s
     }
 
-    fun longestPathToFurthestDoor() = longestPathToFurthestDoor(Coordinates(0, 0), 0, 0).branchLength
+    fun shortestPathToFurthestRoom() = shortestPathToFurthestRoom(Coordinates(0, 0), 0, 0).distance
 
     fun countPathsHavingAtLeastDoors(min: Int) = shortestDistances.count { it.value >= min }
 }

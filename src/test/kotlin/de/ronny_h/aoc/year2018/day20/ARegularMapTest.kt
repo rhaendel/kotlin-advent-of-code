@@ -23,7 +23,7 @@ val ARegularMapTest by testSuite {
         ARegularMap().part2(listOf("^WNE$")) shouldBe 0
 
         val project = BaseConstructionProject("WNE")
-        project.longestPathToFurthestDoor()
+        project.shortestPathToFurthestRoom()
         project.countPathsHavingAtLeastDoors(2) shouldBe 2
     }
 }
