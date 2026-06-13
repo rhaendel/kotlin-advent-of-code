@@ -2,6 +2,11 @@ package de.ronny_h.aoc.year2018.day16
 
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.collections.split
+import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.yield
+
+private val log = KotlinLogging.logger { }
 
 fun main() = ChronalClassification().run(531, 649)
 
@@ -11,10 +16,10 @@ class ChronalClassification : AdventOfCode<Int>(2018, 16) {
         return deviceAnalyzer.behaveLikeNumberOfOpcodes().filter { it > 2 }.size
     }
 
-    override fun part2(input: List<String>): Int {
+    override fun part2(input: List<String>): Int = runBlocking {
         val deviceAnalyzer = WristDeviceAnalyzer(input)
         val operations = deviceAnalyzer.deduceOpcodeMapping()
-        return WristDevice(input.parseTestProgram()).runProgram(operations)
+        return@runBlocking WristDevice(input.parseTestProgram()).runProgram(operations)
     }
 }
 
@@ -141,7 +146,9 @@ class WristDevice(
 
     private var instructionPointer = 0
 
-    fun runProgram(operations: List<(Int, Int, Int, MutableList<Int>) -> Unit>): Int {
+    suspend fun runProgram(operations: List<(Int, Int, Int, MutableList<Int>) -> Unit>): Int {
+        if (registers[0] % 1000 == 0) log.info { "start running on registers[0]=${registers[0]}" }
+        var ops = 0
         while (instructionPointer in program.indices) {
             preOperation(instructionPointer, registers)
             with(program[instructionPointer]) {
@@ -149,6 +156,8 @@ class WristDevice(
             }
             instructionPointer = postOperation(instructionPointer, registers)
             instructionPointer++
+            ops++
+            if (ops % 100_000 == 0) yield()
         }
         return registers[0]
     }
