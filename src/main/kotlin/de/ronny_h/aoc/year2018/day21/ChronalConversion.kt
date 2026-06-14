@@ -1,48 +1,13 @@
 package de.ronny_h.aoc.year2018.day21
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.year2018.day19.WristDeviceWithFlowControl
-import io.github.oshai.kotlinlogging.KotlinLogging
-import kotlinx.coroutines.*
-import kotlinx.coroutines.selects.select
 
-fun main() = ChronalConversion().run(0, 0)
-
-private val log = KotlinLogging.logger { }
+fun main() = ChronalConversion().run(9566170, 0)
 
 class ChronalConversion : AdventOfCode<Int>(2018, 21) {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun part1(input: List<String>): Int {
-        // runTheActualProgram(input)
         return ActivationSystem().run()
-    }
-
-    private fun runTheActualProgram(input: List<String>) = runBlocking {
-        val values = 0..100_000
-        val deferreds = values.map { regZero ->
-            async(Dispatchers.Default) {
-                if (regZero % 1000 == 0) log.info { "launching $regZero" }
-                val device = WristDeviceWithFlowControl(input, regZero)
-                yield()
-                device.runProgram()
-                log.info { "finished $regZero" }
-                regZero
-            }
-        }
-
-        log.info { "receiving" }
-        val result = select {
-            deferreds.forEach {
-                it.onAwait { value ->
-                    log.info { "received $value" }
-                    value
-                }
-            }
-        }
-        coroutineContext.cancelChildren()
-        log.info { "result: $result" }
-        return@runBlocking 0
     }
 
     override fun part2(input: List<String>): Int {

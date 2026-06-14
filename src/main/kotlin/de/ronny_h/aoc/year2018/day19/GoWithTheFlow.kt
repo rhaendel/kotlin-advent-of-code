@@ -3,15 +3,14 @@ package de.ronny_h.aoc.year2018.day19
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.year2018.day16.ProgramStep
 import de.ronny_h.aoc.year2018.day16.WristDevice
-import kotlinx.coroutines.runBlocking
 
 fun main() = GoWithTheFlow().run(1694, 18964204)
 
 class GoWithTheFlow : AdventOfCode<Int>(2018, 19) {
 
-    override fun part1(input: List<String>): Int = runBlocking {
+    override fun part1(input: List<String>): Int {
         println("part one hard-coded: " + HardCodedWristDevice().partOne())
-        return@runBlocking WristDeviceWithFlowControl(input).runProgram()
+        return WristDeviceWithFlowControl(input).runProgram()
     }
 
     override fun part2(input: List<String>): Int {
@@ -44,7 +43,7 @@ class WristDeviceWithFlowControl(input: List<String>, registerZeroInitValue: Int
         postOperation = { _, registers -> registers[program.instructionPointerRegister] }
     )
 
-    suspend fun runProgram(): Int = device.runProgram(WristDevice.operations)
+    fun runProgram(): Int = device.runProgram(WristDevice.operations)
 }
 
 class HardCodedWristDevice {
