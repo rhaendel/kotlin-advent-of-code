@@ -15,9 +15,7 @@ class ChronalConversion : AdventOfCode<Int>(2018, 21) {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun part1(input: List<String>): Int {
         // runTheActualProgram(input)
-        val registerZero = 0
-        ActivationSystem(registerZero).run()
-        return registerZero
+        return ActivationSystem().run()
     }
 
     private fun runTheActualProgram(input: List<String>) = runBlocking {
@@ -52,36 +50,28 @@ class ChronalConversion : AdventOfCode<Int>(2018, 21) {
     }
 }
 
-class ActivationSystem(private val reg0: Int = 0) {
+class ActivationSystem {
     private var reg2 = 0
     private var reg3 = 0
     private var reg4 = 0
 
-    fun run() {
-        reg4 = 0
+    fun run(): Int {
+        reg3 = 65536
+        reg4 = 4332021
 
-        do {
-            reg3 = reg4 or 65536
-            reg4 = 4332021
+        while (true) {
+            reg2 = reg3 and 255
+            reg4 += reg2
+            reg4 = reg4 and 16777215
+            reg4 *= 65899
+            reg4 = reg4 and 16777215
 
-            while (true) {
-                reg2 = reg3 and 255
-                reg4 += reg2
-                reg4 = reg4 and 16777215
-                reg4 *= 65899
-                reg4 = reg4 and 16777215
-
-                if (reg3 < 256) {
-                    break
-                }
-
-                reg2 = 0
-                while ((reg2 + 1) * 256 <= reg3) {
-                    reg2++
-                }
-
-                reg3 = reg2
+            if (reg3 < 256) {
+                break
             }
-        } while (reg4 != reg0)
+
+            reg3 /= 256
+        }
+        return reg4
     }
 }
