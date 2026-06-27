@@ -69,8 +69,7 @@ val ModeMazeTest by testSuite {
         ModeMaze().part1(input) shouldBe 114
     }
 
-    test("part 2") {
-        val input = listOf("")
-        ModeMaze().part2(input) shouldBe 0
+    test("part 2: the fewest number of minutes to reach the target") {
+        ModeMaze().part2(input) shouldBe 45
     }
 }
