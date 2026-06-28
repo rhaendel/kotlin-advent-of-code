@@ -56,13 +56,16 @@ val ShortestPathTest by testSuite {
         val d: (Node, Node) -> Int = { _, _ -> 1 }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStarAllPaths(start, goal::positionEquals, neighbours, d, h) shouldBe listOf(
+        AStar(start, goal::positionEquals, neighbours, d, h).allPaths() shouldBe listOf(
             ShortestPath(
                 listOf(start, goal),
                 1
             )
         )
-        aStar(start, goal::positionEquals, neighbours, d, h) shouldBe ShortestPath(listOf(start, goal), 1)
+        AStar(start, goal::positionEquals, neighbours, d, h).shortestPath() shouldBe ShortestPath(
+            listOf(start, goal),
+            1
+        )
         dijkstraShortestPaths(Graph(listOf(start, goal), d), start, listOf(goal)) shouldBe listOf(
             ShortestPath(
                 listOf(start, goal),
@@ -94,9 +97,9 @@ val ShortestPathTest by testSuite {
         val d: (Node, Node) -> Int = { m, n -> distances.getValue(m to n) }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        AStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h).allPaths() shouldBe
                 listOf(ShortestPath(listOf(start, a, goal), 10))
-        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        AStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h).shortestPath() shouldBe
                 ShortestPath(listOf(start, a, goal), 10)
 
         val edges: (Node, Node) -> Int? = { m, n -> distances[m to n] }
@@ -124,9 +127,9 @@ val ShortestPathTest by testSuite {
         val d: (Node, Node) -> Int = { m, n -> distances.getValue(m to n) }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        AStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h).allPaths() shouldBe
                 listOf(ShortestPath(listOf(start, a, goal), 9))
-        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        AStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h).shortestPath() shouldBe
                 ShortestPath(listOf(start, a, goal), 9)
         dijkstraShortestPaths(Graph(listOf(start, a, goal), d), start, listOf(goal)) shouldBe
                 listOf(ShortestPath(listOf(start, a, goal), 9))
@@ -156,9 +159,9 @@ val ShortestPathTest by testSuite {
         val d: (Node, Node) -> Int = { m, n -> distances.getValue(m to n) }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        AStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h).allPaths() shouldBe
                 listOf(ShortestPath(listOf(start, a, goal), 9))
-        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        AStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h).shortestPath() shouldBe
                 ShortestPath(listOf(start, a, goal), 9)
         dijkstraShortestPaths(Graph(listOf(start, a, goal), d), start, listOf(goal)) shouldBe
                 listOf(ShortestPath(listOf(start, a, goal), 9))
@@ -187,9 +190,9 @@ val ShortestPathTest by testSuite {
         val d: (Node, Node) -> Int = { m, n -> distances.getValue(m to n) }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStarAllPaths(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        AStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h).allPaths() shouldBe
                 listOf(ShortestPath(listOf(start, a, b, goal), 9))
-        aStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h) shouldBe
+        AStar(start, goal::positionEquals, { n -> neighbours.getValue(n) }, d, h).shortestPath() shouldBe
                 ShortestPath(listOf(start, a, b, goal), 9)
 
         val edges: (Node, Node) -> Int? = { m, n -> distances[m to n] }
@@ -204,9 +207,9 @@ val ShortestPathTest by testSuite {
         val d: (Node, Node) -> Int = { _, _ -> 0 }
         val h: (Node) -> Int = { n -> n.position taxiDistanceTo goal.position }
 
-        aStarAllPaths(start, goal::positionEquals, { emptyList() }, d, h) shouldBe emptyList()
+        AStar(start, goal::positionEquals, { emptyList() }, d, h).allPaths() shouldBe emptyList()
         dijkstraShortestPaths(Graph(listOf(start, goal), { _, _ -> null }), start, listOf(goal)) shouldBe emptyList()
 
-        shouldThrow<IllegalStateException> { aStar(start, goal::positionEquals, { emptyList() }, d, h) }
+        shouldThrow<NoSuchElementException> { AStar(start, goal::positionEquals, { emptyList() }, d, h).shortestPath() }
     }
 }

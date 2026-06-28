@@ -1,7 +1,7 @@
 package de.ronny_h.aoc.year2018.day22
 
 import de.ronny_h.aoc.AdventOfCode
-import de.ronny_h.aoc.extensions.graphs.shortestpath.aStar
+import de.ronny_h.aoc.extensions.graphs.shortestpath.AStar
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Coordinates.Companion.ZERO
 import de.ronny_h.aoc.extensions.grids.Direction
@@ -63,7 +63,7 @@ class CaveSystem(input: List<String>) {
 
         val goal = Node(target, TORCH)
 
-        val shortestPath = aStar(
+        val shortestPath = AStar(
             start = Node(ZERO, TORCH),
             isGoal = { this == goal },
             neighbors = { node ->
@@ -77,7 +77,7 @@ class CaveSystem(input: List<String>) {
             },
             d = { from, to -> if (from.tool == to.tool) 1 else 8 },
             h = { it.pos taxiDistanceTo target },
-        )
+        ).shortestPath()
         return shortestPath.distance
     }
 }

@@ -2,8 +2,8 @@ package de.ronny_h.aoc.year2024.day20
 
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.animation.*
+import de.ronny_h.aoc.extensions.graphs.shortestpath.AStar
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
-import de.ronny_h.aoc.extensions.graphs.shortestpath.aStar
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Direction
 import de.ronny_h.aoc.extensions.grids.Grid
@@ -76,12 +76,12 @@ private class RaceTrack(input: List<String>) : Grid<Char>(input, WALL) {
 
         val h: (Coordinates) -> Int = { it taxiDistanceTo goal }
 
-        return aStar(
+        return AStar(
             start, { this == goal }, neighbours, d, h,
             printIt = { visited, _, _ ->
                 recorder?.record(toString(visited.filter { get(it) == EMPTY }.toSet(), VISITED))
             }
-        )
+        ).shortestPath()
     }
 
     fun countAllShortcutsSavingAtLeast(minToSave: Int, shortcutMaxLength: Int): Int {

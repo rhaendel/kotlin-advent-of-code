@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year2024.day18
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.graphs.shortestpath.AStar
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
-import de.ronny_h.aoc.extensions.graphs.shortestpath.aStar
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Direction
 import de.ronny_h.aoc.extensions.grids.Grid
@@ -32,7 +32,7 @@ class RAMRun : AdventOfCode<String>(2024, 18) {
             val memorySpace = MemorySpace(width, input.subList(0, n).toCoordinates())
             try {
                 memorySpace.shortestPath(Coordinates(0, 0), Coordinates(width - 1, width - 1))
-            } catch (_: IllegalStateException) {
+            } catch (_: NoSuchElementException) {
                 return input[n - 1]
             }
         }
@@ -62,6 +62,6 @@ private class MemorySpace(width: Int, corrupted: List<Coordinates>) : Grid<Char>
 
         val h: (Coordinates) -> Int = { it taxiDistanceTo goal }
 
-        return aStar(start, { this == goal }, neighbours, d, h)
+        return AStar(start, { this == goal }, neighbours, d, h).shortestPath()
     }
 }

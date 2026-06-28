@@ -1,8 +1,8 @@
 package de.ronny_h.aoc.year2024.day16
 
 import de.ronny_h.aoc.AdventOfCode
+import de.ronny_h.aoc.extensions.graphs.shortestpath.AStar
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
-import de.ronny_h.aoc.extensions.graphs.shortestpath.aStarAllPaths
 import de.ronny_h.aoc.extensions.grids.Coordinates
 import de.ronny_h.aoc.extensions.grids.Direction
 import de.ronny_h.aoc.extensions.grids.Grid
@@ -81,6 +81,6 @@ private class ReindeerMazeGrid(input: List<String>) : Grid<Char>(input, '#') {
             println(info.invoke())
         }
 
-        return aStarAllPaths(start, goal::positionEquals, neighbours, d, h)
+        return AStar(start, goal::positionEquals, neighbours, d, h).allPaths()
     }
 }

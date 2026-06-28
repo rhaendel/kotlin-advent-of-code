@@ -1,9 +1,9 @@
 package de.ronny_h.aoc.extensions.grids
 
 import de.ronny_h.aoc.extensions.animation.AnimationRecorder
+import de.ronny_h.aoc.extensions.graphs.shortestpath.AStar
 import de.ronny_h.aoc.extensions.graphs.shortestpath.Graph
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
-import de.ronny_h.aoc.extensions.graphs.shortestpath.aStarAllPaths
 import de.ronny_h.aoc.extensions.graphs.shortestpath.dijkstraShortestPaths
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
@@ -214,7 +214,7 @@ abstract class Grid<T>(
 
         val h: (Coordinates) -> Int = { it taxiDistanceTo goal }
 
-        return aStarAllPaths(start, { this == goal }, neighbours, d, h)
+        return AStar(start, { this == goal }, neighbours, d, h).allPaths()
     }
 
     fun shortestPaths(
