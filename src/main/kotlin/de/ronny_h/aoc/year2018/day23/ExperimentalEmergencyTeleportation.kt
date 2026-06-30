@@ -2,19 +2,34 @@ package de.ronny_h.aoc.year2018.day23
 
 import de.ronny_h.aoc.AdventOfCode
 import de.ronny_h.aoc.extensions.threedim.Vector
+import de.ronny_h.aoc.extensions.threedim.Vector.Companion.ZERO
 
-fun main() = ExperimentalEmergencyTeleportation().run(396, 0)
+fun main() = ExperimentalEmergencyTeleportation().run(396, 119406340)
 
-class ExperimentalEmergencyTeleportation : AdventOfCode<Int>(2018, 23) {
-    override fun part1(input: List<String>): Int {
+class ExperimentalEmergencyTeleportation : AdventOfCode<Long>(2018, 23) {
+    override fun part1(input: List<String>): Long {
         val bots = input.parseBots()
         val strongestBot = bots.maxBy { it.radius }
         val inRange = bots.filter { (strongestBot.position taxiDistanceTo it.position) <= strongestBot.radius }
-        return inRange.count()
+        return inRange.count().toLong()
     }
 
-    override fun part2(input: List<String>): Int {
-        return 0
+    override fun part2(input: List<String>): Long = input
+        .parseBots()
+        .clusterBotsWithIntersectingRanges()
+        .maxBy(Set<Nanobot>::size)
+        // the bot farthest away with smallest range defines the nearest border of the intersected ranges
+        .maxOf { (it.position taxiDistanceTo ZERO) - it.radius }
+
+    private fun List<Nanobot>.clusterBotsWithIntersectingRanges(): List<MutableSet<Nanobot>> = mapIndexed { i, bot ->
+        val intersecting = mutableSetOf(bot)
+        for (j in i + 1..lastIndex) {
+            val b = this[j]
+            if (intersecting.all { it.position taxiDistanceTo b.position <= it.radius + b.radius }) {
+                intersecting.add(b)
+            }
+        }
+        intersecting
     }
 }
 

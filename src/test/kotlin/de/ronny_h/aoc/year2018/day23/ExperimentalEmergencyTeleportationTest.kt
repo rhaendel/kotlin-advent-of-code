@@ -41,8 +41,16 @@ val ExperimentalEmergencyTeleportationTest by testSuite {
         ExperimentalEmergencyTeleportation().part1(input) shouldBe 7
     }
 
-    test("part 2") {
-        val input = listOf("")
-        ExperimentalEmergencyTeleportation().part2(input) shouldBe 0
+
+    test("part 2: the shortest manhattan distance between the range of any of the nanobots of the biggest cluster and 0,0,0") {
+        val input = """
+            pos=<10,12,12>, r=2
+            pos=<12,14,12>, r=2
+            pos=<16,12,12>, r=4
+            pos=<14,14,14>, r=6
+            pos=<50,50,50>, r=200
+            pos=<10,10,10>, r=5
+        """.asList()
+        ExperimentalEmergencyTeleportation().part2(input) shouldBe 36
     }
 }
