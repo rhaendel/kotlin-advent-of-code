@@ -1,6 +1,5 @@
 package de.ronny_h.aoc.extensions.grids
 
-import com.github.stefanbirkner.systemlambda.SystemLambda.tapSystemOut
 import de.infix.testBalloon.framework.core.TestConfig
 import de.infix.testBalloon.framework.core.TestConfig.Invocation.Sequential
 import de.infix.testBalloon.framework.core.invocation
@@ -9,6 +8,9 @@ import de.ronny_h.aoc.extensions.asList
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
+import java.nio.charset.StandardCharsets.UTF_8
 
 val GridTest by testSuite {
 
@@ -195,69 +197,70 @@ val GridTest by testSuite {
         }
     }
 
-    testSuite(
-        "printGrid",
-        // tapSystemOut needs sequential execution
-        testConfig = TestConfig.invocation(Sequential),
-    ) {
+    testSuite("printGrid") {
         test("prints the grid") {
-            val output = tapSystemOut {
+            val output = withPrintStream {
                 val grid = SimpleCharGrid(listOf("12", "34"))
-                grid.printGrid()
+                grid.printGrid(writer = it)
             }
             output shouldBe "12${newLine}34$newLine"
         }
 
         test("overrides specified coordinates") {
-            val output = tapSystemOut {
+            val output = withPrintStream {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
-                    setOf(Coordinates(1, 0), Coordinates(0, 1))
+                    setOf(Coordinates(1, 0), Coordinates(0, 1)),
+                    writer = it,
                 )
             }
             output shouldBe "1#${newLine}#4$newLine"
         }
 
         test("overrides specified coordinates with given overrideChar") {
-            val output = tapSystemOut {
+            val output = withPrintStream {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
                     setOf(Coordinates(1, 0), Coordinates(0, 1)),
-                    '?'
+                    '?',
+                    writer = it,
                 )
             }
             output shouldBe "1?${newLine}?4$newLine"
         }
 
         test("highlights specified coordinates with given highlightDirection's Char") {
-            val output = tapSystemOut {
+            val output = withPrintStream {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
                     highlightPosition = Coordinates(1, 0),
-                    highlightDirection = Direction.SOUTH
+                    highlightDirection = Direction.SOUTH,
+                    writer = it,
                 )
             }
             output shouldBe "1↓${newLine}34$newLine"
         }
 
         test("highlight has higher priority than overrides") {
-            val output = tapSystemOut {
+            val output = withPrintStream {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
                     overrides = setOf(Coordinates(1, 0)),
                     highlightPosition = Coordinates(1, 0),
-                    highlightDirection = Direction.SOUTH
+                    highlightDirection = Direction.SOUTH,
+                    writer = it,
                 )
             }
             output shouldBe "1↓${newLine}34$newLine"
         }
 
         test("highlight without a direction falls back to overrides") {
-            val output = tapSystemOut {
+            val output = withPrintStream {
                 val grid = SimpleCharGrid(listOf("12", "34"))
                 grid.printGrid(
                     overrides = setOf(Coordinates(1, 0)),
                     highlightPosition = Coordinates(1, 0),
+                    writer = it,
                 )
             }
             output shouldBe "1#${newLine}34$newLine"
@@ -280,4 +283,12 @@ val GridTest by testSuite {
             grid.toString(padding = 2) shouldBe "..12..$newLine..34.."
         }
     }
+}
+
+private fun withPrintStream(block: (PrintStream) -> Unit): String {
+    val out = ByteArrayOutputStream()
+    PrintStream(out, true, UTF_8).use {
+        block(it)
+    }
+    return out.toString(UTF_8)
 }

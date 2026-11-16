@@ -145,7 +145,7 @@ abstract class Grid<T>(
     ): String {
         val out = ByteArrayOutputStream()
         PrintStream(out, true, StandardCharsets.UTF_8).use {
-            printGrid(it, overrides = overrides, overrideChar = overrideChar, padding = padding)
+            printGrid(overrides = overrides, overrideChar = overrideChar, padding = padding, writer = it)
         }
         return out.toString().trim()
     }
@@ -162,18 +162,8 @@ abstract class Grid<T>(
         highlightPosition: Coordinates? = null,
         highlightDirection: Direction? = null,
         path: Map<Coordinates, Char> = mapOf(),
-    ) {
-        printGrid(System.out, overrides, overrideChar, highlightPosition, highlightDirection, path)
-    }
-
-    private fun printGrid(
-        writer: PrintStream,
-        overrides: Set<Coordinates> = setOf(),
-        overrideChar: Char = '#',
-        highlightPosition: Coordinates? = null,
-        highlightDirection: Direction? = null,
-        path: Map<Coordinates, Char> = mapOf(),
         padding: Int = 0,
+        writer: PrintStream = System.out,
     ) {
         val paddingString = "$fallbackElement".repeat(padding)
         forEachCoordinates { position, element ->

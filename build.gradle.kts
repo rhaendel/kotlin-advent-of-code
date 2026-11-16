@@ -22,7 +22,6 @@ dependencies {
     implementation(libs.z3.turnkey)
     runtimeOnly(libs.logback.classic)
 
-    testImplementation(libs.system.lambda)
     testImplementation(libs.testballoon)
     testImplementation(libs.testballoon.kotest.assertions)
 }
