@@ -1,16 +1,11 @@
 package de.ronny_h.aoc.extensions.grids
 
-import de.infix.testBalloon.framework.core.TestConfig
-import de.infix.testBalloon.framework.core.TestConfig.Invocation.Sequential
-import de.infix.testBalloon.framework.core.invocation
 import de.infix.testBalloon.framework.core.testSuite
 import de.ronny_h.aoc.extensions.asList
+import de.ronny_h.aoc.extensions.withPrintStream
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
-import java.nio.charset.StandardCharsets.UTF_8
 
 val GridTest by testSuite {
 
@@ -283,12 +278,4 @@ val GridTest by testSuite {
             grid.toString(padding = 2) shouldBe "..12..$newLine..34.."
         }
     }
-}
-
-private fun withPrintStream(block: (PrintStream) -> Unit): String {
-    val out = ByteArrayOutputStream()
-    PrintStream(out, true, UTF_8).use {
-        block(it)
-    }
-    return out.toString(UTF_8)
 }

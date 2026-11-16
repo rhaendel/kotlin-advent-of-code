@@ -5,9 +5,8 @@ import de.ronny_h.aoc.extensions.graphs.shortestpath.AStar
 import de.ronny_h.aoc.extensions.graphs.shortestpath.Graph
 import de.ronny_h.aoc.extensions.graphs.shortestpath.ShortestPath
 import de.ronny_h.aoc.extensions.graphs.shortestpath.dijkstraShortestPaths
-import java.io.ByteArrayOutputStream
+import de.ronny_h.aoc.extensions.withPrintStream
 import java.io.PrintStream
-import java.nio.charset.StandardCharsets
 
 /**
  * A 2-dimensional, rectangular Grid where each cell is identified by its [Coordinates] and represented by a value of type [T].
@@ -142,13 +141,9 @@ abstract class Grid<T>(
         overrides: Set<Coordinates> = setOf(),
         overrideChar: Char = '#',
         padding: Int = 0,
-    ): String {
-        val out = ByteArrayOutputStream()
-        PrintStream(out, true, StandardCharsets.UTF_8).use {
-            printGrid(overrides = overrides, overrideChar = overrideChar, padding = padding, writer = it)
-        }
-        return out.toString().trim()
-    }
+    ): String = withPrintStream {
+        printGrid(overrides = overrides, overrideChar = overrideChar, padding = padding, writer = it)
+    }.trim()
 
     /**
      * Prints this [Grid] to [System.out] with (the first matching rule applies):

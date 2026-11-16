@@ -56,4 +56,22 @@ val StringUtilsTest by testSuite {
     ) { (word1, word2, isAnagram) ->
         word1 isAnagramOf word2 shouldBe isAnagram
     }
+
+    test("withPrintStream") {
+        withPrintStream {
+            it.println("first line")
+            it.println("second line")
+            it.print(
+                """
+                |multi
+                |line
+                """.trimMargin()
+            )
+        } shouldBe """
+            |first line
+            |second line
+            |multi
+            |line
+        """.trimMargin()
+    }
 }
